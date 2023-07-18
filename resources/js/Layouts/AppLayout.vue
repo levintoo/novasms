@@ -1,10 +1,8 @@
 <script setup>
-
 import {ref} from "vue";
-
-import WindMillDropdownLink from "@/Components/WindMillDropdownLink.vue";
-import WindMillDropdown from "@/Components/WindMillDropdown.vue";
 import SideBarLinks from "@/Components/SideBarLinks.vue";
+import Dropdown from "@/Components/Dropdown.vue";
+import DropdownLink from "@/Components/DropdownLink.vue";
 
 const isSideMenuOpen = ref(false)
 </script>
@@ -25,7 +23,7 @@ const isSideMenuOpen = ref(false)
                             class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
                             href="#"
                         >
-                            Windmill
+                            Novasms
                         </a>
                     </template>
                 </SideBarLinks>
@@ -141,7 +139,7 @@ const isSideMenuOpen = ref(false)
                            </li>
 
                            <!-- Profile menu -->
-                           <WindMillDropdown class="hidden md:block" align="right" width="48">
+                           <Dropdown class="hidden md:block" align="right" width="48">
                                <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
@@ -169,7 +167,7 @@ const isSideMenuOpen = ref(false)
                                <template #content>
                                    <ul aria-label="submenu"
                                        class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:border-gray-700 dark:text-gray-300 dark:bg-gray-700">
-                                       <WindMillDropdownLink :href="route('profile.edit')">
+                                       <DropdownLink :href="route('profile.edit')">
                                            <svg
                                                aria-hidden="true"
                                                class="w-4 h-4 mr-3"
@@ -185,9 +183,9 @@ const isSideMenuOpen = ref(false)
                                                ></path>
                                            </svg>
                                            <span>Profile</span>
-                                       </WindMillDropdownLink>
+                                       </DropdownLink>
 
-                                       <WindMillDropdownLink href="#">
+                                       <DropdownLink href="#">
                                            <svg
                                                aria-hidden="true"
                                                class="w-4 h-4 mr-3"
@@ -204,8 +202,8 @@ const isSideMenuOpen = ref(false)
                                                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                            </svg>
                                            <span>Settings</span>
-                                       </WindMillDropdownLink>
-                                       <WindMillDropdownLink :href="route('logout')" as="button" method="POST">
+                                       </DropdownLink>
+                                       <DropdownLink :href="route('logout')" as="button" method="POST">
                                            <svg
                                                aria-hidden="true"
                                                class="w-4 h-4 mr-3"
@@ -221,17 +219,25 @@ const isSideMenuOpen = ref(false)
                                                ></path>
                                            </svg>
                                            <span>Log out</span>
-                                       </WindMillDropdownLink>
+                                       </DropdownLink>
                                    </ul>
                                </template>
-                           </WindMillDropdown>
+                           </Dropdown>
 
                     </ul>
                 </div>
             </header>
 
-<!-- content goes here -->
-            <slot />
+            <main class="h-full overflow-y-auto">
+                <div class="container px-6 mx-auto grid">
+
+                    <slot name="header" />
+
+                    <!-- content goes here -->
+                    <slot name="content" />
+
+                </div>
+            </main>
 
         </div>
 
