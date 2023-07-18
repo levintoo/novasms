@@ -17,4 +17,11 @@ class Contact extends Model
         'last_name',
         'phone',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+    public function group() {
+        return $this->belongsTo(Group::class);
+    }
 }

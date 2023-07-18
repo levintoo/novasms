@@ -15,4 +15,14 @@ class Group extends Model
         'name',
         'description',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+    public function messages() {
+        return $this->hasMany(Message::class);
+    }
+    public function contacts() {
+        return $this->hasMany(Contact::class);
+    }
 }
