@@ -205,7 +205,7 @@ const isSideMenuOpen = ref(false)
                                            </svg>
                                            <span>Settings</span>
                                        </WindMillDropdownLink>
-                                       <WindMillDropdownLink :href="route('logout')" as="button" method="post">
+                                       <WindMillDropdownLink :href="route('logout')" as="button" method="POST">
                                            <svg
                                                aria-hidden="true"
                                                class="w-4 h-4 mr-3"
