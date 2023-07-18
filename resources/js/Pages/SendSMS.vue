@@ -1,0 +1,102 @@
+<script setup>
+import AppLayout from "@/Layouts/AppLayout.vue";
+import {Head, useForm} from "@inertiajs/vue3";
+import InputError from "@/Components/InputError.vue";
+import TextInput from "@/Components/TextInput.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import {ref} from "vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+
+defineProps({
+    groups: {
+        type: Object,
+        default: {},
+    }
+})
+
+const recipients = ref('one')
+
+const form = useForm({
+    recipient: '',
+    group_id: '',
+    message: '',
+})
+const handleSendSMS = () => {
+    form.post(route('send-sms.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+
+        },
+        onError: () => {
+
+        },
+    })
+}
+</script>
+
+<template>
+    <Head title="Send SMS" />
+
+    <AppLayout>
+        <template #header>
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                Send SMS
+            </h2>
+        </template>
+
+        <div class="bg-white rounded-md p-6">
+
+            <div>
+<!--                <h2 class="text-lg font-medium text-gray-900">Send an sms to group or to a contact</h2>-->
+
+                <p class="mt-1 text-sm text-gray-600">
+                    Set recipients to group to reveal more options
+                </p>
+            </div>
+
+            <form @submit.prevent="handleSendSMS()">
+
+                <div class="mt-4">
+                    <InputLabel>Recipients</InputLabel>
+                    <select v-model="recipients" class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm">
+                        <option value="one">One</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+
+                <div class="mt-4" v-if="recipients === 'group' ">
+                    <InputLabel>Group</InputLabel>
+                    <select class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm">
+                        <option value="">select</option>
+                        <option v-for="group in groups" value="{{ group.id }}">{{ group.name }} ({{ group.size }})</option>
+                    </select>
+                </div>
+
+                <div v-else class="mt-4">
+                    <InputLabel>Phone</InputLabel>
+                    <TextInput class="mt-1 block w-full" type="text" v-model="form.recipient" />
+                    <InputError class="mt-2" :message="form.errors.recipient" />
+                </div>
+
+                <div class="mt-4">
+                    <InputLabel>Message</InputLabel>
+                    <textarea
+                        class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm"  v-model="form.message"></textarea>
+                    <InputError class="mt-2" :message="form.errors.message" />
+                </div>
+
+                <div v-if="recipients === 'group' " class="mt-4 space-x-4">
+                    <SecondaryButton type="button">First Name</SecondaryButton>
+                    <SecondaryButton type="button">Last Name</SecondaryButton>
+                    <SecondaryButton type="button">Phone</SecondaryButton>
+                </div>
+                <div class="mt-4">
+                    <PrimaryButton type="submit">send</PrimaryButton>
+                </div>
+
+            </form>
+        </div>
+
+    </AppLayout>
+</template>

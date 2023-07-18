@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,6 +26,11 @@ Route::get('/', function () {
 
 Route::middleware('auth')->controller(DashboardController::class)->group(function () {
     Route::get('/dashboard', 'index')->name('dashboard');
+});
+
+Route::middleware('auth')->controller(SendSMSController::class)->group(function () {
+    Route::get('/sendsms', 'index')->name('send-sms');
+    Route::post('/sendsms', 'store')->name('send-sms.store');
 });
 
 Route::middleware('auth')->controller(ProfileController::class)->group(function () {

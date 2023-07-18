@@ -233,8 +233,7 @@ const isSideMenuOpen = ref(false)
 
                     <slot name="header" />
 
-                    <!-- content goes here -->
-                    <slot name="content" />
+                    <slot />
 
                 </div>
             </main>
