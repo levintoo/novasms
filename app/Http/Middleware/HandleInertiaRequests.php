@@ -35,6 +35,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => [
                     'name' => $request->user()->name ?? null,
                     'email' => $request->user()->email ?? null,
+                    'phone' => $request->user()->phone ?? null,
                 ],
             ],
             'ziggy' => function () use ($request) {
