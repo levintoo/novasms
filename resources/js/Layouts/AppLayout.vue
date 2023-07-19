@@ -3,11 +3,15 @@ import {ref} from "vue";
 import SideBarLinks from "@/Components/SideBarLinks.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
+import ToastList from "@/Components/ToastList.vue";
 
 const isSideMenuOpen = ref(false)
 </script>
 
 <template>
+
+    <ToastList />
+
     <div
         class="flex h-screen bg-gray-50 dark:bg-gray-900"
         :class="{ 'overflow-hidden': isSideMenuOpen }"

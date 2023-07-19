@@ -30,7 +30,7 @@ import SideBarDropdownLink from "@/Components/SideBarDropdownLink.vue";
         </SideBarLink>
     </ul>
     <ul>
-        <SideBarLink :href="route('send-sms')">
+        <SideBarLink :href="route('send-sms')" :active="route().current('send-sms')">
             <svg
                 aria-hidden="true"
                 class="w-5 h-5"
