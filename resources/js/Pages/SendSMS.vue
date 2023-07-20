@@ -32,13 +32,18 @@ const handleSendSMS = () => {
                 duration: 5000
             })
         },
-        onError: () => {
+        onError: (e) => {
+            console.log(e)
             toast.add({
-                message: page.props.toast,
+                message: 'you have an error ',
                 duration: 5000
             })
         },
     })
+}
+
+const addFieldToMessage = (field) => {
+    form.message = `${form.message} ${field}`
 }
 </script>
 
@@ -104,9 +109,9 @@ const handleSendSMS = () => {
                 </div>
 
                 <div v-if="form.recipients === 'group' " class="mt-4 space-x-4">
-                    <SecondaryButton type="button">First Name</SecondaryButton>
-                    <SecondaryButton type="button">Last Name</SecondaryButton>
-                    <SecondaryButton type="button">Phone</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage('{{ first_name }}')">First Name</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage('{{ last_name }}')">Last Name</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage('{{ phone }}')">Phone</SecondaryButton>
                 </div>
                 <div class="mt-4">
                     <PrimaryButton type="submit">send</PrimaryButton>

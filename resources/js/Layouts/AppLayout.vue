@@ -53,7 +53,7 @@ const isSideMenuOpen = ref(false)
                                 class=" text-lg font-bold text-gray-800 dark:text-gray-200"
                                 href="#"
                             >
-                                Windmill
+                                Novasms
                             </a>
                             <span
                                 @click="isSideMenuOpen = !isSideMenuOpen"
@@ -232,10 +232,12 @@ const isSideMenuOpen = ref(false)
                 </div>
             </header>
 
-            <main class="h-full overflow-y-auto">
+            <main class="h-full">
+
+
                 <div class="container px-6 mx-auto grid">
 
-                    <slot name="header" />
+                <slot name="header" class="" />
 
                     <slot />
 

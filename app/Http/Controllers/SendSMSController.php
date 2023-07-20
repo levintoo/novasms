@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use App\Models\Group;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -46,22 +47,59 @@ class SendSMSController extends Controller
             'message' => 'required|string',
         ]);
 
-        if($request->recipients == 'one')
-        {
-            // send sms to user
+        if($request['recipients'] == 'one') {
+
+            // send sms
+
             $message = Message::create([
                 'user_id' => Auth::id(),
-                'recipient' => $request->phone,
-                'content' => $request->message,
+                'recipient' => $request['phone'],
+                'content' => $request['message'],
             ]);
 
-            return redirect()->back()->withToast('Message sent');
+            return redirect()
+                ->back()
+                ->withToast('message sent');
         }
-        else if($request->recipients == 'group')
-        {
-            // dispatch job to send sms
-            dd('sending sms to many people');
+
+        else if($request['recipients'] == 'group') {
+
+            $group_contacts = Contact::where('user_id',Auth::id())
+                ->where('group_id',$request['group'])
+                ->count();
+
+            if($group_contacts <= 0) {
+                return redirect()
+                    ->back()
+                    ->withToast('group does not have contacts');
+            }
+
+            // send sms to groups
+            $preview_replaceable = [
+                '{{ first_name }}',
+                '{{ last_name }}',
+                '{{ phone }}',
+            ];
+
+            $contact = Contact::where('user_id',Auth::id())
+                ->select('first_name','last_name','phone')
+                ->where('group_id',$request['group'])
+                ->inRandomOrder()
+                ->firstorfail();
+
+            $preview_wordlist = [
+                $contact->first_name,
+                $contact->last_name,
+                $contact->phone,
+            ];
+
+            $preview_message = str_replace($preview_replaceable, $preview_wordlist, $request['message']);
+
+            return redirect()
+                ->back()
+                ->withToast($preview_message);
         }
+
     }
 
     /**

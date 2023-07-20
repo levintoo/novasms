@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SendSMSController;
 use Illuminate\Support\Facades\Route;
@@ -24,19 +26,34 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware('auth')->controller(DashboardController::class)->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard');
+Route::middleware('auth')->group(function () {
+
+
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/dashboard', 'index')->name('dashboard');
+    });
+
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/profile', 'edit')->name('profile.edit');
+        Route::patch('/profile', 'update')->name('profile.update');
+        Route::delete('/profile', 'destroy')->name('profile.destroy');
+    });
+
+    Route::controller(SendSMSController::class)->group(function () {
+        Route::get('/sendsms', 'index')->name('send-sms');
+        Route::post('/sendsms', 'store')->name('send-sms.store');
+    });
+
+    Route::controller(ContactController::class)->group(function () {
+        Route::get('/contacts', 'index')->name('contacts');
+        Route::get('/contact/create', 'create')->name('contact.create');
+        Route::post('/contact/create', 'store')->name('contact.store');
+    });
+    Route::controller(GroupController::class)->group(function () {
+        Route::get('/groups', 'index')->name('groups');
+    });
+
 });
 
-Route::middleware('auth')->controller(SendSMSController::class)->group(function () {
-    Route::get('/sendsms', 'index')->name('send-sms');
-    Route::post('/sendsms', 'store')->name('send-sms.store');
-});
-
-Route::middleware('auth')->controller(ProfileController::class)->group(function () {
-    Route::get('/profile', 'edit')->name('profile.edit');
-    Route::patch('/profile', 'update')->name('profile.update');
-    Route::delete('/profile', 'destroy')->name('profile.destroy');
-});
 
 require __DIR__.'/auth.php';

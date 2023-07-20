@@ -44,7 +44,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'toast' => $request->session()->get('toast') ?? '-',
+            'toast' => $request->session()->get('toast') ?? null,
         ]);
     }
 }

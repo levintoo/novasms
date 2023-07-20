@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
+use App\Models\Group;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ContactController extends Controller
 {
@@ -12,7 +16,19 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        $query = Contact::query();
+        $query->where('user_id',Auth::id());
+        $query->orderBy('created_at','DESC');
+        $contacts = $query->paginate(5)
+            ->withQueryString()
+            ->through(fn($contact) => [
+            'id' => $contact->id,
+            'phone' => $contact->phone,
+            'first_name' => $contact->first_name,
+            'last_name' => $contact->last_name,
+            'created' => $contact->created_at ? carbon::create($contact->created_at)->diffForHumans() : null ,
+        ]);
+        return inertia('Contacts/Contacts', compact('contacts'));
     }
 
     /**
@@ -20,7 +36,8 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        $groups = Group::where('user_id',Auth::id())->select('name','id')->get();
+        return inertia('Contacts/CreateContact', compact('groups'));
     }
 
     /**
@@ -28,7 +45,19 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'group' => ['required',Rule::exists('groups','id')->where('user_id',Auth::id())],
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'phone' => 'required|max:255',
+        ]);
+
+        Contact::create([
+            'user_id' => Auth::id(),
+            ...$validated
+        ]);
+
+        return redirect()->back()->withToast('Contact created');
     }
 
     /**
