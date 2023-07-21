@@ -1,75 +1,115 @@
 <script setup>
-import {Head, Link} from "@inertiajs/vue3";
+import {Head, Link, router, usePage} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
+import IconButton from "@/Components/IconButton.vue";
+import PrimaryLink from "@/Components/PrimaryLink.vue";
+import IconLink from "@/Components/IconLink.vue";
+import toast from "@/Stores/Toast.js";
 
 defineProps({
     contacts: {
         type: Object
     }
 })
+const page = usePage()
+const handleDeleteContact = (id) => {
+    router.delete(route('contact.delete',id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            toast.add({
+                message: page.props.toast,
+                duration: 5000
+            })
+        },
+        onError: (errors) => {
+            toast.add({
+                message: 'something went wrong',
+                duration: 5000
+            })
+        },
+    })
+}
 </script>
 
 <template>
-    <Head title="Contacts" />
+    <Head title="Contacts"/>
 
-        <AppLayout >
+    <AppLayout>
 
-            <template #header>
-                <div class="grid grid-cols-2">
-                    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Contacts
-                    </h2>
+        <template #header>
+            <div class="grid grid-cols-2">
+                <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                    Contacts
+                </h2>
 
-                    <span class="flex align-center justify-end">
-                        <Link class="flex justify-between my-6 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                              :href="route('contact.create')">
+                <span class="flex align-center justify-end">
+                        <PrimaryLink :href="route('contact.create')" class="flex justify-between my-6">
                             <span aria-hidden="true" class="mr-2">+</span>
                             <span>Add new</span>
-                        </Link>
+                        </PrimaryLink>
                     </span>
-                </div>
-            </template>
+            </div>
+        </template>
 
 
-                <section class="container mx-auto overflow-y-auto">
-                    <div class="w-full mb-8 rounded-md shadow-md">
-                        <div class="w-full">
-                            <table class="w-full">
-                                <thead>
-                                <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                                    <th class="px-4 py-3">First Name</th>
-                                    <th class="px-4 py-3">Last Name</th>
-                                    <th class="px-4 py-3">Phone</th>
-                                    <th class="px-4 py-3">Created</th>
-                                    <th colspan="3" class="px-4 py-3 text-center">Action</th>
-                                </tr>
-                                </thead>
-                                <tbody v-if="contacts.data.length > 0" class="bg-white">
-                                    <tr v-for="contact in contacts.data" class="text-gray-700">
-                                        <td class="px-4 py-3 text-ms border font-medium">{{ contact.first_name ?? '-' }}</td>
-                                        <td class="px-4 py-3 text-sm border font-medium">{{ contact.last_name ?? '-' }}</td>
-                                        <td class="px-4 py-3 text-sm border font-mono">{{ contact.phone ?? '-' }}</td>
-                                        <td class="px-4 py-3 text-sm border font-medium">{{ contact.created ?? '-' }}</td>
-                                        <td class="pl-5 border">
-                                            <button class="py-3 px-3 text-sm focus:outline-none leading-none text-red-700 bg-red-100 rounded">Remove</button>
-                                        </td>
-                                        <td class="pl-4 border">
-                                            <button class="focus:ring-2 focus:ring-offset-2 focus:ring-red-300 text-sm leading-none text-gray-600 py-3 px-5 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none">Edit</button>
-                                        </td>
-                                    </tr>
+        <section class="container mx-auto overflow-y-auto">
+            <div class="w-full mb-8 rounded-md shadow-md overflow-y-auto">
+                <table class="w-full overflow-y-auto">
+                    <thead>
+                    <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                        <th class="px-4 py-3">First Name</th>
+                        <th class="px-4 py-3">Last Name</th>
+                        <th class="px-4 py-3">Phone</th>
+                        <th class="px-4 py-3">Group</th>
+                        <th class="px-4 py-3">Created</th>
+                        <th class="px-4 py-3 text-center" colspan="2">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody v-if="contacts.data.length > 0" class="bg-white">
+                    <tr v-for="contact in contacts.data" class="text-gray-700">
+                        <td class="px-4 py-3 text-ms border font-medium">{{ contact.first_name ?? '-' }}</td>
+                        <td class="px-4 py-3 text-sm border font-medium">{{ contact.last_name ?? '-' }}</td>
+                        <td class="px-4 py-3 text-sm border font-mono">{{ contact.phone ?? '-' }}</td>
+                        <td class="px-4 py-3 text-sm border font-medium">{{ contact.group ?? '-' }}</td>
+                        <td class="px-4 py-3 text-sm border font-medium">{{ contact.created ?? '-' }}</td>
+                        <td class="pl-4 border">
+                            <IconLink :href="route('contact.edit', contact.id)"
+                                      class="text-gray-500 focus:ring-gray-300">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"/>
+                                    <path
+                                        d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"/>
+                                </svg>
+                            </IconLink>
+                        </td>
+                        <td class="pl-4 border">
+                            <IconButton @click="handleDeleteContact(contact.id)"
+                                        class="text-red-500 focus:ring-red-300">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd"
+                                          d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                                          fill-rule="evenodd"/>
+                                </svg>
+                            </IconButton>
+                        </td>
+                    </tr>
 
-                                </tbody>
-                                <tbody v-else>
-                                    <tr class="text-gray-700">
-                                        <td colspan="5" class="px-4 py-3 text-ms text-gray-500 text-center">There is nothing to show here</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                            <Pagination :links="contacts.links" class="mb-6" />
-                </section>
+                    </tbody>
+                    <tbody v-else>
+                    <tr class="text-gray-700">
+                        <td class="px-4 py-3 text-ms text-gray-500 text-center" colspan="5">There is nothing to show
+                            here
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <Pagination :links="contacts.links" class="mb-6"/>
+        </section>
 
-        </AppLayout>
+    </AppLayout>
 </template>

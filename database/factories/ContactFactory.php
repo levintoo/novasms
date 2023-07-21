@@ -17,8 +17,8 @@ class ContactFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => 1,
-            'group_id' => 1,
+            'user_id' => '1',
+            'group_id' => '1',
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'phone' => fake()->e164PhoneNumber(),

@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/contacts', 'index')->name('contacts');
         Route::get('/contact/create', 'create')->name('contact.create');
         Route::post('/contact/create', 'store')->name('contact.store');
+        Route::delete('/contact/{id}/delete', 'destroy')->name('contact.delete');
+        Route::get('/contact/{id}/edit', 'edit')->name('contact.edit');
+        Route::patch('/contact/{id}/edit', 'update')->name('contact.update');
     });
     Route::controller(GroupController::class)->group(function () {
         Route::get('/groups', 'index')->name('groups');

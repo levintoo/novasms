@@ -1,31 +1,38 @@
 <script setup>
-import {Head, useForm, usePage} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import InputError from "@/Components/InputError.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import SelectInput from "@/Components/SelectInput.vue";
+import {Head, useForm} from "@inertiajs/vue3";
 import toast from "@/Stores/Toast.js";
+import TextInput from "@/Components/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import InputError from "@/Components/InputError.vue";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
-import SecondaryLink from "@/Components/SecondaryLink.vue";
+import SelectInput from "@/Components/SelectInput.vue";
+import InputLabel from "@/Components/InputLabel.vue";
 
-defineProps({
+const props = defineProps({
+    id: {
+        type: String,
+        required: true,
+    },
     groups: {
         type: Object,
         default: {},
-    }
+    },
+    contact: {
+        type: Object,
+        default: {},
+    },
 })
 
-const page = usePage()
 const form = useForm({
-    first_name: '',
-    last_name: '',
-    phone: '',
-    group: '',
+    first_name: props.contact.first_name ?? '',
+    last_name: props.contact.last_name ?? '',
+    phone: props.contact.phone ?? '',
+    group: props.contact.group ?? '',
 })
-const handleCreateContact = () => {
-    form.post(route('contact.store'), {
+
+const handleUpdateContact = () => {
+    form.patch(route('contact.update', props.id), {
         preserveScroll: true,
         onError: () => {
             toast.add({
@@ -38,10 +45,9 @@ const handleCreateContact = () => {
 </script>
 
 <template>
-    <Head title="Contacts" />
+    <Head title="Edit Contact" />
 
-    <AppLayout >
-
+    <AppLayout>
         <template #header>
             <div class="grid grid-cols-2">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -50,7 +56,7 @@ const handleCreateContact = () => {
 
                 <span class="flex align-center justify-end">
                         <PrimaryLink class="flex justify-between my-6"
-                              :href="route('contacts')">
+                                     :href="route('contacts')">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path clip-rule="evenodd" d="M15 10a.75.75 0 01-.75.75H7.612l2.158 1.96a.75.75 0 11-1.04 1.08l-3.5-3.25a.75.75 0 010-1.08l3.5-3.25a.75.75 0 111.04 1.08L7.612 9.25h6.638A.75.75 0 0115 10z" fill-rule="evenodd"/>
                             </svg>
@@ -62,7 +68,7 @@ const handleCreateContact = () => {
 
         <div class="bg-white rounded-md p-6">
 
-            <form @submit.prevent="handleCreateContact()">
+            <form @submit.prevent="handleUpdateContact()">
 
 
                 <div class="mt-4">
@@ -124,12 +130,12 @@ const handleCreateContact = () => {
                 </div>
 
                 <div class="mt-4">
-                    <PrimaryButton type="submit">save</PrimaryButton>
+                    <PrimaryButton type="submit">update</PrimaryButton>
                 </div>
 
             </form>
         </div>
 
-
     </AppLayout>
 </template>
+
