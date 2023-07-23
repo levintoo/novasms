@@ -54,6 +54,12 @@ Route::middleware('auth')->group(function () {
     });
     Route::controller(GroupController::class)->group(function () {
         Route::get('/groups', 'index')->name('groups');
+        Route::get('/group/create', 'create')->name('group.create');
+        Route::post('/group/create', 'store')->name('group.store');
+        Route::delete('/group/{id}/delete', 'destroy')->name('group.delete');
+        Route::get('/group/{id}/edit', 'edit')->name('group.edit');
+        Route::get('/group/{id}/show', 'show')->name('group.show');
+        Route::patch('/group/{id}/edit', 'update')->name('group.update');
     });
 
 });

@@ -13,7 +13,7 @@ const isSideMenuOpen = ref(false)
     <ToastList />
 
     <div
-        class="flex h-screen bg-gray-50 dark:bg-gray-900"
+        class="flex min-h-screen bg-gray-50 dark:bg-gray-900"
         :class="{ 'overflow-hidden': isSideMenuOpen }"
     >
         <!-- Desktop sidebar -->
@@ -232,7 +232,7 @@ const isSideMenuOpen = ref(false)
                 </div>
             </header>
 
-            <main class="h-full">
+            <main class="min-h-screen">
 
 
                 <div class="container px-6 mx-auto grid">
