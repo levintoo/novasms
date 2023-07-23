@@ -8,7 +8,6 @@ import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import toast from "@/Stores/Toast.js";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
-import SecondaryLink from "@/Components/SecondaryLink.vue";
 
 defineProps({
     groups: {
