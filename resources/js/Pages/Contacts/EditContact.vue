@@ -51,7 +51,7 @@ const handleUpdateContact = () => {
         <template #header>
             <div class="grid grid-cols-2">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                    Create Contact
+                    Edit Contact
                 </h2>
 
                 <span class="flex align-center justify-end">
