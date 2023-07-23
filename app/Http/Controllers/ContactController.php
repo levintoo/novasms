@@ -20,14 +20,15 @@ class ContactController extends Controller
         $query->where('user_id',Auth::id());
         $query->orderBy('created_at','DESC');
         $query->with('group:id,name');
-        $contacts = $query->paginate(5)
+        $query->select('id','phone','first_name','last_name','created_at','group_id');
+        $contacts = $query->paginate()
             ->withQueryString()
             ->through(fn($contact) => [
                 'id' => $contact->id,
                 'phone' => $contact->phone,
                 'first_name' => $contact->first_name,
                 'last_name' => $contact->last_name,
-                'created' => $contact->created_at ? carbon::create($contact->created_at)->diffForHumans() : null,
+                'created' => $contact->created_at ? Carbon::parse($contact->created_at)->diffForHumans() : null,
                 'group' => $contact->group->name ?? null,
         ]);
         return inertia('Contacts/Contacts', compact('contacts'));

@@ -14,6 +14,7 @@ defineProps({
 })
 const page = usePage()
 const handleDeleteContact = (id) => {
+    if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
     router.delete(route('contact.delete',id), {
         preserveScroll: true,
         onSuccess: () => {
@@ -57,7 +58,7 @@ const handleDeleteContact = (id) => {
             <div class="w-full mb-8 rounded-md shadow-md overflow-y-auto">
                 <table class="w-full overflow-y-auto">
                     <thead>
-                    <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                    <tr class="text-sm font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
                         <th class="px-4 py-3">First Name</th>
                         <th class="px-4 py-3">Last Name</th>
                         <th class="px-4 py-3">Phone</th>
@@ -68,7 +69,7 @@ const handleDeleteContact = (id) => {
                     </thead>
                     <tbody v-if="contacts.data.length > 0" class="bg-white">
                     <tr v-for="contact in contacts.data" class="text-gray-700">
-                        <td class="px-4 py-3 text-ms border font-medium">{{ contact.first_name ?? '-' }}</td>
+                        <td class="px-4 py-3 text-sm border font-medium">{{ contact.first_name ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm border font-medium">{{ contact.last_name ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm border font-mono">{{ contact.phone ?? '-' }}</td>
                         <td class="px-4 py-3 text-sm border font-medium">{{ contact.group ?? '-' }}</td>
@@ -101,7 +102,8 @@ const handleDeleteContact = (id) => {
                     </tbody>
                     <tbody v-else>
                     <tr class="text-gray-700">
-                        <td class="px-4 py-3 text-ms text-gray-500 text-center" colspan="5">There is nothing to show
+                        <td class="px-4 py-3 text-ms border font-medium text-center" colspan="6">
+                            There is nothing to show
                             here
                         </td>
                     </tr>
