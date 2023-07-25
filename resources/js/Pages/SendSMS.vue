@@ -7,6 +7,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import toast from "@/Stores/Toast.js";
+import TextareaInput from "@/Components/TextareaInput.vue";
 
 const page = usePage()
 
@@ -41,9 +42,9 @@ const handleSendSMS = () => {
         },
     })
 }
-
 const addFieldToMessage = (field) => {
-    form.message = `${form.message} ${field}`
+    const curPos = document.getElementById("message").selectionStart;
+    form.message = form.message.slice(0, curPos) + field + form.message.slice(curPos);
 }
 </script>
 
@@ -102,16 +103,15 @@ const addFieldToMessage = (field) => {
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel>Message</InputLabel>
-                    <textarea
-                        class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm"  v-model="form.message"></textarea>
+                    <InputLabel for="message">Message</InputLabel>
+                    <TextareaInput rows="3" class="mt-1 block w-full" id="message" v-model="form.message"></TextareaInput>
                     <InputError class="mt-2" :message="form.errors.message" />
                 </div>
 
                 <div v-if="form.recipients === 'group' " class="mt-4 space-x-4">
-                    <SecondaryButton type="button" @click="addFieldToMessage('{{ first_name }}')">First Name</SecondaryButton>
-                    <SecondaryButton type="button" @click="addFieldToMessage('{{ last_name }}')">Last Name</SecondaryButton>
-                    <SecondaryButton type="button" @click="addFieldToMessage('{{ phone }}')">Phone</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage(' {{ first_name }} ')">First Name</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage(' {{ last_name }} ')">Last Name</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage(' {{ phone }} ')">Phone</SecondaryButton>
                 </div>
                 <div class="mt-4">
                     <PrimaryButton type="submit">send</PrimaryButton>
