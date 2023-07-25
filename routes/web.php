@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SendSMSController;
+use App\Http\Controllers\UploadContactsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -52,13 +53,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/contact/{id}/edit', 'edit')->name('contact.edit');
         Route::patch('/contact/{id}/edit', 'update')->name('contact.update');
     });
+    Route::controller(UploadContactsController::class)->group(function () {
+        Route::get('/contacts/upload', 'index')->name('contacts.create');
+        Route::post('/contacts/upload', 'upload')->name('contacts.upload');
+    });
     Route::controller(GroupController::class)->group(function () {
         Route::get('/groups', 'index')->name('groups');
         Route::get('/group/create', 'create')->name('group.create');
         Route::post('/group/create', 'store')->name('group.store');
         Route::delete('/group/{id}/delete', 'destroy')->name('group.delete');
         Route::get('/group/{id}/edit', 'edit')->name('group.edit');
-        Route::get('/group/{id}/show', 'show')->name('group.show');
+        Route::get('/group/{id}', 'show')->name('group.show');
         Route::patch('/group/{id}/edit', 'update')->name('group.update');
     });
 
