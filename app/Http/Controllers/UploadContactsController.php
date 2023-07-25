@@ -34,6 +34,6 @@ class UploadContactsController extends Controller
 //        }else{
 //            dd('File does not exist.');
 //        }
-        return redirect()->route('contacts')->withToast('job dispatched');
+        return redirect()->route('batch', $batch->id)->withToast('job dispatched');
     }
 }

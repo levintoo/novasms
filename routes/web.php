@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BatchProgressController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
@@ -65,6 +66,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/group/{id}/edit', 'edit')->name('group.edit');
         Route::get('/group/{id}', 'show')->name('group.show');
         Route::patch('/group/{id}/edit', 'update')->name('group.update');
+    });
+    Route::controller(BatchProgressController::class)->group(function () {
+        Route::get('/batch/{id}', 'index')->name('batch');
+        Route::post('/batch/{id}/progress', 'getProgress')->name('batch.progress');
     });
 
 });

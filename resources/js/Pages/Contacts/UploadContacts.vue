@@ -5,7 +5,6 @@ import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import SelectInput from "@/Components/SelectInput.vue";
-import toast from "@/Stores/Toast.js";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
 
 defineProps({
