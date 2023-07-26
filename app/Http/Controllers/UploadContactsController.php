@@ -29,11 +29,11 @@ class UploadContactsController extends Controller
         $batch = Bus::batch([
             new ImportContactsJob($validated['group'],Auth::id(),$filepath),
         ])->dispatch();
-//        if(Storage::exists($filepath)){
-//            Storage::delete([$filepath]);
-//        }else{
-//            dd('File does not exist.');
-//        }
+        if(Storage::exists($filepath)){
+            Storage::delete([$filepath]);
+        }else{
+            dd('File does not exist.');
+        }
         return redirect()->route('batch', $batch->id)->withToast('job dispatched');
     }
 }
