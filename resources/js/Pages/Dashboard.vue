@@ -1,6 +1,7 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
+import Table from "@/Components/Table.vue";
 </script>
 
 <template>
@@ -14,6 +15,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
             </h2>
         </template>
 
+        <Table />
             <!-- CTA -->
             <span
                 class="flex items-center justify-between p-4 mb-8 text-sm font-semibold text-purple-100 bg-purple-600 rounded-lg shadow-md focus:outline-none focus:shadow-outline-purple"

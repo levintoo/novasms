@@ -6,6 +6,12 @@ import IconButton from "@/Components/IconButton.vue";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
 import IconLink from "@/Components/IconLink.vue";
 import toast from "@/Stores/Toast.js";
+import TableHeadItem from "@/Components/TableHeadItem.vue";
+import TableHead from "@/Components/TableHead.vue";
+import TableBody from "@/Components/TableBody.vue";
+import TableBodyItem from "@/Components/TableBodyItem.vue";
+import Table from "@/Components/Table.vue";
+import TableData from "@/Components/TableData.vue";
 
 defineProps({
     groups: {
@@ -40,7 +46,7 @@ const handleDelete = (id) => {
 
         <template #header>
             <div class="grid grid-cols-2">
-                <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">
                     Groups
                 </h2>
 
@@ -54,32 +60,46 @@ const handleDelete = (id) => {
         </template>
 
 
-        <section class="container mx-auto overflow-y-auto">
-            <div class="w-full mb-8 rounded-md shadow-md overflow-y-auto">
-                <table class="w-full overflow-y-auto">
-                    <thead>
-                    <tr class="text-sm font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                        <th class="px-4 py-3">Name</th>
-                        <th class="px-4 py-3">Description</th>
-                        <th class="px-4 py-3">contacts</th>
-                        <th class="px-4 py-3">Created</th>
-                        <th class="px-4 py-3 text-center" colspan="3">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody v-if="groups.data.length > 0" class="bg-white">
-                    <tr v-for="group in groups.data" class="text-gray-700">
-                        <td class="px-4 py-3 text-sm border font-medium">
-                            <Link class="text-purple-900 underline hover:text-blue-500" :href="route('group.show', group.id)">
+        <Table >
+            <template #thead>
+                <TableHead>
+                    <TableHeadItem >Name</TableHeadItem>
+                    <TableHeadItem >Description</TableHeadItem>
+                    <TableHeadItem >Contacts</TableHeadItem>
+                    <TableHeadItem >Created</TableHeadItem>
+                    <TableHeadItem class="text-center" colspan="3">Actions</TableHeadItem>
+                </TableHead>
+            </template>
+            <template #tbody>
+                <TableBody v-if="groups.data.length > 0">
+                    <TableBodyItem v-for="group in groups.data">
+                        <TableData class="border">
                             {{ group.name ?? '-' }}
-                            </Link>
+                        </TableData>
+                        <TableData class="border font-mono text-xs">
+                            {{ group.description ?? '-' }}
+                        </TableData>
+                        <TableData class="text-sm border">
+                            {{ group.size ?? '-' }}
+                        </TableData>
+                        <TableData class="text-sm border">
+                            {{ group.created ?? '-' }}
+                        </TableData>
+                        <td class="text-center border">
+                            <IconLink :href="route('group.show', group.id)"
+                                        class="text-purple-500 focus:purple-red-300">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd"
+                                          d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                                          fill-rule="evenodd"/>
+                                </svg>
+                            </IconLink>
                         </td>
-                        <td class="px-4 py-3 text-sm border font-medium">{{ group.description ?? '-' }}</td>
-                        <td class="px-4 py-3 text-sm border font-medium">{{ group.size ?? '-' }}</td>
-                        <td class="px-4 py-3 text-sm border font-medium">{{ group.created ?? '-' }}</td>
-                        <td class="pl-4 border">
+                        <td class="text-center border">
                             <IconLink :href="route('group.edit', group.id)"
                                       class="text-gray-500 focus:ring-gray-300">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"/>
@@ -88,10 +108,10 @@ const handleDelete = (id) => {
                                 </svg>
                             </IconLink>
                         </td>
-                        <td class="pl-4 border">
+                        <td class="text-center border">
                             <IconButton @click="handleDelete(group.id)"
                                         class="text-red-500 focus:ring-red-300">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path clip-rule="evenodd"
                                           d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
@@ -99,21 +119,22 @@ const handleDelete = (id) => {
                                 </svg>
                             </IconButton>
                         </td>
-                    </tr>
+                    </TableBodyItem>
+                </TableBody>
 
-                    </tbody>
-                    <tbody v-else>
-                    <tr class="text-gray-700">
-                        <td class="px-4 py-3 text-ms border font-medium text-center" colspan="6">
-                            There is nothing to show
-                            here
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <Pagination :links="groups.links" class="mb-6"/>
-        </section>
+                <TableBody v-else>
+                    <TableBodyItem>
+                        <TableData colspan="6" class="text-center text-gray-500">
+                            There is nothing to show here
+                        </TableData>
+                    </TableBodyItem>
+                </TableBody>
+
+            </template>
+            <template #pagination>
+                <Pagination :links="groups.links" />
+            </template>
+        </Table>
 
     </AppLayout>
 </template>
