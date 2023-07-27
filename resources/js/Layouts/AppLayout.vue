@@ -1,9 +1,9 @@
 <script setup>
 import {ref} from "vue";
-import SideBarLinks from "@/Components/SideBarLinks.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import ToastList from "@/Components/ToastList.vue";
+import SideBar from "@/Components/SideBar.vue";
 
 const isSideMenuOpen = ref(false)
 </script>
@@ -21,7 +21,7 @@ const isSideMenuOpen = ref(false)
             class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0"
         >
             <div class="py-4 text-gray-500 dark:text-gray-400">
-                <SideBarLinks>
+                <SideBar>
                     <template #head>
                         <a
                             class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
@@ -30,7 +30,7 @@ const isSideMenuOpen = ref(false)
                             Novasms
                         </a>
                     </template>
-                </SideBarLinks>
+                </SideBar>
             </div>
         </aside>
         <!-- Mobile sidebar -->
@@ -46,7 +46,7 @@ const isSideMenuOpen = ref(false)
             class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white md:hidden"
         >
             <div class="py-4 text-gray-500 dark:text-gray-400">
-                <SideBarLinks>
+                <SideBar>
                     <template #head>
                         <div class="flex justify-between mx-6">
                             <a
@@ -65,7 +65,7 @@ const isSideMenuOpen = ref(false)
                    </span>
                         </div>
                     </template>
-                </SideBarLinks>
+                </SideBar>
             </div>
         </aside>
 
@@ -236,8 +236,6 @@ const isSideMenuOpen = ref(false)
 
 
                 <div class="container px-6 mx-auto grid">
-
-                <slot name="header" class="" />
 
                     <slot />
 

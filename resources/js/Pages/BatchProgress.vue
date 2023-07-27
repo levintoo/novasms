@@ -1,7 +1,10 @@
 <script setup>
 import {Head, router} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {ref} from "vue";
+import {defineOptions, onUnmounted, ref} from "vue";
+defineOptions({
+    layout: AppLayout,
+})
 const props = defineProps({
     batchinfo: {
         type: Object,
@@ -10,22 +13,28 @@ const props = defineProps({
 })
 const is_failed = ref(props.batchinfo.finished && props.batchinfo.progress < 100)
 
-setInterval(() => {
-    if(props.batchinfo.finished) return
+const polling = setInterval(() => {
+    if(props.batchinfo.finished) {
+        clearInterval(polling)
+        return
+    }
     router.post(route('batch.progress',props.batchinfo.id))
 },2000)
+
+onUnmounted(() => {
+    clearInterval(polling)
+})
 </script>
 
 <template>
     <Head title="Processing" />
 
-    <AppLayout>
 
-        <template #header>
+        <div>
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
 
             </h2>
-        </template>
+        </div>
 
         <div class="bg-white p-10 rounded-lg shadow-md">
             <h1 class="text-xl font-bold">
@@ -38,5 +47,4 @@ setInterval(() => {
                 </div>
             </div>
         </div>
-    </AppLayout>
 </template>

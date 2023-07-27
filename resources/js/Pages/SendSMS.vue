@@ -11,6 +11,10 @@ import TextareaInput from "@/Components/TextareaInput.vue";
 
 const page = usePage()
 
+defineOptions({
+    layout: AppLayout,
+})
+
 defineProps({
     groups: {
         type: Object,
@@ -24,6 +28,7 @@ const form = useForm({
     group: "",
     message: "",
 })
+
 const handleSendSMS = () => {
     form.post(route('send-sms.store'), {
         preserveScroll: true,
@@ -34,7 +39,6 @@ const handleSendSMS = () => {
             })
         },
         onError: (e) => {
-            console.log(e)
             toast.add({
                 message: 'you have an error ',
                 duration: 5000
@@ -42,21 +46,22 @@ const handleSendSMS = () => {
         },
     })
 }
+
 const addFieldToMessage = (field) => {
     const curPos = document.getElementById("message").selectionStart;
     form.message = form.message.slice(0, curPos) + field + form.message.slice(curPos);
 }
+
 </script>
 
 <template>
     <Head title="Send SMS" />
 
-    <AppLayout>
-        <template #header>
+        <div>
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                 Send SMS
             </h2>
-        </template>
+        </div>
 
         <div class="bg-white rounded-md p-6">
 
@@ -120,5 +125,4 @@ const addFieldToMessage = (field) => {
             </form>
         </div>
 
-    </AppLayout>
 </template>

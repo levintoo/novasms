@@ -1,5 +1,5 @@
 <script setup>
-import {Head, Link, router, usePage} from "@inertiajs/vue3";
+import {Head, router, usePage} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
 import IconButton from "@/Components/IconButton.vue";
@@ -14,14 +14,21 @@ import TableHead from "@/Components/TableHead.vue";
 import TableBody from "@/Components/TableBody.vue";
 import TableBodyItem from "@/Components/TableBodyItem.vue";
 import TableData from "@/Components/TableData.vue";
+import {defineOptions} from "vue";
+
+const page = usePage()
+
+defineOptions({
+    layout: AppLayout,
+})
 
 defineProps({
     contacts: {
         type: Object
     }
 })
-const page = usePage()
-const handleDeleteContact = (id) => {
+
+const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
     router.delete(route('contact.delete',id), {
         preserveScroll: true,
@@ -44,9 +51,7 @@ const handleDeleteContact = (id) => {
 <template>
     <Head title="Contacts"/>
 
-    <AppLayout>
-
-        <template #header>
+        <div>
             <div class="grid grid-cols-2">
                 <h2 class="my-6 text-xl sm:text-xl font-bold text-gray-700 dark:text-gray-200">
                     Contacts
@@ -100,7 +105,7 @@ const handleDeleteContact = (id) => {
                     </div>
                 </span>
             </div>
-        </template>
+        </div>
 
         <Table >
             <template #thead>
@@ -140,7 +145,7 @@ const handleDeleteContact = (id) => {
                             </IconLink>
                         </td>
                         <td class="text-center border">
-                            <IconButton @click="handleDeleteContact(contact.id)"
+                            <IconButton @click="handleDelete(contact.id)"
                                         class="text-red-500 focus:ring-red-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -166,5 +171,4 @@ const handleDeleteContact = (id) => {
                 <Pagination :links="contacts.links" />
             </template>
         </Table>
-    </AppLayout>
 </template>

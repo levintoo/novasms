@@ -8,12 +8,19 @@ import TextInput from "@/Components/TextInput.vue";
 import toast from "@/Stores/Toast.js";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
 import TextareaInput from "@/Components/TextareaInput.vue";
+import {defineOptions} from "vue";
 
 const page = usePage()
+
+defineOptions({
+    layout: AppLayout,
+})
+
 const form = useForm({
     name: "",
     description: "",
 })
+
 const handleCreateGroup = () => {
     form.post(route('group.store'), {
         preserveScroll: true,
@@ -30,9 +37,7 @@ const handleCreateGroup = () => {
 <template>
     <Head title="Create Group" />
 
-    <AppLayout >
-
-        <template #header>
+        <div>
             <div class="grid grid-cols-2">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                     Create Group
@@ -50,7 +55,7 @@ const handleCreateGroup = () => {
                         </div>
                     </span>
             </div>
-        </template>
+        </div>
 
         <div class="bg-white rounded-md p-6">
 
@@ -91,7 +96,4 @@ const handleCreateGroup = () => {
 
             </form>
         </div>
-
-
-    </AppLayout>
 </template>

@@ -4,6 +4,7 @@ import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
+import {defineOptions} from "vue";
 
 defineProps({
     mustVerifyEmail: {
@@ -13,17 +14,20 @@ defineProps({
         type: String,
     },
 });
+
+defineOptions({
+    layout: AppLayout,
+})
 </script>
 
 <template>
     <Head title="Profile" />
 
-    <AppLayout>
-        <template #header>
+        <div>
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                 Profile
             </h2>
-        </template>
+        </div>
 
             <div class="py-12">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
@@ -44,5 +48,4 @@ defineProps({
                     </div>
                 </div>
             </div>
-    </AppLayout>
 </template>

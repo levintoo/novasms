@@ -8,18 +8,26 @@ import TextInput from "@/Components/TextInput.vue";
 import toast from "@/Stores/Toast.js";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
 import TextareaInput from "@/Components/TextareaInput.vue";
+import {defineOptions} from "vue";
 
 const page = usePage()
+
+defineOptions({
+    layout: AppLayout,
+})
+
 const props = defineProps({
     group: {
         type: Object,
         required: true,
     }
 })
+
 const form = useForm({
     name: props.group.name,
     description: props.group.description ?? "",
 })
+
 const handleUpdateGroup = () => {
     form.patch(route('group.update',props.group.id), {
         preserveScroll: true,
@@ -36,9 +44,7 @@ const handleUpdateGroup = () => {
 <template>
     <Head title="Edit Group" />
 
-    <AppLayout >
-
-        <template #header>
+        <div>
             <div class="grid grid-cols-2">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                     Edit Group
@@ -54,7 +60,7 @@ const handleUpdateGroup = () => {
                         </PrimaryLink>
                     </span>
             </div>
-        </template>
+        </div>
 
         <div class="bg-white rounded-md p-6">
 
@@ -95,7 +101,4 @@ const handleUpdateGroup = () => {
 
             </form>
         </div>
-
-
-    </AppLayout>
 </template>

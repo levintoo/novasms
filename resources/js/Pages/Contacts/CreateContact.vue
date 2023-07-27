@@ -8,6 +8,13 @@ import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import toast from "@/Stores/Toast.js";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
+import {defineOptions} from "vue";
+
+const page = usePage()
+
+defineOptions({
+    layout: AppLayout,
+})
 
 defineProps({
     groups: {
@@ -16,13 +23,13 @@ defineProps({
     }
 })
 
-const page = usePage()
 const form = useForm({
     first_name: '',
     last_name: '',
     phone: '',
     group: '',
 })
+
 const handleCreateContact = () => {
     form.post(route('contact.store'), {
         preserveScroll: true,
@@ -39,9 +46,7 @@ const handleCreateContact = () => {
 <template>
     <Head title="Create Contact" />
 
-    <AppLayout >
-
-        <template #header>
+        <div>
             <div class="grid grid-cols-2">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                     Create Contact
@@ -59,7 +64,7 @@ const handleCreateContact = () => {
                         </div>
                     </span>
             </div>
-        </template>
+        </div>
 
         <div class="bg-white rounded-md p-6">
 
@@ -130,7 +135,4 @@ const handleCreateContact = () => {
 
             </form>
         </div>
-
-
-    </AppLayout>
 </template>

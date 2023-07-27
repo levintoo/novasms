@@ -6,6 +6,13 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import PrimaryLink from "@/Components/PrimaryLink.vue";
+import {defineOptions} from "vue";
+
+const page = usePage()
+
+defineOptions({
+    layout: AppLayout,
+})
 
 defineProps({
     groups: {
@@ -14,7 +21,6 @@ defineProps({
     }
 })
 
-const page = usePage()
 const form = useForm({
     file: null,
     group: "",
@@ -32,9 +38,7 @@ const handleUploadContacts = () => {
 <template>
     <Head title="Upload Contacts" />
 
-    <AppLayout >
-
-        <template #header>
+        <div>
             <div class="grid grid-cols-2">
                 <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                     Upload Contacts
@@ -52,7 +56,7 @@ const handleUploadContacts = () => {
                         </div>
                     </span>
             </div>
-        </template>
+        </div>
 
         <div class="bg-white rounded-md p-6">
 
@@ -126,7 +130,4 @@ const handleUploadContacts = () => {
 
             </form>
         </div>
-
-
-    </AppLayout>
 </template>

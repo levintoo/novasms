@@ -2,18 +2,20 @@
 import { Head } from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Table from "@/Components/Table.vue";
+import {defineOptions} from "vue";
+defineOptions({
+    layout: AppLayout,
+})
 </script>
 
 <template>
     <Head title="Dashboard" />
 
-    <AppLayout>
-
-        <template #header>
+        <div>
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                 Dashboard
             </h2>
-        </template>
+        </div>
 
         <Table />
             <!-- CTA -->
@@ -697,6 +699,4 @@ import Table from "@/Components/Table.vue";
                 </div>
             </div>
 
-
-    </AppLayout>
 </template>
