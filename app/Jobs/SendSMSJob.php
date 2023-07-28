@@ -48,9 +48,10 @@ class SendSMSJob implements ShouldQueue
 
         $chunkedContacts = $contacts->chunk(1000);
 
-        $messages = collect();
 
         foreach ($chunkedContacts as $records) {
+            $messages = collect();
+
             foreach ($records as $contact) {
 
                 $wordlist = [
@@ -65,7 +66,8 @@ class SendSMSJob implements ShouldQueue
                     'user_id' => $this->user_id,
                     'group_id' => $this->group_id,
                     'recipient' => $contact->phone,
-                    'content' => $message_content
+                    'content' => $message_content,
+                    'created_at' => now()
                 ]);
             }
             Message::insert($messages->toArray());
