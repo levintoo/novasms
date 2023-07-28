@@ -36,6 +36,10 @@ onUnmounted(() => {
             </h2>
         </div>
 
+    <pre>
+        {{ 'failed: ' + batchinfo.cancelled }}
+    </pre>
+
         <div class="bg-white p-10 rounded-lg shadow-md">
             <h1 class="text-xl font-bold">
                 {{ !batchinfo.finished ? 'Processing...' : 'Finished processing' }} <span v-if="is_failed">(failed)</span>
@@ -47,4 +51,5 @@ onUnmounted(() => {
                 </div>
             </div>
         </div>
+
 </template>

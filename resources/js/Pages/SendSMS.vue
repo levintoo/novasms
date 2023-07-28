@@ -23,10 +23,10 @@ defineProps({
 })
 
 const form = useForm({
-    recipients: 'one',
+    recipients: 'group',
     phone: "",
-    group: "",
-    message: "",
+    group: "26",
+    message: "hello {{ first_name }}",
 })
 
 const handleSendSMS = () => {
@@ -114,9 +114,9 @@ const addFieldToMessage = (field) => {
                 </div>
 
                 <div v-if="form.recipients === 'group' " class="mt-4 space-x-4">
-                    <SecondaryButton type="button" @click="addFieldToMessage(' {{ first_name }} ')">First Name</SecondaryButton>
-                    <SecondaryButton type="button" @click="addFieldToMessage(' {{ last_name }} ')">Last Name</SecondaryButton>
-                    <SecondaryButton type="button" @click="addFieldToMessage(' {{ phone }} ')">Phone</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage('{{ first_name }} ')">First Name</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage('{{ last_name }} ')">Last Name</SecondaryButton>
+                    <SecondaryButton type="button" @click="addFieldToMessage('{{ phone }} ')">Phone</SecondaryButton>
                 </div>
                 <div class="mt-4">
                     <PrimaryButton type="submit">send</PrimaryButton>
