@@ -71,6 +71,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/batch/{id}', 'index')->name('batch');
         Route::post('/batch/{id}/progress', 'getProgress')->name('batch.progress');
     });
+    Route::controller(\App\Http\Controllers\MessageController::class)->group(function () {
+        Route::get('/messages', 'index')->name('messages');
+        Route::delete('/message/{id}', 'destroy')->name('message.delete');
+    });
 
 });
 
