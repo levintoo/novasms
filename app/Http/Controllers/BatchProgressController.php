@@ -9,12 +9,7 @@ class BatchProgressController extends Controller
     public function index($batchId)
     {
         $batch = Bus::findBatch($batchId);
-        $batchinfo = [
-            'id' => $batch->id,
-            'progress' => $batch->progress(),
-            'finished' => $batch->finished(),
-            'cancelled' => $batch->cancelled(),
-        ];
+        $batchinfo = $batch->toArray();
         return inertia('BatchProgress',compact('batchinfo'));
     }
     public function getProgress($batchid)

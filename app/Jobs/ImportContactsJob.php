@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ImportContactsJob implements ShouldQueue
@@ -35,12 +36,16 @@ class ImportContactsJob implements ShouldQueue
     public function handle(): void
     {
         Excel::import(new ContactsImport($this->group_id,$this->user_id), $this->filepath);
-        info('dispatched');
+        if(Storage::exists($this->filepath)){
+            Storage::delete([$this->filepath]);
+        }
     }
 
     public function failed(\Exception $exception)
     {
-        info('failed...');
         info($exception->getMessage());
+        if(Storage::exists($this->filepath)){
+            Storage::delete([$this->filepath]);
+        }
     }
 }

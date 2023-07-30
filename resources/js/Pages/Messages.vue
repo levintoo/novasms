@@ -67,19 +67,31 @@ const handleDelete = (id) => {
         <template #tbody>
             <TableBody v-if="messages.data.length > 0">
                 <TableBodyItem v-for="message in messages.data">
-                    <TableData class="border">
+                    <TableData class="whitespace-nowrap">
                         {{ message.recipient ?? '-' }}
                     </TableData>
-                    <TableData class="border">
+                    <TableData class="">
                         {{ message.content ?? '-' }}
                     </TableData>
-                    <TableData class="border">
+                    <TableData class=" whitespace-nowrap">
                         {{ message.sent ?? '-' }}
                     </TableData>
-                    <TableData class="border">
-                        {{ message.delivered ?? '-' }}
+                    <TableData class=" text-xs text-center">
+<!--                        {{ message.delivered ?? null }}-->
+                        <span
+                            v-if="message.delivered"
+                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full"
+                        >
+                          Delivered
+                        </span>
+                        <span
+                            v-else
+                            class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full"
+                        >
+                          Pending
+                        </span>
                     </TableData>
-                    <td class="text-center border">
+                    <td class="text-center ">
                         <IconButton @click="handleDelete(message.id)"
                                     class="text-red-500 focus:ring-red-300">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"

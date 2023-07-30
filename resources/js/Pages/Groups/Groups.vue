@@ -73,19 +73,19 @@ const handleDelete = (id) => {
             <template #tbody>
                 <TableBody v-if="groups.data.length > 0">
                     <TableBodyItem v-for="group in groups.data">
-                        <TableData class="border">
+                        <TableData class="">
                             {{ group.name ?? '-' }}
                         </TableData>
-                        <TableData class="border font-mono text-xs">
+                        <TableData class="font-mono text-xs">
                             {{ group.description ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm border">
+                        <TableData class="text-sm">
                             {{ group.size ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm border">
+                        <TableData class="text-sm">
                             {{ group.created ?? '-' }}
                         </TableData>
-                        <td class="text-center border">
+                        <td class="text-center">
                             <IconLink :href="route('group.show', group.id)"
                                         class="text-purple-500 focus:purple-red-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
@@ -97,7 +97,7 @@ const handleDelete = (id) => {
 
                             </IconLink>
                         </td>
-                        <td class="text-center border">
+                        <td class="text-center">
                             <IconLink :href="route('group.edit', group.id)"
                                       class="text-gray-500 focus:ring-gray-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
@@ -109,7 +109,7 @@ const handleDelete = (id) => {
                                 </svg>
                             </IconLink>
                         </td>
-                        <td class="text-center border">
+                        <td class="text-center">
                             <IconButton @click="handleDelete(group.id)"
                                         class="text-red-500 focus:ring-red-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"

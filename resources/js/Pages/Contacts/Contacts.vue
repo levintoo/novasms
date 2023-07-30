@@ -110,7 +110,8 @@ const handleDelete = (id) => {
         <Table >
             <template #thead>
                 <TableHead>
-                    <TableHeadItem >Name</TableHeadItem>
+                    <TableHeadItem >First Name</TableHeadItem>
+                    <TableHeadItem >Last Name</TableHeadItem>
                     <TableHeadItem >Phone</TableHeadItem>
                     <TableHeadItem >Group</TableHeadItem>
                     <TableHeadItem >Created</TableHeadItem>
@@ -120,19 +121,22 @@ const handleDelete = (id) => {
             <template #tbody>
                 <TableBody v-if="contacts.data.length > 0">
                     <TableBodyItem v-for="contact in contacts.data">
-                        <TableData class="border">
-                            {{ contact.first_name ?? '-' }} {{ contact.first_name ?? '-' }}
+                        <TableData class="">
+                            {{ contact.first_name ?? '-' }}
                         </TableData>
-                        <TableData class="border font-mono text-xs">
+                        <TableData class="">
+                            {{ contact.first_name ?? '-' }}
+                        </TableData>
+                        <TableData class="font-mono text-xs">
                             {{ contact.phone ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm border">
+                        <TableData class="text-sm">
                             {{ contact.group ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm border">
+                        <TableData class="text-sm">
                             {{ contact.created ?? '-' }}
                         </TableData>
-                        <td class="text-center border">
+                        <td class="text-center">
                             <IconLink :href="route('contact.edit', contact.id)"
                                       class="text-gray-500 focus:ring-gray-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
@@ -144,7 +148,7 @@ const handleDelete = (id) => {
                                 </svg>
                             </IconLink>
                         </td>
-                        <td class="text-center border">
+                        <td class="text-center">
                             <IconButton @click="handleDelete(contact.id)"
                                         class="text-red-500 focus:ring-red-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
