@@ -28,7 +28,7 @@ class GroupController extends Controller
             'created' => Carbon::create($group->created_at)->diffForHumans(),
                 'size' => $group->contacts_count
         ]);
-        return inertia('Groups/Groups',compact('groups'));
+        return inertia('Groups/Index',compact('groups'));
     }
 
     /**
@@ -36,7 +36,7 @@ class GroupController extends Controller
      */
     public function create()
     {
-        return inertia('Groups/CreateGroup');
+        return inertia('Groups/Create');
     }
 
     /**
@@ -88,7 +88,7 @@ class GroupController extends Controller
                 'created' => $contact->created_at ? carbon::parse($contact->created_at)->diffForHumans() : null,
             ]);
 
-        return inertia('Groups/ViewGroup', compact('group','contacts'));
+        return inertia('Groups/View', compact('group','contacts'));
     }
 
     /**
@@ -100,7 +100,7 @@ class GroupController extends Controller
             ->where('id',$id)
             ->select('id','name','description')
             ->firstorfail();
-        return inertia('Groups/EditGroup', compact('group'));
+        return inertia('Groups/Edit', compact('group'));
     }
 
     /**

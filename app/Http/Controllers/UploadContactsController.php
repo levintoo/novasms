@@ -13,7 +13,7 @@ class UploadContactsController extends Controller
     public function index()
     {
         $groups = Group::where('user_id',Auth::id())->select('name','id')->get();
-        return inertia('Contacts/UploadContacts',compact('groups'));
+        return inertia('Contacts/Upload',compact('groups'));
     }
     public function upload(Request $request)
     {

@@ -31,7 +31,7 @@ class ContactController extends Controller
                 'created' => $contact->created_at ? Carbon::parse($contact->created_at)->diffForHumans() : null,
                 'group' => $contact->group->name ?? null,
         ]);
-        return inertia('Contacts/Contacts', compact('contacts'));
+        return inertia('Contacts/Index', compact('contacts'));
     }
 
     /**
@@ -40,7 +40,7 @@ class ContactController extends Controller
     public function create()
     {
         $groups = Group::where('user_id',Auth::id())->select('name','id')->get();
-        return inertia('Contacts/CreateContact', compact('groups'));
+        return inertia('Contacts/Create', compact('groups'));
     }
 
     /**
@@ -94,7 +94,7 @@ class ContactController extends Controller
             ->select('name','id')
             ->get();
 
-        return inertia('Contacts/EditContact', compact('id','contact','groups'));
+        return inertia('Contacts/Edit', compact('id','contact','groups'));
     }
 
     /**

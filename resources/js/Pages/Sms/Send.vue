@@ -30,7 +30,7 @@ const form = useForm({
 })
 
 const handleSendSMS = () => {
-    form.post(route('send-sms.store'), {
+    form.post(route('send-sms.send'), {
         preserveScroll: true,
         onSuccess: () => {
             toast.add({

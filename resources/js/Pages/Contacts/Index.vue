@@ -125,7 +125,7 @@ const handleDelete = (id) => {
                             {{ contact.first_name ?? '-' }}
                         </TableData>
                         <TableData class="">
-                            {{ contact.first_name ?? '-' }}
+                            {{ contact.last_name ?? '-' }}
                         </TableData>
                         <TableData class="font-mono text-xs">
                             {{ contact.phone ?? '-' }}

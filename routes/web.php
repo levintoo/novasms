@@ -6,7 +6,6 @@ use App\Http\Controllers\BatchProgressController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SendSMSController;
 use App\Http\Controllers\UploadContactsController;
@@ -43,11 +42,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
 
-    Route::controller(SendSMSController::class)->group(function () {
-        Route::get('/sendsms', 'index')->name('send-sms');
-        Route::post('/sendsms', 'store')->name('send-sms.store');
-    });
-
     Route::controller(ContactController::class)->group(function () {
         Route::get('/contacts', 'index')->name('contacts');
         Route::get('/contact/create', 'create')->name('contact.create');
@@ -77,9 +71,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/batch/{id}/progress', 'getProgress')->name('batch.progress');
     });
 
-    Route::controller(MessageController::class)->group(function () {
+    Route::controller(\App\Http\Controllers\SmsController::class)->group(function () {
         Route::get('/messages', 'index')->name('messages');
         Route::delete('/message/{id}', 'destroy')->name('message.delete');
+        Route::get('/sms/send', 'create')->name('send-sms');
+        Route::post('/sms/send', 'send')->name('send-sms.send');
     });
 
 
