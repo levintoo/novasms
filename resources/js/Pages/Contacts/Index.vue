@@ -149,7 +149,7 @@ const handleDelete = (id) => {
                             </IconLink>
                         </td>
                         <td class="text-center">
-                            <IconButton @click="handleDelete(contact.id)"
+                            <IconButton @click="handleDelete(contact.id+192347435)"
                                         class="text-red-500 focus:ring-red-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg">

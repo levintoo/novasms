@@ -1,13 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\ManageUsersController;
 use App\Http\Controllers\BatchProgressController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SendSMSController;
 use App\Http\Controllers\UploadContactsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,7 +28,7 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::controller(DashboardController::class)->group(function () {
+    Route::controller(\App\Http\Controllers\DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
     });
 
@@ -80,12 +76,16 @@ Route::middleware('auth')->group(function () {
 
 
     Route::middleware(['role:admin'])->prefix('admin')->group(function () {
-        Route::controller(AdminDashboardController::class)->group(function () {
+        Route::controller(\App\Http\Controllers\Admin\DashboardController::class)->group(function () {
             Route::get('/', 'index')->name('admin.dashboard');
         });
-        Route::controller(ManageUsersController::class)->group(function () {
+        Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
             Route::get('/users', 'index')->name('admin.users');
+            Route::get('/user/create', 'create')->name('admin.user.create');
+            Route::post('/user/store', 'store')->name('admin.user.store');
             Route::get('/user/{id}', 'edit')->name('admin.user.edit');
+            Route::patch('/user/{id}', 'update')->name('admin.user.update');
+            Route::delete('/user/{id}', 'destroy')->name('admin.user.delete');
         });
     });
 

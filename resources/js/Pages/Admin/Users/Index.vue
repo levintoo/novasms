@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import {Head, router, usePage} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {defineOptions} from "vue";
 import Table from "@/Components/Table.vue";
@@ -11,6 +11,8 @@ import TableData from "@/Components/TableData.vue";
 import Pagination from "@/Components/Pagination.vue";
 import IconButton from "@/Components/IconButton.vue";
 import IconLink from "@/Components/IconLink.vue";
+import toast from "@/Stores/Toast.js";
+import PrimaryLink from "@/Components/PrimaryLink.vue";
 defineOptions({
     layout: AppLayout,
 })
@@ -22,8 +24,25 @@ defineProps({
     }
 })
 
+const page = usePage()
+
 const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
+    router.delete(route('admin.user.delete',id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            toast.add({
+                message: page.props.toast,
+                duration: 5000
+            })
+        },
+        onError: (errors) => {
+            toast.add({
+                message: 'something went wrong',
+                duration: 5000
+            })
+        },
+    })
 }
 </script>
 
@@ -31,19 +50,30 @@ const handleDelete = (id) => {
     <Head title="Manage Users" />
 
     <div>
-        <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-            Manage Users
-        </h2>
+        <div class="grid grid-cols-2">
+            <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                Manage Users
+            </h2>
+
+            <span class="flex align-center justify-end">
+                <PrimaryLink :href="route('admin.user.create')" class="flex justify-between my-6">
+                    <span aria-hidden="true" class="mr-2">+</span>
+                    <span>Add new</span>
+                </PrimaryLink>
+            </span>
+        </div>
     </div>
+
 
     <Table>
        <template #thead>
            <TableHead>
                <TableHeadItem>Name</TableHeadItem>
+               <TableHeadItem>Phone</TableHeadItem>
                <TableHeadItem>Email</TableHeadItem>
-               <TableHeadItem>Balance</TableHeadItem>
-               <TableHeadItem>Contacts</TableHeadItem>
                <TableHeadItem>Groups</TableHeadItem>
+               <TableHeadItem>Contacts</TableHeadItem>
+               <TableHeadItem>Balance</TableHeadItem>
                <TableHeadItem>Joined</TableHeadItem>
                <TableHeadItem>Roles</TableHeadItem>
                <TableHeadItem colspan="3" class="text-center">action</TableHeadItem>
@@ -53,13 +83,14 @@ const handleDelete = (id) => {
             <TableBody v-if="users.data.length > 0">
                 <TableBodyItem v-for="user in users.data">
                     <TableData>{{ user.name }}</TableData>
+                    <TableData class="whitespace-nowrap">{{ user.phone }}</TableData>
                     <TableData>{{ user.email }}</TableData>
-                    <TableData>{{ user.balance }}</TableData>
-                    <TableData>{{ user.contacts }}</TableData>
                     <TableData>{{ user.groups }}</TableData>
+                    <TableData>{{ user.contacts }}</TableData>
+                    <TableData>{{ user.balance }}</TableData>
                     <TableData>{{ user.joined }}</TableData>
-                    <TableData v-if="user.roles.length > 0">
-                        <span v-for="role in user.roles">{{ role }}</span>
+                    <TableData class="flex flex-col" v-if="user.roles.length > 0">
+                        <span class="whitespace-nowrap" v-for="role in user.roles">{{ role }}</span>
                     </TableData>
                     <TableData v-else>
                         -

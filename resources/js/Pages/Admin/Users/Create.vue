@@ -1,45 +1,36 @@
 <script setup>
-import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import {Head, useForm, usePage} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {defineOptions} from "vue";
+import PrimaryLink from "@/Components/PrimaryLink.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import InputLabel from "@/Components/InputLabel.vue";
 import SelectInput from "@/Components/SelectInput.vue";
+import InputLabel from "@/Components/InputLabel.vue";
 import toast from "@/Stores/Toast.js";
-import PrimaryLink from "@/Components/PrimaryLink.vue";
 
 defineOptions({
     layout: AppLayout,
 })
 
-const props = defineProps({
-    user: {
+defineProps({
+    roles: {
         type: Object,
         required: true,
-    },
-    role: {
-        type: Array,
-        required: false,
-    },
-    all_roles: {
-        type: Object,
-        required: true,
-    },
+    }
 })
 
 const form = useForm({
-    name: props.user.name ?? "",
-    email: props.user.email ?? "",
-    phone: props.user.phone ?? "",
-    role: props.role.length > 0 ? props.role[0] : "",
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
 });
 
 const page = usePage()
 
 const handleSubmit = () => {
-    form.patch(route('admin.user.update',props.user.id),{
+    form.post(route('admin.user.store'),{
         preserveScroll: true,
         onSuccess: () => {
             toast.add({
@@ -58,12 +49,12 @@ const handleSubmit = () => {
 </script>
 
 <template>
-    <Head title="Manage Users" />
+    <Head title="Create User" />
 
     <div>
         <div class="grid grid-cols-2">
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                Edit User
+                Create User
             </h2>
 
             <span class="flex align-center justify-end">
@@ -81,10 +72,10 @@ const handleSubmit = () => {
         <div class="p-4 sm:p-6 bg-white sm:rounded-md shadow-sm">
             <section>
                 <header>
-                    <h2 class="text-lg font-medium text-gray-900">User Information</h2>
+                    <h2 class="text-lg font-medium text-gray-900">New User Information</h2>
 
                     <p class="mt-1 text-sm text-gray-600">
-                        Update this account's profile information.
+                        Fill the form to create new user.
                     </p>
                 </header>
 
@@ -146,7 +137,7 @@ const handleSubmit = () => {
                             autocomplete="role"
                         >
                             <option value="">select</option>
-                            <option v-for="role in all_roles" :value=role>{{ role }}</option>
+                            <option v-for="role in roles" :value=role>{{ role }}</option>
                         </SelectInput>
 
                         <InputError class="mt-2" :message="form.errors.role" />
