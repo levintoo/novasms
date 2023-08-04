@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+    Route::middleware(['can:manage users'])->prefix('admin')->group(function () {
         Route::controller(\App\Http\Controllers\Admin\DashboardController::class)->group(function () {
             Route::get('/', 'index')->name('admin.dashboard');
         });

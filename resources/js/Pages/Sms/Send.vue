@@ -88,7 +88,7 @@ const addFieldToMessage = (field) => {
                     <InputLabel>Group</InputLabel>
                     <select v-model="form.group" class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm">
                         <option value="">select</option>
-                        <option v-for="group in groups" :value="group.id">{{ group.name }} ({{ group.size }})</option>
+                        <option v-for="group in groups" :value="group.id">{{ group.name.slice(0,100) }} ({{ group.size }})</option>
                     </select>
                     <InputError class="mt-2" :message="form.errors.group" />
                 </div>

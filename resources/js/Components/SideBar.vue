@@ -2,9 +2,14 @@
 import SideBarDropdown from "@/Components/SideBarDropdown.vue";
 import SideBarDropdownLink from "@/Components/SideBarDropdownLink.vue";
 import SideBarItem from "@/Components/SideBarItem.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
+import {Link, usePage} from "@inertiajs/vue3"
+
+const page = usePage()
 
 const state = ref('dashboard')
+
+const isadmin = computed(() => page.props.auth.roles.includes('admin') || page.props.auth.roles.includes('super admin') )
 </script>
 
 <template>
@@ -55,7 +60,7 @@ const state = ref('dashboard')
                 Messages
             </span>
         </SideBarItem>
-        <SideBarItem :href="route('contacts')" :active="route().current('contacts') || route().current('contact.create')"  >
+        <SideBarItem :href="route('contacts')" :active="route().current('contacts') || route().current('contact.create') || route().current('contacts.create')"  >
             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M384 48c8.8 0 16 7.2 16 16V448c0 8.8-7.2 16-16 16H96c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16H384zM96 0C60.7 0 32 28.7 32 64V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H96zM240 256a64 64 0 1 0 0-128 64 64 0 1 0 0 128zm-32 32c-44.2 0-80 35.8-80 80c0 8.8 7.2 16 16 16H336c8.8 0 16-7.2 16-16c0-44.2-35.8-80-80-80H208zM512 80c0-8.8-7.2-16-16-16s-16 7.2-16 16v64c0 8.8 7.2 16 16 16s16-7.2 16-16V80zM496 192c-8.8 0-16 7.2-16 16v64c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm16 144c0-8.8-7.2-16-16-16s-16 7.2-16 16v64c0 8.8 7.2 16 16 16s16-7.2 16-16V336z"/></svg>
             <span class="ml-4">
                 Contacts
@@ -70,7 +75,7 @@ const state = ref('dashboard')
                 Groups
             </span>
         </SideBarItem>
-        <SideBarDropdown>
+        <SideBarDropdown v-if="isadmin">
             <template #toggler>
                 <svg
                     aria-hidden="true"
@@ -109,15 +114,27 @@ const state = ref('dashboard')
                 </SideBarDropdownLink>
             </template>
         </SideBarDropdown>
-
     </ul>
 
     <div class="px-6 my-6">
-        <button
-            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+        <Link  :href="route('logout')" as="button" method="POST"
+            class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
         >
+            <svg
+                aria-hidden="true"
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                ></path>
+            </svg>
             Sign out
-            <span aria-hidden="true" class="ml-2">+</span>
-        </button>
+        </Link>
     </div>
 </template>

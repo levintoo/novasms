@@ -123,10 +123,16 @@ class UsersController extends Controller
 
         $user = User::findorfail($id);
 
-        if(!Auth::user()->hasRole('super admin') and !Auth::user()->hasRole($validated['role'])) {
-            return redirect()->back()->withToast('action is unauthorized');
+        if($user->hasRole('admin') ||
+            $user->hasRole('super admin') ||
+            $validated['role'] === "admin" ||
+            $validated['role'] === "super admin" ) {
+            if (!Auth::user()->can('manage admins')) {
+                return redirect()->back()->withToast('cannot manage admin roles');
+            }
         }
 
+        if(!$user->id === Auth::id())
         $user->syncRoles($validated['role']);
 
         $user->update([
@@ -145,6 +151,11 @@ class UsersController extends Controller
         if($id == Auth::id()) return redirect()->back()->withToast('To delete your account head to the profile menu by clicking your name on the top right');
 
         $user = User::findorfail($id);
+
+        if($user->hasRole('admin') || $user->hasRole('super admin'))
+            if(!Auth::user()->can('manage admins'))
+                return redirect()->back()->withToast('cannot delete admins');
+
         $user->contacts()->delete();
         $user->groups()->delete();
         $user->delete();

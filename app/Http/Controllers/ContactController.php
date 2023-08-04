@@ -50,8 +50,8 @@ class ContactController extends Controller
     {
         $validated = $request->validate([
             'group' => ['required',Rule::exists('groups','id')->where('user_id',Auth::id())],
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'first_name' => 'required|max:100',
+            'last_name' => 'required|max:100',
             'phone' => 'required|max:255',
         ]);
 
@@ -104,8 +104,8 @@ class ContactController extends Controller
     {
         $validated = $request->validate([
             'group' => ['required',Rule::exists('groups','id')->where('user_id',Auth::id())],
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'first_name' => 'required|max:100',
+            'last_name' => 'required|max:100',
             'phone' => 'required|max:255',
         ]);
 

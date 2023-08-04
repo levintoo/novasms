@@ -109,7 +109,7 @@ const handleUploadContacts = () => {
                         autocomplete="group"
                     >
                         <option value=''>Select</option>
-                        <option v-for="group in groups" :value=group.id>{{ group.name }}</option>
+                        <option v-for="group in groups" :value=group.id>{{ (group.name).slice(0,100) }}</option>
                     </SelectInput>
 
                     <InputError class="mt-2" :message="form.errors.group" />

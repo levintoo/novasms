@@ -45,7 +45,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-           'name' => ['required','string','max:255'],
+           'name' => ['required','string','max:100'],
            'description' => ['max:2550'],
         ]);
         $group = Group::create([
@@ -69,8 +69,8 @@ class GroupController extends Controller
             'name' => $group->name,
             'description' => $group->description,
             'size' => $group->contacts_count,
-            'created' => Carbon::parse($group->created_at)->format('F j,Y H:i A T'),
-            'updated' =>  Carbon::parse($group->updated_at)->format('F j,Y H:i A T'),
+            'created' => Carbon::parse($group->created_at)->format('F j,Y h:i a'),
+            'updated' =>  Carbon::parse($group->updated_at)->format('F j,Y H:i a'),
         ]);
 
         $query = Contact::query();
@@ -109,7 +109,7 @@ class GroupController extends Controller
     public function update(Request $request,$id)
     {
         $validated = $request->validate([
-            'name' => ['required','string','max:255'],
+            'name' => ['required','string','max:100'],
             'description' => ['max:2550'],
         ]);
 

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('group_id')->nullable();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name',100);
+            $table->string('last_name',100);
             $table->string('phone');
             $table->timestamps();
             $table->softDeletes();
