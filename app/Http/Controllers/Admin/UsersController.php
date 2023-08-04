@@ -71,7 +71,13 @@ class UsersController extends Controller
 
         event(new Registered($user));
 
-        $user->assignRole($validated['role']);
+        if($validated['role'] != "admin" && $validated['role'] != "super admin") {
+            $user->assignRole($validated['role']);
+        } else if (Auth::user()->can('manage admins')) {
+            $user->assignRole($validated['role']);
+        } else {
+            $user->assignRole('standard user');
+        }
 
         return redirect()->route('admin.users')->withToast('user created');
     }
@@ -132,8 +138,9 @@ class UsersController extends Controller
             }
         }
 
-        if(!$user->id === Auth::id())
-        $user->syncRoles($validated['role']);
+        if($user->id != Auth::id()) {
+            $user->syncRoles($validated['role']);
+        }
 
         $user->update([
             'name' => $validated['name'],

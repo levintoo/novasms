@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
+use App\Models\Group;
+use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,7 +16,14 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return inertia('Admin/Index');
+        $stats = [
+            'users' => User::count(),
+            'groups' => Group::count(),
+            'contacts' => Contact::count(),
+            'messages' => Message::count(),
+            'account' => User::sum('sms_balance'),
+        ];
+        return inertia('Admin/Index',compact('stats'));
     }
 
     /**
