@@ -38,7 +38,13 @@ class SmsController extends Controller
 
         if($validated['recipients'] == 'one')
         {
-            return $this->sendSMSToOne($validated);
+            $message = Message::create([
+                'user_id' => Auth::id(),
+                'recipient' => $validated['phone'],
+                'content' => $validated['message'],
+            ]);
+
+            return redirect()->back()->withToast('message sent');
         }
 
         else if($validated['recipients'] == 'group')
@@ -46,18 +52,6 @@ class SmsController extends Controller
             return $this->sendSMSToGroup($validated);
         }
     }
-
-    public function sendSMSToOne(mixed $validated): mixed
-    {
-        $message = Message::create([
-            'user_id' => Auth::id(),
-            'recipient' => $validated['phone'],
-            'content' => $validated['message'],
-        ]);
-
-        return redirect()->back()->withToast('message sent');
-    }
-
     /**
      * @param mixed $validated
      * @return mixed

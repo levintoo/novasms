@@ -76,7 +76,7 @@ const handleDelete = (id) => {
                     <TableData class=" whitespace-nowrap">
                         {{ message.sent ?? '-' }}
                     </TableData>
-                    <TableData class=" text-xs text-center">
+                    <TableData class=" text-xs">
 <!--                        {{ message.delivered ?? null }}-->
                         <span
                             v-if="message.delivered"

@@ -24,7 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'sms_balance',
+        'balance',
     ];
 
     /**

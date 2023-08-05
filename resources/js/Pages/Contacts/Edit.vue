@@ -118,7 +118,7 @@ const handleUpdateContact = () => {
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel for="group" value="Add to group" />
+                    <InputLabel for="group" value="Belongs to group" />
 
                     <SelectInput
                         id="group"

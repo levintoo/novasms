@@ -21,7 +21,7 @@ class DashboardController extends Controller
             'groups' => Group::count(),
             'contacts' => Contact::count(),
             'messages' => Message::count(),
-            'account' => User::sum('sms_balance'),
+            'balance' => User::sum('balance'),
         ];
         return inertia('Admin/Index',compact('stats'));
     }
