@@ -83,9 +83,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/users', 'index')->name('admin.users');
             Route::get('/user/create', 'create')->name('admin.user.create');
             Route::post('/user/store', 'store')->name('admin.user.store');
-            Route::get('/user/{id}', 'edit')->name('admin.user.edit');
+            Route::get('/user/{id}/edit', 'edit')->name('admin.user.edit');
+            Route::get('/user/{id}', 'show')->name('admin.user.show');
             Route::patch('/user/{id}', 'update')->name('admin.user.update');
             Route::delete('/user/{id}', 'destroy')->name('admin.user.delete');
+            Route::patch('/user/{id}/restore', 'restore')->name('admin.user.restore');
         });
     });
 
