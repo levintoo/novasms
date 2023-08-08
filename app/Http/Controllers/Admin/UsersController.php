@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
+use App\Models\Group;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
@@ -19,22 +21,73 @@ class UsersController extends Controller
      */
     public function index()
     {
+        request()->validate([
+            'direction' => 'in:desc,asc',
+            'field' => 'in:name,email,phone,joined,groups,balance,contacts',
+            'trashed' => 'in:without,with,only',
+            'search' => 'max:25'
+        ]);
+
         $query = User::query();
+
+        if(request('search')) {
+            $query->where(function ($query) {
+                $query->where('name','LIKE','%'.request('search').'%')
+                    ->orwhere('email','LIKE','%'.request('search').'%')
+                    ->orwhere('phone','LIKE','%'.request('search').'%');
+            });
+        }
+
+        if(request('field') == 'contacts') {
+           $query->orderBy('contacts_count',request('direction'));
+        }
+        else if(request('field') == 'groups') {
+            $query->orderBy('groups_count',request('direction'));
+        }
+        else if(request('field') == 'joined') {
+            $query->orderBy('created_at',request('direction'));
+        }
+        else if(request('field')) {
+            $query->orderBy(request('field'),request('direction'));
+        }
+
+        if(request('trashed') == "with") {
+            $query->withTrashed();
+        }
+        else if(request('trashed') == "only") {
+            $query->onlyTrashed();
+        }
+        else {
+            $query->withoutTrashed();
+        }
+
         $query->orderBy('created_at','DESC');
+
         $query->withCount('groups');
+
         $query->withCount('contacts');
+
         $users = $query->paginate()->through(fn($user) => [
             'id' => $user->id,
             'name' => $user->name,
             'contacts' => $user->contacts_count,
             'groups' => $user->groups_count,
-            'balance' => $user->sms_balance,
+            'balance' => $user->balance,
             'phone' => $user->phone,
             'email' => $user->email,
             'joined' => $user->created_at ? Carbon::parse($user->created_at)->diffForHumans() : null ,
             'roles' => $user->getRoleNames(),
+            'trashed' => !!$user->deleted_at,
         ]);
-        return inertia('Admin/Users/Index', compact('users'));
+
+        $filters = request()->all([
+            'field',
+            'search',
+            'direction',
+            'trashed'
+        ]);
+
+        return inertia('Admin/Users/Index', compact('users','filters'));
     }
 
     /**
@@ -87,7 +140,9 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::withTrashed()->with('contacts')->with('groups')->findorfail($id);
+
+        return inertia('Admin/Users/Show',compact('user'));
     }
 
     /**
@@ -168,5 +223,19 @@ class UsersController extends Controller
         $user->delete();
 
         return redirect()->back()->withToast('user trashed successfully');
+    }
+    public function restore($id)
+    {
+        $user = User::onlyTrashed()->findorfail($id);
+
+        $user->restore();
+
+        $user->contacts()->onlyTrashed()->restore();
+
+        $user->messages()->onlyTrashed()->restore();
+
+        $user->groups()->onlyTrashed()->restore();
+
+        return redirect()->back()->withToast('user restored successfully');
     }
 }
