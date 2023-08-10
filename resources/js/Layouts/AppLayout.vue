@@ -110,7 +110,7 @@ const isSideMenuOpen = ref(false)
                                 </svg>
                             </div>
                             <input
-                                class="block border-gray-300 w-full text-sm focus:outline-none form-input leading-5 focus:border-purple-400 focus:shadow-outline-purple pl-8 text-gray-700"
+                                class="block border-gray-300 w-full text-sm focus:outline-none form-input leading-5 focus:border-purple-600 focus:shadow-outline-purple pl-8 text-gray-700"
                                 type="text"
                                 placeholder="Search"
                                 aria-label="Search"

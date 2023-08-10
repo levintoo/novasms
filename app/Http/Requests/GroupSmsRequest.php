@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class StoreSMSRequest extends FormRequest
+class GroupSmsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,7 @@ class StoreSMSRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'recipients' => 'in:one,group',
-            'group' => ['required_if:recipients,group','max:255',Rule::exists('groups','id')->where('user_id',Auth::id())],
-            'phone' => 'required_if:recipients,one|max:255',
+            'group' => ['required','max:255',Rule::exists('groups','id')->where('user_id',Auth::id())],
             'message' => 'required|string',
         ];
     }

@@ -57,11 +57,11 @@ const handleDelete = (id) => {
     <Table >
         <template #thead>
             <TableHead>
-                <TableHeadItem >recipient</TableHeadItem>
-                <TableHeadItem >message</TableHeadItem>
-                <TableHeadItem >sent</TableHeadItem>
-                <TableHeadItem >delivered</TableHeadItem>
-                <TableHeadItem class="text-center" colspan="2">Actions</TableHeadItem>
+                <TableHeadItem field="recipient" />
+                <TableHeadItem field="message" />
+                <TableHeadItem field="sent" />
+                <TableHeadItem field="delivered" />
+                <TableHeadItem field="Actions" class="text-center"/>
             </TableHead>
         </template>
         <template #tbody>
@@ -77,7 +77,7 @@ const handleDelete = (id) => {
                         {{ message.sent ?? '-' }}
                     </TableData>
                     <TableData class=" text-xs">
-<!--                        {{ message.delivered ?? null }}-->
+                        <!--                        {{ message.delivered ?? null }}-->
                         <span
                             v-if="message.delivered"
                             class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full"

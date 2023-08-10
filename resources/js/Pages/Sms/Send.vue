@@ -23,28 +23,45 @@ defineProps({
 })
 
 const form = useForm({
-    recipients: 'group',
+    recipients: "one",
     phone: "",
-    group: "26",
-    message: "hello {{ first_name }}",
+    group: "",
+    message: "",
 })
 
 const handleSendSMS = () => {
-    form.post(route('send-sms.send'), {
-        preserveScroll: true,
-        onSuccess: () => {
-            toast.add({
-                message: page.props.toast,
-                duration: 5000
-            })
-        },
-        onError: (e) => {
-            toast.add({
-                message: 'you have an error ',
-                duration: 5000
-            })
-        },
-    })
+    if(form.recipients === 'one') {
+        form.post(route('sms.contact.send'), {
+            preserveScroll: true,
+            onFinish: () => {
+                form.reset()
+            },
+            onError: (e) => {
+                console.log(e)
+                toast.add({
+                    message: 'Something went wrong',
+                    duration: 5000
+                })
+            },
+        })
+    } else if(form.recipients === 'group') {
+        form.post(route('sms.group.send'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.add({
+                    message: page.props.toast,
+                    duration: 5000
+                })
+            },
+            onError: (e) => {
+                console.log(e)
+                toast.add({
+                    message: 'Something went wrong',
+                    duration: 5000
+                })
+            },
+        })
+    }
 }
 
 const addFieldToMessage = (field) => {
@@ -76,20 +93,24 @@ const addFieldToMessage = (field) => {
             <form @submit.prevent="handleSendSMS()">
 
                 <div class="mt-4">
-                    <InputLabel>Recipients</InputLabel>
-                    <select v-model="form.recipients" class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm">
+                    <InputLabel for="recipients">Recipients</InputLabel>
+
+                    <select autofocus id="recipients" required v-model="form.recipients" class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm">
                         <option value="one">One</option>
                         <option value="group">Group</option>
                     </select>
+
                     <InputError class="mt-2" :message="form.errors.recipients" />
                 </div>
 
                 <div class="mt-4" v-if="form.recipients === 'group' ">
-                    <InputLabel>Group</InputLabel>
-                    <select v-model="form.group" class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm">
+                    <InputLabel for="group">Group</InputLabel>
+
+                    <select id="group" v-model="form.group" class="mt-1 block w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500 rounded-md shadow-sm">
                         <option value="">select</option>
                         <option v-for="group in groups" :value="group.id">{{ group.name.slice(0,100) }} ({{ group.size }})</option>
                     </select>
+
                     <InputError class="mt-2" :message="form.errors.group" />
                 </div>
 

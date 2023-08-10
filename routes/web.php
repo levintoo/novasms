@@ -6,7 +6,6 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadContactsController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +19,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome',[
+    return \inertia('Welcome',[
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
@@ -70,10 +69,10 @@ Route::middleware('auth')->group(function () {
     Route::controller(\App\Http\Controllers\SmsController::class)->group(function () {
         Route::get('/messages', 'index')->name('messages');
         Route::delete('/message/{id}', 'destroy')->name('message.delete');
-        Route::get('/sms/send', 'create')->name('send-sms');
-        Route::post('/sms/send', 'send')->name('send-sms.send');
+        Route::get('/sms/create', 'create')->name('sms.create');
+        Route::post('/contact/sms/send', 'sendToGroup')->name('sms.group.send');
+        Route::post('/group/sms/send', 'sendToContact')->name('sms.contact.send');
     });
-
 
     Route::middleware(['can:manage users'])->prefix('admin')->group(function () {
         Route::controller(\App\Http\Controllers\Admin\DashboardController::class)->group(function () {

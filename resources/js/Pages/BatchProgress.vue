@@ -14,7 +14,7 @@ const props = defineProps({
 const is_failed = ref(!!props.batchinfo.finishedAt && props.batchinfo.progress < 100)
 
 const polling = setInterval(() => {
-    if(props.batchinfo.finished) {
+    if(props.batchinfo.finishedAt) {
         clearInterval(polling)
         return
     }
@@ -37,6 +37,7 @@ onUnmounted(() => {
         </div>
 
     <pre>
+        {{ 'failed: ' + is_failed }}
         {{ 'failed: ' + !!batchinfo.cancelledAt }}
         {{ batchinfo }}
     </pre>

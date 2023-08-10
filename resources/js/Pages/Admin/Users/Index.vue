@@ -16,7 +16,7 @@ import PrimaryLink from "@/Components/PrimaryLink.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TextInput from "@/Components/TextInput.vue";
 import {Link} from "@inertiajs/vue3";
-import {debounce} from "lodash";
+import {debounce, omitBy} from "lodash";
 
 defineOptions({
     layout: AppLayout,
@@ -36,8 +36,8 @@ const page = usePage()
 
 const params = ref({
     search: props.filters.search ?? "",
-    field: props.filters.field ?? "joined",
-    direction: props.filters.direction ?? "desc",
+    field: props.filters.field ?? "",
+    direction: props.filters.direction ?? "",
     trashed: props.filters.trashed ?? "without",
 })
 
@@ -47,7 +47,7 @@ const sort = (field) => {
 }
 
 watch(params.value, debounce((params) => {
-    router.get(route('admin.users'), { trashed: params.trashed, search: params.search, field: params.field, direction: params.direction }, { preserveScroll: true, replace: true, preserveState: true },)
+    router.get(route('admin.users'), { ...omitBy(params, v => v === "") }, { preserveScroll: true, replace: true, preserveState: true },)
 },150));
 
 const handleDelete = (id) => {
@@ -113,7 +113,7 @@ const handleRestore = (id) => {
                         </svg>
                     </span>
                 <TextInput v-model="params.search" type="text" placeholder="Search"
-                       class="block pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
+                       class="block h-10 pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
             </div>
         </div>
         <div class="md:justify-end flex items-center">
@@ -127,13 +127,13 @@ const handleRestore = (id) => {
     <Table>
        <template #thead>
            <TableHead>
-               <TableHeadItem field="name" :params=params @click="sort('name')" />
-               <TableHeadItem field="phone" :params=params @click="sort('phone')" />
-               <TableHeadItem field="email" :params=params @click="sort('email')" />
-               <TableHeadItem field="groups" :params="params" @click="sort('groups')"/>
-               <TableHeadItem field="contacts" :params="params" @click="sort('contacts')" />
-               <TableHeadItem field="balance" :params="params" @click="sort('balance')" />
-               <TableHeadItem field="joined" :params="params" @click="sort('joined')" />
+               <TableHeadItem class="cursor-pointer" field="name" :params=params @click="sort('name')" />
+               <TableHeadItem class="cursor-pointer" field="phone" :params=params @click="sort('phone')" />
+               <TableHeadItem class="cursor-pointer" field="email" :params=params @click="sort('email')" />
+               <TableHeadItem class="cursor-pointer" field="groups" :params="params" @click="sort('groups')"/>
+               <TableHeadItem class="cursor-pointer" field="contacts" :params="params" @click="sort('contacts')" />
+               <TableHeadItem class="cursor-pointer" field="balance" :params="params" @click="sort('balance')" />
+               <TableHeadItem class="cursor-pointer" field="joined" :params="params" @click="sort('joined')" />
                <TableHeadItem field="action" colspan="3" class="text-center">action</TableHeadItem>
            </TableHead>
        </template>

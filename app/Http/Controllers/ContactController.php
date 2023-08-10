@@ -16,11 +16,46 @@ class ContactController extends Controller
      */
     public function index()
     {
+        request()->validate([
+            'direction' => 'in:desc,asc',
+            'field' => 'in:first_name,last_name,phone,created,group',
+            'search' => 'max:25',
+            'group' => ['max:255',Rule::exists('groups','id')->where('user_id',Auth::id())],
+        ]);
+
         $query = Contact::query();
+
+        if(request('search')) {
+            $query->where(function ($query) {
+                $query->where('first_name','LIKE','%'.request('search').'%')
+                    ->orwhere('last_name','LIKE','%'.request('search').'%')
+                    ->orwhere('phone','LIKE','%'.request('search').'%');
+            });
+        }
+
+        if(request('group')) {
+            $query->where('group_id',request('group'));
+        }
+
+        if(request('field') == 'created') {
+            $query->orderBy('created_at',request('direction'));
+        }
+        else if(request('field') == 'group') {
+            $query->orderBy('group_id',request('direction'));
+        }
+        else if(request('field') && request('direction')) {
+            $query->orderBy(\request('field'),\request('direction'));
+        }
+        else{
+            $query->orderBy('created_at','DESC');
+        }
+
         $query->where('user_id',Auth::id());
-        $query->orderBy('created_at','DESC');
+
         $query->with('group:id,name');
+
         $query->select('id','phone','first_name','last_name','created_at','group_id');
+
         $contacts = $query->paginate()
             ->withQueryString()
             ->through(fn($contact) => [
@@ -31,7 +66,28 @@ class ContactController extends Controller
                 'created' => $contact->created_at ? Carbon::parse($contact->created_at)->diffForHumans() : null,
                 'group' => $contact->group->name ?? null,
         ]);
-        return inertia('Contacts/Index', compact('contacts'));
+
+        $contacts_count = $query->count();
+
+        $filters = request()->all([
+            'field',
+            'search',
+            'direction',
+            'group'
+        ]);
+
+        $groups = Group::query()
+            ->where('user_id',Auth::id())
+            ->select('name','id')
+            ->orderBy('name','ASC')
+            ->withCount('contacts')
+            ->get()->map(fn($group) => [
+            'id' => $group->id,
+            'name' => $group->name,
+            'size' => $group->contacts_count,
+        ]);
+
+        return inertia('Contacts/Index', compact('groups','contacts','contacts_count','filters'));
     }
 
     /**
