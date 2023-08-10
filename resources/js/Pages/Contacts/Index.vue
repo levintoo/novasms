@@ -32,9 +32,7 @@ const props = defineProps({
     contacts_count: Number,
     filters: {
         type: Object,
-        default: {
-
-        },
+        default: {},
     },
     groups: {
         type: Object,

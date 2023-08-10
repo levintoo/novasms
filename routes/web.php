@@ -68,8 +68,8 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(\App\Http\Controllers\SmsController::class)->group(function () {
         Route::get('/messages', 'index')->name('messages');
-        Route::delete('/message/{id}', 'destroy')->name('message.delete');
         Route::get('/sms/create', 'create')->name('sms.create');
+        Route::delete('/message/{id}', 'destroy')->name('message.delete');
         Route::post('/contact/sms/send', 'sendToGroup')->name('sms.group.send');
         Route::post('/group/sms/send', 'sendToContact')->name('sms.contact.send');
     });

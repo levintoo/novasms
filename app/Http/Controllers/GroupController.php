@@ -15,20 +15,53 @@ class GroupController extends Controller
      */
     public function index()
     {
+        request()->validate([
+            'direction' => 'in:desc,asc',
+            'field' => 'in:name,description,size,created',
+            'search' => 'max:25',
+        ]);
+
         $query = Group::query();
+
         $query->where('user_id',Auth::id());
-        $query->orderBy('created_at','DESC');
+
         $query->select('id','name','description','created_at');
+
         $query->withCount('contacts');
+
+        if(request('search')) {
+            $query->where(function ($query) {
+                $query->where('name','LIKE','%'.request('search').'%')
+                    ->orwhere('description','LIKE','%'.request('search').'%');
+            });
+        }
+
+        if(request('field') == 'created') {
+            $query->orderBy('created_at',request('direction'));
+        }
+        else if(request('field') == 'size') {
+            $query->orderBy('contacts_count',request('direction'));
+        }
+        else if(request('field') && request('direction')) {
+            $query->orderBy(\request('field'),\request('direction'));
+        }
+        else{
+            $query->orderBy('created_at','DESC');
+        }
+
+        $groups_count = $query->count();
+
         $groups = $query->paginate()
-            ->through(fn($group)=>[
-            'id' => $group->id,
-            'name' => $group->name,
-            'description' => $group->description,
-            'created' => Carbon::create($group->created_at)->diffForHumans(),
+            ->withQueryString()
+            ->through(fn($group) =>[
+                'id' => $group->id,
+                'name' => $group->name,
+                'description' => $group->description,
+                'created' => Carbon::create($group->created_at)->diffForHumans(),
                 'size' => $group->contacts_count
         ]);
-        return inertia('Groups/Index',compact('groups'));
+
+        return inertia('Groups/Index',compact('groups','groups_count'));
     }
 
     /**
@@ -48,10 +81,12 @@ class GroupController extends Controller
            'name' => ['required','string','max:100'],
            'description' => ['max:2550'],
         ]);
+
         $group = Group::create([
             'user_id' => Auth::id(),
             ...$validated
         ]);
+
         return redirect()->route('groups')->withToast('group created');
     }
 
@@ -74,10 +109,15 @@ class GroupController extends Controller
         ]);
 
         $query = Contact::query();
+
         $query->where('user_id',Auth::id());
+
         $query->orderBy('created_at','DESC');
+
         $query->where('group_id',$id);
+
         $query->select('id','phone','first_name','last_name','created_at');
+
         $contacts = $query->paginate()
             ->withQueryString()
             ->through(fn($contact) => [

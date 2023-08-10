@@ -12,15 +12,40 @@ import TableBody from "@/Components/TableBody.vue";
 import TableBodyItem from "@/Components/TableBodyItem.vue";
 import Table from "@/Components/Table.vue";
 import TableData from "@/Components/TableData.vue";
+import {ref, watch} from "vue";
+import {debounce, omitBy} from "lodash";
+import TextInput from "@/Components/TextInput.vue";
 defineOptions({
     layout: AppLayout,
 })
-defineProps({
+const props = defineProps({
     groups: {
         type: Object
-    }
+    },
+    filters: {
+        type: Object,
+        default: {},
+    },
+    groups_count: Number,
 })
+
 const page = usePage()
+
+const params = ref({
+    search: props.filters.search ?? "",
+    field: props.filters.field ?? "",
+    direction: props.filters.direction ?? "",
+})
+
+const sort = (field) => {
+    params.value.field = field
+    params.value.direction = params.value.direction === 'asc' ? 'desc' : 'asc'
+}
+
+watch(params.value, debounce((params) => {
+    router.get(route('groups'), { ...omitBy(params, v => v === "") }, { preserveScroll: true, replace: true, preserveState: true },)
+},150));
+
 const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
     router.delete(route('group.delete',id), {
@@ -45,29 +70,41 @@ const handleDelete = (id) => {
     <Head title="Groups"/>
 
         <div>
-            <div class="grid grid-cols-2">
-                <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">
-                    Groups
-                </h2>
-
-                <span class="flex align-center justify-end">
-                        <PrimaryLink :href="route('group.create')" class="flex justify-between my-6">
-                            <span aria-hidden="true" class="mr-2">+</span>
-                            <span>Add new</span>
-                        </PrimaryLink>
-                    </span>
-            </div>
+            <h2 class="my-6 text-xl font-semibold text-gray-700 dark:text-gray-200">
+                Groups
+            </h2>
         </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-center">
+        <div class="md:space-x-2 grid grid-cols-1 md:grid-cols-2  space-y-2 md:space-y-0 md:my-auto">
+            <div class="block relative">
+                    <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+                            <path
+                                d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                            </path>
+                        </svg>
+                    </span>
+                <TextInput v-model="params.search" type="text" placeholder="Search"
+                           class="block h-10 w-full pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
+            </div>
+        </div>
+        <div class="md:justify-end flex items-center">
+            <PrimaryLink :href="route('group.create')" class="flex justify-between my-6">
+                <span aria-hidden="true" class="mr-2">+</span>
+                <span>Add new</span>
+            </PrimaryLink>
+        </div>
+    </div>
 
-        <Table >
+    <Table >
             <template #thead>
                 <TableHead>
-                    <TableHeadItem >Name</TableHeadItem>
-                    <TableHeadItem >Description</TableHeadItem>
-                    <TableHeadItem >Contacts</TableHeadItem>
-                    <TableHeadItem >Created</TableHeadItem>
-                    <TableHeadItem class="text-center" colspan="3">Actions</TableHeadItem>
+                    <TableHeadItem :params="params" @click="sort('name')" class="cursor-pointer" field="name"/>
+                    <TableHeadItem :params="params" @click="sort('description')" class="cursor-pointer" field="description"/>
+                    <TableHeadItem :params="params" @click="sort('size')" sort="size" class="cursor-pointer"  field="contacts" />
+                    <TableHeadItem :params="params" @click="sort('created')" class="cursor-pointer" field="created"/>
+                    <TableHeadItem field="Actions" class="text-center" colspan="3"/>
                 </TableHead>
             </template>
             <template #tbody>
@@ -123,7 +160,7 @@ const handleDelete = (id) => {
 
             </template>
             <template #pagination>
-                <Pagination :links="groups.links" />
+                <Pagination :to="groups.to" :from="groups.from" :count="groups_count" :links="groups.links" />
             </template>
         </Table>
 </template>
