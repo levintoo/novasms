@@ -10,7 +10,11 @@ import TableHead from "@/Components/TableHead.vue";
 import TableBody from "@/Components/TableBody.vue";
 import TableBodyItem from "@/Components/TableBodyItem.vue";
 import TableData from "@/Components/TableData.vue";
-import {defineOptions} from "vue";
+import {defineOptions, ref, watch} from "vue";
+import PrimaryLink from "@/Components/PrimaryLink.vue";
+import TextInput from "@/Components/TextInput.vue";
+import SelectInput from "@/Components/SelectInput.vue";
+import {debounce, omitBy} from "lodash";
 
 const page = usePage()
 
@@ -18,12 +22,32 @@ defineOptions({
     layout: AppLayout,
 })
 
-defineProps({
+const props = defineProps({
     messages: {
         type: Object
-    }
+    },
+    filters: {
+        type: Object,
+        default: {},
+    },
+    messages_count: Number,
 })
 
+const params = ref({
+    search: props.filters.search ?? "",
+    field: props.filters.field ?? "",
+    direction: props.filters.direction ?? "",
+    status: props.filters.status ?? "",
+})
+
+const sort = (field) => {
+    params.value.field = field
+    params.value.direction = params.value.direction === 'asc' ? 'desc' : 'asc'
+}
+
+watch(params.value, debounce((params) => {
+    router.get(route('messages'), { ...omitBy(params, v => v === "") }, { preserveScroll: true, replace: true, preserveState: true },)
+},150));
 
 const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
@@ -54,14 +78,41 @@ const handleDelete = (id) => {
         </h2>
     </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-center">
+        <div class="md:space-x-2 grid grid-cols-1 md:grid-cols-2  space-y-2 md:space-y-0 md:my-auto">
+            <SelectInput v-model="params.status" class="h-10 text-sm" :class="params.status === '' ? 'text-gray-500' : '' ">
+                <option value="">select</option>
+                <option >delivered</option>
+                <option >undelivered</option>
+            </SelectInput>
+            <div class="block relative">
+                    <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+                            <path
+                                d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
+                            </path>
+                        </svg>
+                    </span>
+                <TextInput v-model="params.search" type="text" placeholder="Search"
+                           class="block h-10 pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
+            </div>
+        </div>
+        <div class="md:justify-end flex items-center">
+            <PrimaryLink :href="route('admin.user.create')" class="flex justify-between my-6">
+                <span aria-hidden="true" class="mr-2">+</span>
+                <span>Add new</span>
+            </PrimaryLink>
+        </div>
+    </div>
+
     <Table >
         <template #thead>
             <TableHead>
-                <TableHeadItem field="recipient" />
-                <TableHeadItem field="message" />
-                <TableHeadItem field="sent" />
+                <TableHeadItem @click="sort('recipient')" class="cursor-pointer" :params="params" field="recipient" />
+                <TableHeadItem @click="sort('content')" class="cursor-pointer" :params="params" field="content" />
+                <TableHeadItem @click="sort('sent')" class="cursor-pointer" :params="params" field="sent" />
                 <TableHeadItem field="delivered" />
-                <TableHeadItem field="Actions" class="text-center"/>
+                <TableHeadItem field="Actions"/>
             </TableHead>
         </template>
         <template #tbody>
@@ -76,7 +127,7 @@ const handleDelete = (id) => {
                     <TableData class=" whitespace-nowrap">
                         {{ message.sent ?? '-' }}
                     </TableData>
-                    <TableData class=" text-xs">
+                    <TableData class="text-xs">
                         <!--                        {{ message.delivered ?? null }}-->
                         <span
                             v-if="message.delivered"
@@ -115,7 +166,7 @@ const handleDelete = (id) => {
 
         </template>
         <template #pagination>
-            <Pagination :links="messages.links" />
+            <Pagination :to="messages.to" :from="messages.from" :count="messages_count" :links="messages.links" />
         </template>
     </Table>
 </template>

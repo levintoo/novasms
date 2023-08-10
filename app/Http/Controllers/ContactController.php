@@ -56,6 +56,8 @@ class ContactController extends Controller
 
         $query->select('id','phone','first_name','last_name','created_at','group_id');
 
+        $contacts_count = $query->count();
+
         $contacts = $query->paginate()
             ->withQueryString()
             ->through(fn($contact) => [
@@ -66,8 +68,6 @@ class ContactController extends Controller
                 'created' => $contact->created_at ? Carbon::parse($contact->created_at)->diffForHumans() : null,
                 'group' => $contact->group->name ?? null,
         ]);
-
-        $contacts_count = $query->count();
 
         $filters = request()->all([
             'field',
@@ -95,7 +95,10 @@ class ContactController extends Controller
      */
     public function create()
     {
-        $groups = Group::where('user_id',Auth::id())->select('name','id')->get();
+        $groups = Group::query()
+            ->where('user_id',Auth::id())
+            ->select('name','id')
+            ->get();
         return inertia('Contacts/Create', compact('groups'));
     }
 
@@ -183,7 +186,8 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
-        $contact = Contact::where('id',$id)
+        $contact = Contact::query()
+            ->where('id',$id)
             ->where('user_id',Auth::id())
             ->firstorfail();
         $contact->delete();

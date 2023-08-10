@@ -87,7 +87,7 @@ const handleDelete = (id) => {
 
     <div class="grid grid-cols-1 md:grid-cols-2 justify-center">
         <div class="md:space-x-2 grid grid-cols-1 md:grid-cols-2  space-y-2 md:space-y-0 md:my-auto">
-            <SelectInput class="h-9 text-sm" v-model="params.group">
+            <SelectInput class="h-10 text-sm" v-model="params.group" :class="params.group === '' ? 'text-gray-500' : '' ">
                 <option value="">select</option>
                 <option v-for="group in groups" :value="group.id ?? '-'">{{ group.name ?? '-' }} {{ group.size ? ' ('+group.size + ') ' : '' }}</option>
             </SelectInput>
@@ -100,7 +100,7 @@ const handleDelete = (id) => {
                         </svg>
                     </span>
                 <TextInput v-model="params.search" type="text" placeholder="Search"
-                           class="block h-9 w-full pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
+                           class="block h-10 w-full pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
             </div>
         </div>
         <div class="md:justify-end flex items-center">

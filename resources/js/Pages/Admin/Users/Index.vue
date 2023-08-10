@@ -143,7 +143,7 @@ const handleRestore = (id) => {
                     <TableData>
                         <div class="text-sm">
                             <Link :href="route('admin.user.show',user.id)" class="underline hover:text-purple-800">{{ user.name }}</Link>
-                            <div v-if="user.roles.length > 0">
+                            <div v-if="user.roles.length > 0" class="">
                                 <p v-for="role in user.roles" class="text-xs text-gray-600">{{ role ?? '-' }}</p>
                             </div>
                             <p v-else class="text-xs text-gray-600">-</p>

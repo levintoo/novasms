@@ -21,17 +21,59 @@ class SmsController extends Controller
      */
     public function index()
     {
+        request()->validate([
+            'direction' => 'in:desc,asc',
+            'field' => 'in:recipient,content,sent',
+            'search' => 'max:25',
+            'status' => 'in:delivered,undelivered',
+        ]);
+
         $query = Message::query();
+
         $query->where('user_id',Auth::id());
-        $query->orderBy('created_at','DESC');
-        $messages = $query->paginate()->through(fn($message) => [
+
+        if(request('status') === 'delivered') {
+            $query->whereNotNull('delivered_at');
+        }
+        else if(request('status') === 'undelivered') {
+            $query->whereNull('delivered_at');
+        }
+
+        if(request('search')) {
+            $query->where(function ($query) {
+                $query->where('recipient','LIKE','%'.request('search').'%')
+                    ->orwhere('content','LIKE','%'.request('search').'%');
+            });
+        }
+
+        if(request('field') == 'sent') {
+            $query->orderBy('created_at',request('direction'));
+        }
+        else if(request('field') && request('direction')) {
+            $query->orderBy(\request('field'),\request('direction'));
+        }
+        else{
+            $query->orderBy('created_at','DESC');
+        }
+
+        $messages_count = $query->count();
+
+        $messages = $query->paginate()->withQueryString()->through(fn($message) => [
             'id' => $message->id,
             'recipient' => $message->recipient,
             'content' => $message->content,
             'sent' => $message->created_at ? Carbon::parse($message->created_at)->diffForHumans() : null,
             'delivered' => $message->delivered_at ? Carbon::parse($message->delivered_at)->diffForHumans() : null,
         ]);
-        return inertia('Sms/Index', compact('messages'));
+
+        $filters = request()->all([
+            'field',
+            'search',
+            'direction',
+            'status'
+        ]);
+
+        return inertia('Sms/Index', compact('messages','filters','messages_count'));
     }
     /**
      * Show the form for creating a new sms.
