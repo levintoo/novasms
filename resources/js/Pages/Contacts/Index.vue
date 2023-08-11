@@ -86,7 +86,7 @@ const handleDelete = (id) => {
     <div class="grid grid-cols-1 md:grid-cols-2 justify-center">
         <div class="md:space-x-2 grid grid-cols-1 md:grid-cols-2  space-y-2 md:space-y-0 md:my-auto">
             <SelectInput class="h-10 text-sm" v-model="params.group" :class="params.group === '' ? 'text-gray-500' : '' ">
-                <option value="">select</option>
+                <option value="">select group</option>
                 <option v-for="group in groups" :value="group.id ?? '-'">{{ group.name ?? '-' }} {{ group.size ? ' ('+group.size + ') ' : '' }}</option>
             </SelectInput>
             <div class="block relative">

@@ -20,7 +20,7 @@ class ContactController extends Controller
             'direction' => 'in:desc,asc',
             'field' => 'in:first_name,last_name,phone,created,group',
             'search' => 'max:25',
-            'group' => ['max:255',Rule::exists('groups','id')->where('user_id',Auth::id())],
+            'group' => [Rule::exists('groups','id')->where('user_id',Auth::id())],
         ]);
 
         $query = Contact::query();

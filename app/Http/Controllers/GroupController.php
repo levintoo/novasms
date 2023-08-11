@@ -95,40 +95,7 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        $group = Group::where('user_id',Auth::id())
-            ->select('name','description','created_at','updated_at')
-            ->withCount('contacts')
-            ->findorfail($id);
-
-        $group = collect([
-            'name' => $group->name,
-            'description' => $group->description,
-            'size' => $group->contacts_count,
-            'created' => Carbon::parse($group->created_at)->format('F j,Y h:i a'),
-            'updated' =>  Carbon::parse($group->updated_at)->format('F j,Y H:i a'),
-        ]);
-
-        $query = Contact::query();
-
-        $query->where('user_id',Auth::id());
-
-        $query->orderBy('created_at','DESC');
-
-        $query->where('group_id',$id);
-
-        $query->select('id','phone','first_name','last_name','created_at');
-
-        $contacts = $query->paginate()
-            ->withQueryString()
-            ->through(fn($contact) => [
-                'id' => $contact->id,
-                'phone' => $contact->phone,
-                'first_name' => $contact->first_name,
-                'last_name' => $contact->last_name,
-                'created' => $contact->created_at ? carbon::parse($contact->created_at)->diffForHumans() : null,
-            ]);
-
-        return inertia('Groups/View', compact('group','contacts'));
+        //
     }
 
     /**

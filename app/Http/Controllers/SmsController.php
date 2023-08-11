@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Validation\Rule;
 
 class SmsController extends Controller
 {
@@ -26,11 +27,28 @@ class SmsController extends Controller
             'field' => 'in:recipient,content,sent',
             'search' => 'max:25',
             'status' => 'in:delivered,undelivered',
+            'start_date' => 'string',
+            'end_date' => 'string',
+            'group' => [Rule::exists('groups','id')->where('user_id',Auth::id())],
         ]);
 
         $query = Message::query();
 
         $query->where('user_id',Auth::id());
+
+        if(\request('start_date') && \request('end_date')){
+            $query->whereBetween('created_at',[carbon::parse(\request('start_date')), carbon::parse(\request('end_date'))]);
+        }
+//        else if(\request('end_date')){
+//            dd(\request('end_date'));
+//        }
+//        else if(\request('start_date')){
+//            dd(\request('start_date'));
+//        }
+
+        if(request('group')) {
+            $query->where('group_id',\request('group'));
+        }
 
         if(request('status') === 'delivered') {
             $query->whereNotNull('delivered_at');
@@ -56,6 +74,8 @@ class SmsController extends Controller
             $query->orderBy('created_at','DESC');
         }
 
+        $query->with('group:name,id');
+
         $messages_count = $query->count();
 
         $messages = $query->paginate()->withQueryString()->through(fn($message) => [
@@ -64,16 +84,29 @@ class SmsController extends Controller
             'content' => $message->content,
             'sent' => $message->created_at ? Carbon::parse($message->created_at)->diffForHumans() : null,
             'delivered' => $message->delivered_at ? Carbon::parse($message->delivered_at)->diffForHumans() : null,
+            'group' => $message->group,
         ]);
+
+        $groups = Group::where('user_id',Auth::id())
+            ->select('name','id')
+            ->orderBy('name','ASC')
+            ->get()
+            ->map(fn($group) => [
+                'id' => $group->id,
+                'name' => $group->name,
+            ]);
 
         $filters = request()->all([
             'field',
             'search',
             'direction',
-            'status'
+            'status',
+            'group',
+            'start_date',
+            'end_date',
         ]);
 
-        return inertia('Sms/Index', compact('messages','filters','messages_count'));
+        return inertia('Sms/Index', compact('messages','filters','messages_count','groups'));
     }
     /**
      * Show the form for creating a new sms.

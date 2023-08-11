@@ -57,7 +57,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/group/create', 'store')->name('group.store');
         Route::delete('/group/{id}/delete', 'destroy')->name('group.delete');
         Route::get('/group/{id}/edit', 'edit')->name('group.edit');
-        Route::get('/group/{id}', 'show')->name('group.show');
         Route::patch('/group/{id}/edit', 'update')->name('group.update');
     });
 

@@ -110,12 +110,10 @@ const handleDelete = (id) => {
             <template #tbody>
                 <TableBody v-if="groups.data.length > 0">
                     <TableBodyItem v-for="group in groups.data">
-                        <TableData class="underline hover:text-purple-800">
-                            <Link :href="route('group.show', group.id)">
-                                {{ group.name ?? '-' }}
-                            </Link>
+                        <TableData class="text-sm">
+                            {{ group.name ?? '-' }}
                         </TableData>
-                        <TableData class="font-mono text-xs">
+                        <TableData class="text-xs">
                             {{ group.description ?? '-' }}
                         </TableData>
                         <TableData class="text-sm">

@@ -15,6 +15,9 @@ import PrimaryLink from "@/Components/PrimaryLink.vue";
 import TextInput from "@/Components/TextInput.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import {debounce, omitBy} from "lodash";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import InputLabel from "@/Components/InputLabel.vue";
 
 const page = usePage()
 
@@ -25,6 +28,10 @@ defineOptions({
 const props = defineProps({
     messages: {
         type: Object
+    },
+    groups: {
+        type: Object,
+        default: {},
     },
     filters: {
         type: Object,
@@ -38,6 +45,9 @@ const params = ref({
     field: props.filters.field ?? "",
     direction: props.filters.direction ?? "",
     status: props.filters.status ?? "",
+    group: props.filters.group ?? "",
+    start_date: props.filters.start_date ?? "",
+    end_date: props.filters.end_date ?? "",
 })
 
 const sort = (field) => {
@@ -48,6 +58,16 @@ const sort = (field) => {
 watch(params.value, debounce((params) => {
     router.get(route('messages'), { ...omitBy(params, v => v === "") }, { preserveScroll: true, replace: true, preserveState: true },)
 },150));
+
+const resetFilters = () => {
+    params.value.search = ""
+    params.value.field = ""
+    params.value.direction = ""
+    params.value.status = ""
+    params.value.start_date = ""
+    params.value.end_date = ""
+    params.value.group = ""
+}
 
 const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
@@ -78,30 +98,52 @@ const handleDelete = (id) => {
         </h2>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 justify-center">
-        <div class="md:space-x-2 grid grid-cols-1 md:grid-cols-2  space-y-2 md:space-y-0 md:my-auto">
-            <SelectInput v-model="params.status" class="h-10 text-sm" :class="params.status === '' ? 'text-gray-500' : '' ">
-                <option value="">select</option>
-                <option >delivered</option>
-                <option >undelivered</option>
-            </SelectInput>
-            <div class="block relative">
-                    <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-                        <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
-                            <path
-                                d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z">
-                            </path>
-                        </svg>
-                    </span>
-                <TextInput v-model="params.search" type="text" placeholder="Search"
-                           class="block h-10 pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
-            </div>
+    <div class="w-full rounded-t p-5 bg-white">
+        <div class="md:flex items-center justify-between">
+            <p class="font-medium">
+                Filters
+            </p>
+
+            <SecondaryButton @click="resetFilters()" class="px-4 py-2 text-sm font-medium rounded-md">
+                Reset Filters
+            </SecondaryButton>
         </div>
-        <div class="md:justify-end flex items-center">
-            <PrimaryLink :href="route('admin.user.create')" class="flex justify-between my-6">
-                <span aria-hidden="true" class="mr-2">+</span>
-                <span>Add new</span>
-            </PrimaryLink>
+
+        <div>
+            <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
+
+                <div class="space-y-1">
+                    <InputLabel for="search" value="search" />
+                    <TextInput placeholder="search here..." id="search" v-model="params.search" type="text" class="px-3 py-2 w-full text-sm" />
+                </div>
+
+               <div class="space-y-1">
+                   <InputLabel for="status" value="status" />
+                   <SelectInput id="status" v-model="params.status" class="px-3 py-2 w-full text-sm">
+                       <option value="">select</option>
+                       <option value="delivered">delivered</option>
+                       <option value="undelivered">undelivered</option>
+                   </SelectInput>
+               </div>
+
+                <div class="space-y-1">
+                    <InputLabel for="start_date" value="start date" />
+                    <TextInput id="start_date" v-model="params.start_date" type="datetime-local" class="px-3 py-2 w-full text-sm" />
+                </div>
+
+                <div class="space-y-1">
+                    <InputLabel for="end_date" value="end date" />
+                    <TextInput id="end_date" v-model="params.end_date" type="datetime-local" class="px-3 py-2 w-full text-sm" />
+                </div>
+
+                <div class="space-y-1" v-if="Object.keys(groups).length > 0">
+                    <InputLabel for="status" value="group" />
+                    <SelectInput id="status" v-model="params.group" class="px-3 py-2 w-full text-sm">
+                        <option value="">select</option>
+                        <option v-for="group in groups" :value="group.id">{{ group.name ?? '-' }}</option>
+                    </SelectInput>
+                </div>
+       </div>
         </div>
     </div>
 
@@ -112,6 +154,7 @@ const handleDelete = (id) => {
                 <TableHeadItem @click="sort('content')" class="cursor-pointer" :params="params" field="content" />
                 <TableHeadItem @click="sort('sent')" class="cursor-pointer" :params="params" field="sent" />
                 <TableHeadItem field="delivered" />
+                <TableHeadItem field="group" />
                 <TableHeadItem field="Actions"/>
             </TableHead>
         </template>
@@ -141,6 +184,12 @@ const handleDelete = (id) => {
                         >
                           Pending
                         </span>
+                    </TableData>
+                    <TableData  class=" whitespace-nowrap">
+                        <span v-if="message.group">
+                            {{ message.group.name ?? '-' }}
+                        </span>
+                        <span v-else>-</span>
                     </TableData>
                     <td class="text-center ">
                         <IconButton @click="handleDelete(message.id)"
