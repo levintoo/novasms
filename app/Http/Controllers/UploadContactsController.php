@@ -12,7 +12,11 @@ class UploadContactsController extends Controller
 {
     public function index()
     {
-        $groups = Group::where('user_id',Auth::id())->select('name','id')->get();
+        $groups = Group::query()
+            ->where('user_id',Auth::id())
+            ->select('name','id')
+            ->orderBy('name','ASC')
+            ->get();
         return inertia('Contacts/Upload',compact('groups'));
     }
     public function upload(Request $request)
@@ -28,6 +32,7 @@ class UploadContactsController extends Controller
             new ImportContactsJob($validated['group'],Auth::id(),$filepath),
         ])->dispatch();
 
-        return redirect()->route('batch', $batch->id)->withToast('job dispatched');
+        toast('job dispatched','');
+        return redirect()->route('batch', $batch->id);
     }
 }

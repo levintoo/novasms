@@ -132,7 +132,8 @@ class UsersController extends Controller
             $user->assignRole('standard user');
         }
 
-        return redirect()->route('admin.users')->withToast('user created');
+        toast('user created','success');
+        return redirect()->route('admin.users');
     }
 
     /**
@@ -189,7 +190,8 @@ class UsersController extends Controller
             $validated['role'] === "admin" ||
             $validated['role'] === "super admin" ) {
             if (!Auth::user()->can('manage admins')) {
-                return redirect()->back()->withToast('cannot manage admin roles');
+                toast('cannot manage admin roles','error');
+                return redirect()->back();
             }
         }
 
@@ -202,7 +204,8 @@ class UsersController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
         ]);
-        return redirect()->route('admin.users')->withToast('user updated');
+        toast('user updated','success');
+        return redirect()->route('admin.users');
     }
 
     /**
@@ -215,14 +218,17 @@ class UsersController extends Controller
         $user = User::findorfail($id);
 
         if($user->hasRole('admin') || $user->hasRole('super admin'))
-            if(!Auth::user()->can('manage admins'))
-                return redirect()->back()->withToast('cannot delete admins');
+            if(!Auth::user()->can('manage admins')) {
+                toast('cannot delete admins','error');
+                return redirect()->back();
+            }
 
         $user->contacts()->delete();
         $user->groups()->delete();
         $user->delete();
 
-        return redirect()->back()->withToast('user trashed successfully');
+        toast('user trashed successfully','success');
+        return redirect()->back();
     }
     public function restore($id)
     {
@@ -236,6 +242,7 @@ class UsersController extends Controller
 
         $user->groups()->onlyTrashed()->restore();
 
-        return redirect()->back()->withToast('user restored successfully');
+        toast('user restored successfully','success');
+        return redirect()->back();
     }
 }

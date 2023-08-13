@@ -32,12 +32,6 @@ const page = usePage()
 const handleSubmit = () => {
     form.post(route('admin.user.store'),{
         preserveScroll: true,
-        onSuccess: () => {
-            toast.add({
-                message: page.props.toast,
-                duration: 5000
-            })
-        },
         onError: (errors) => {
             toast.add({
                 message: 'something went wrong',

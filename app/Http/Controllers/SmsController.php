@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactSmsRequest;
 use App\Http\Requests\GroupSmsRequest;
-use App\Http\Requests\StoreSMSRequest;
 use App\Jobs\SendSMSJob;
 use App\Models\Contact;
 use App\Models\Group;
@@ -136,7 +135,8 @@ class SmsController extends Controller
             'content' => $validated['message'],
         ]);
 
-        return redirect()->route('messages')->withToast('message sent');
+        toast('message sent','success');
+        return redirect()->route('messages');
     }
     public function sendToGroup(GroupSmsRequest $request)
     {
@@ -145,14 +145,16 @@ class SmsController extends Controller
         $group_contacts = Contact::where('user_id', Auth::id())->where('group_id', $validated['group'])->count();
 
         if ($group_contacts <= 0) {
-            return redirect()->back()->withToast('group does not have contacts');
+            toast('group does not have contacts','error');
+            return redirect()->back();
         }
 
         $batch = Bus::batch([
             new SendSMSJob(Auth::id(), $validated['group'], $validated['message']),
         ])->dispatch();
 
-        return redirect()->route('batch', $batch->id)->withToast('job dispatched');
+        toast('job dispatched','');
+        return redirect()->route('batch', $batch->id);
     }
     /**
      * Display the specified resource.
@@ -178,6 +180,7 @@ class SmsController extends Controller
             ->where('user_id',Auth::id())
             ->firstorfail();
         $message->delete();
-        return redirect()->back()->withToast('message deleted');
+        toast('message deleted','success');
+        return redirect()->back();
     }
 }

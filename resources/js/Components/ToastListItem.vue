@@ -2,6 +2,7 @@
 
 const props = defineProps({
     message: String,
+    type: String,
     duration: {
         type: Number,
         default: 3000,
@@ -21,7 +22,7 @@ setTimeout(() => {
          role="alert">
 
         <div class="text-sm pb-2">
-            <span class="font-extrabold">computer says</span>
+            <span class="font-extrabold">{{ type ?? 'info' }}</span>
             <span class="float-right hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100" @click="emit('remove')">
             <svg
                 class="fill-current text-gray-600"
@@ -38,7 +39,7 @@ setTimeout(() => {
           </span>
         </div>
         <div class="text-sm text-gray-600  tracking-tight ">
-           `{{ message ?? '-'}}`
+           {{ message ?? '-'}}
         </div>
     </div>
 

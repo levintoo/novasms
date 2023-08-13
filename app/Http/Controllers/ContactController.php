@@ -7,6 +7,7 @@ use App\Models\Group;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class ContactController extends Controller
@@ -33,15 +34,12 @@ class ContactController extends Controller
             });
         }
 
-        if(request('group')) {
+        else if(request('group')) {
             $query->where('group_id',request('group'));
         }
 
         if(request('field') == 'created') {
             $query->orderBy('created_at',request('direction'));
-        }
-        else if(request('field') == 'group') {
-            $query->orderBy('group_id',request('direction'));
         }
         else if(request('field') && request('direction')) {
             $query->orderBy(\request('field'),\request('direction'));
@@ -73,7 +71,6 @@ class ContactController extends Controller
             'field',
             'search',
             'direction',
-            'group'
         ]);
 
         $groups = Group::query()
@@ -98,6 +95,7 @@ class ContactController extends Controller
         $groups = Group::query()
             ->where('user_id',Auth::id())
             ->select('name','id')
+            ->orderBy('name','ASC')
             ->get();
         return inertia('Contacts/Create', compact('groups'));
     }
@@ -120,7 +118,9 @@ class ContactController extends Controller
             ...$validated
         ]);
 
-        return redirect()->route('contacts')->withToast('contact created');
+        toast('contact created','success');
+
+        return redirect()->route('contacts');
     }
 
     /**
@@ -178,7 +178,9 @@ class ContactController extends Controller
         $contact->phone = $validated['phone'];
         $contact->save();
 
-        return redirect()->route('contacts')->withToast('contact updated');
+        toast('contact updated','success');
+
+        return redirect()->route('contacts');
     }
 
     /**
@@ -191,6 +193,9 @@ class ContactController extends Controller
             ->where('user_id',Auth::id())
             ->firstorfail();
         $contact->delete();
-        return redirect()->back()->withToast('contact deleted');
+
+        toast('contact removed','success');
+
+        return redirect()->back();
     }
 }

@@ -50,12 +50,6 @@ const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
     router.delete(route('group.delete',id), {
         preserveScroll: true,
-        onSuccess: () => {
-            toast.add({
-                message: page.props.toast,
-                duration: 5000
-            })
-        },
         onError: (errors) => {
             toast.add({
                 message: 'something went wrong',
@@ -110,16 +104,16 @@ const handleDelete = (id) => {
             <template #tbody>
                 <TableBody v-if="groups.data.length > 0">
                     <TableBodyItem v-for="group in groups.data">
-                        <TableData class="text-sm">
+                        <TableData >
                             {{ group.name ?? '-' }}
                         </TableData>
-                        <TableData class="text-xs">
+                        <TableData>
                             {{ group.description ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm">
+                        <TableData>
                             {{ group.size ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm">
+                        <TableData>
                             {{ group.created ?? '-' }}
                         </TableData>
                         <td class="text-center">

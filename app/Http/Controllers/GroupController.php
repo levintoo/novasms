@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contact;
 use App\Models\Group;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class GroupController extends Controller
 {
@@ -82,12 +82,20 @@ class GroupController extends Controller
            'description' => ['max:2550'],
         ]);
 
+        $count = Group::where('user_id',Auth::id())->count();
+
+        if($count >= 20) {
+            toast('group limit reached','error');
+            return redirect()->route('groups');
+        }
+
         $group = Group::create([
             'user_id' => Auth::id(),
             ...$validated
         ]);
 
-        return redirect()->route('groups')->withToast('group created');
+        toast('group created','success');
+        return redirect()->route('groups');
     }
 
     /**
@@ -129,7 +137,8 @@ class GroupController extends Controller
         $group->description = $validated['description'];
         $group->save();
 
-        return redirect()->route('groups')->withToast('group updated');
+        toast('group updated','success');
+        return redirect()->route('groups');
     }
 
     /**
@@ -141,7 +150,10 @@ class GroupController extends Controller
             ->where('user_id',Auth::id())
             ->firstorfail();
         $group->contacts()->delete();
+
         $group->delete();
-        return redirect()->back()->withToast('group and its contents deleted');
+
+        toast('group and its contents deleted','success');
+        return redirect()->back();
     }
 }

@@ -47,12 +47,6 @@ const handleSendSMS = () => {
     } else if(form.recipients === 'group') {
         form.post(route('sms.group.send'), {
             preserveScroll: true,
-            onSuccess: () => {
-                toast.add({
-                    message: page.props.toast,
-                    duration: 5000
-                })
-            },
             onError: (e) => {
                 console.log(e)
                 toast.add({

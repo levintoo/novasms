@@ -73,12 +73,6 @@ const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
     router.delete(route('message.delete',id), {
         preserveScroll: true,
-        onSuccess: () => {
-            toast.add({
-                message: page.props.toast,
-                duration: 5000
-            })
-        },
         onError: () => {
             toast.add({
                 message: 'something went wrong',

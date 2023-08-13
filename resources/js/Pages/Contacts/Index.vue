@@ -59,12 +59,6 @@ const handleDelete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
     router.delete(route('contact.delete',id), {
         preserveScroll: true,
-        onSuccess: () => {
-            toast.add({
-                message: page.props.toast,
-                duration: 5000
-            })
-        },
         onError: (errors) => {
             toast.add({
                 message: 'something went wrong',
@@ -77,6 +71,7 @@ const handleDelete = (id) => {
 
 <template>
     <Head title="Contacts"/>
+
     <div>
         <h2 class="mt-6 mb-4 text-2xl font-semibold text-gray-700 dark:text-gray-200">
             Contacts
@@ -169,11 +164,7 @@ const handleDelete = (id) => {
                         :params=params
                         @click="sort('phone')" />
 
-                    <TableHeadItem
-                        field="group"
-                        class="cursor-pointer"
-                        :params=params
-                        @click="sort('group')"/>
+                    <TableHeadItem field="group" />
 
                     <TableHeadItem
                         field="created"
@@ -190,19 +181,19 @@ const handleDelete = (id) => {
             <template #tbody>
                 <TableBody v-if="contacts.data.length > 0">
                     <TableBodyItem v-for="contact in contacts.data">
-                        <TableData class="">
+                        <TableData>
                             {{ contact.first_name ?? '-' }}
                         </TableData>
-                        <TableData class="">
+                        <TableData>
                             {{ contact.last_name ?? '-' }}
                         </TableData>
-                        <TableData class="font-mono text-xs">
+                        <TableData>
                             {{ contact.phone ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm">
+                        <TableData>
                             {{ contact.group ?? '-' }}
                         </TableData>
-                        <TableData class="text-sm">
+                        <TableData class="">
                             {{ contact.created ?? '-' }}
                         </TableData>
                         <td class="text-center">
@@ -218,7 +209,7 @@ const handleDelete = (id) => {
                             </IconLink>
                         </td>
                         <td class="text-center">
-                            <IconButton @click="handleDelete(contact.id+192347435)"
+                            <IconButton @click="handleDelete(contact.id)"
                                         class="text-red-500 focus:ring-red-300">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg">

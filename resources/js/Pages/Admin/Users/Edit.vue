@@ -41,12 +41,6 @@ const page = usePage()
 const handleSubmit = () => {
     form.patch(route('admin.user.update',props.user.id),{
         preserveScroll: true,
-        onSuccess: () => {
-            toast.add({
-                message: page.props.toast,
-                duration: 5000
-            })
-        },
         onError: (errors) => {
             toast.add({
                 message: 'something went wrong',
