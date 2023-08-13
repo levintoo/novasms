@@ -213,7 +213,10 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        if($id == Auth::id()) return redirect()->back()->withToast('To delete your account head to the profile menu by clicking your name on the top right');
+        if($id == Auth::id()) {
+            toast('To delete your account head to the profile menu by clicking your name on the top right',null);
+            return redirect()->back();
+        }
 
         $user = User::findorfail($id);
 
