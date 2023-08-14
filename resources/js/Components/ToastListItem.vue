@@ -18,7 +18,7 @@ setTimeout(() => {
 
 <template>
     <div class="shadow-lg rounded-lg bg-white mx-auto m-8 p-4 w-full flex" role="alert">
-        <div class="pr-2" v-if="type === 'error'">
+        <div class="pr-2" v-if="type === 'error' || type === 'Error' || type === 'ERROR'">
             <svg
                 class="fill-current text-orange-600"
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@ setTimeout(() => {
                 />
             </svg>
         </div>
-        <div v-else-if="type === 'success'" class="pr-2">
+        <div v-else-if="type === 'success' || type === 'Success' || type === 'SUCCESS'" class="pr-2">
             <svg
                 class="fill-current text-green-600"
                 xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@ setTimeout(() => {
                 />
             </svg>
         </div>
-        <div v-else-if="type === 'warning'" class="pr-2">
+        <div v-else-if="type === 'warning' || type === 'Warning' || type === 'WARNING'" class="pr-2">
             <svg
                 class="fill-current text-orange-600"
                 xmlns="http://www.w3.org/2000/svg"
