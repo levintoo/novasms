@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contact;
-use App\Models\Group;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -49,6 +48,8 @@ class UsersController extends Controller
         }
         else if(request('field')) {
             $query->orderBy(request('field'),request('direction'));
+        } else {
+            $query->orderBy('created_at','DESC');
         }
 
         if(request('trashed') == "with") {
@@ -60,8 +61,6 @@ class UsersController extends Controller
         else {
             $query->withoutTrashed();
         }
-
-        $query->orderBy('created_at','DESC');
 
         $query->withCount('groups');
 
@@ -174,7 +173,7 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
@@ -182,8 +181,6 @@ class UsersController extends Controller
             'email' => 'required|email|max:255',
             'role' => 'in:admin,standard user,super admin'
         ]);
-
-        $user = User::findorfail($id);
 
         if($user->hasRole('admin') ||
             $user->hasRole('super admin') ||
@@ -211,14 +208,12 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        if($id == Auth::id()) {
+        if($user->id == Auth::id()) {
             toast('To delete your account head to the profile menu by clicking your name on the top right',null);
             return redirect()->back();
         }
-
-        $user = User::findorfail($id);
 
         if($user->hasRole('admin') || $user->hasRole('super admin'))
             if(!Auth::user()->can('manage admins')) {
@@ -246,6 +241,23 @@ class UsersController extends Controller
         $user->groups()->onlyTrashed()->restore();
 
         toast('user restored successfully','success');
+        return redirect()->back();
+    }
+
+    /**
+     * @param User $user
+     * @return RedirectResponse
+     */
+    public function resetPassword(User $user)
+    {
+        $status = Password::sendResetLink(
+            ['email' => $user->email],
+        );
+
+        if ($status == Password::RESET_LINK_SENT) {
+            toast(__($status),'success');
+        }
+            toast(__($status),'error');
         return redirect()->back();
     }
 }
