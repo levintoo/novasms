@@ -83,9 +83,19 @@ Route::middleware('auth')->group(function () {
             Route::post('/user/store', 'store')->name('admin.user.store');
             Route::get('/user/{id}/edit', 'edit')->name('admin.user.edit');
             Route::get('/user/{id}', 'show')->name('admin.user.show');
-            Route::patch('/user/{id}', 'update')->name('admin.user.update');
-            Route::delete('/user/{id}', 'destroy')->name('admin.user.delete');
+            Route::patch('/user/{user}', 'update')->name('admin.user.update');
+            Route::delete('/user/{user}', 'destroy')->name('admin.user.delete');
             Route::patch('/user/{id}/restore', 'restore')->name('admin.user.restore');
+            Route::patch('/user/{user}/password/reset', 'resetPassword')->name('admin.user.password.reset');
+        });
+        Route::controller(\App\Http\Controllers\Admin\ManageContactsController::class)->group(function () {
+            Route::get('/contacts', 'index')->name('admin.contacts');
+        });
+        Route::controller(\App\Http\Controllers\Admin\ManageGroupsController::class)->group(function () {
+            Route::get('/groups', 'index')->name('admin.groups');
+        });
+        Route::controller(\App\Http\Controllers\Admin\ManageSmsController::class)->group(function () {
+            Route::get('/messages', 'index')->name('admin.messages');
         });
     });
 

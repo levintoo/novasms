@@ -6,7 +6,6 @@ use App\Models\Group;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class GroupController extends Controller
 {
@@ -85,7 +84,7 @@ class GroupController extends Controller
         $count = Group::where('user_id',Auth::id())->count();
 
         if($count >= 20) {
-            toast('group limit reached','error');
+            toast('Too many groups','Error');
             return redirect()->route('groups');
         }
 
