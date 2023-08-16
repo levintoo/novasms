@@ -20,7 +20,7 @@ setTimeout(() => {
     <div class="shadow-lg rounded-lg bg-white mx-auto m-8 p-4 w-full flex" role="alert">
         <div class="pr-2" v-if="type === 'error' || type === 'Error' || type === 'ERROR'">
             <svg
-                class="fill-current text-orange-600"
+                class="fill-current text-red-600"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 width="24"

@@ -112,8 +112,8 @@ const handleDelete = (id) => {
                 </div>
 
                <div class="space-y-1">
-                   <InputLabel for="status" value="status" />
-                   <SelectInput id="status" v-model="params.status" class="px-3 py-2 w-full text-sm">
+                   <InputLabel for="status" value="delivery status" />
+                   <SelectInput id="status" v-model="params.status" class="px-3 py-2 w-full text-sm" :class="params.status === '' ? 'text-gray-500' : '' ">
                        <option value="">select</option>
                        <option value="delivered">delivered</option>
                        <option value="undelivered">undelivered</option>
@@ -122,12 +122,12 @@ const handleDelete = (id) => {
 
                 <div class="space-y-1">
                     <InputLabel for="start_date" value="start date" />
-                    <TextInput id="start_date" v-model="params.start_date" type="datetime-local" class="px-3 py-2 w-full text-sm" />
+                    <TextInput id="start_date" v-model="params.start_date" type="datetime-local" class="px-3 py-2 w-full text-sm" :class="params.start_date === '' ? 'text-gray-500' : '' "/>
                 </div>
 
                 <div class="space-y-1">
                     <InputLabel for="end_date" value="end date" />
-                    <TextInput id="end_date" v-model="params.end_date" type="datetime-local" class="px-3 py-2 w-full text-sm" />
+                    <TextInput id="end_date" v-model="params.end_date" type="datetime-local" class="px-3 py-2 w-full text-sm" :class="params.end_date === '' ? 'text-gray-500' : '' "/>
                 </div>
 
                 <div class="space-y-1" v-if="Object.keys(groups).length > 0">

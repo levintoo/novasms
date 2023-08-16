@@ -40,6 +40,7 @@ const handleSendSMS = () => {
                 console.log(e)
                 toast.add({
                     message: 'Something went wrong',
+                    type: 'error',
                     duration: 5000
                 })
             },

@@ -90,17 +90,17 @@ const isadmin = computed(() => page.props.auth.roles.includes('admin') || page.p
                 <SideBarDropdownLink :href="route('admin.users')" >
                     Users
                 </SideBarDropdownLink>
-                <SideBarDropdownLink href="#" >
-                    Roles
-                </SideBarDropdownLink>
-                <SideBarDropdownLink href="#" >
+                <SideBarDropdownLink :href="route('admin.groups')" >
                     Groups
                 </SideBarDropdownLink>
-                <SideBarDropdownLink href="#" >
+                <SideBarDropdownLink :href="route('admin.contacts')" >
+                    Contacts
+                </SideBarDropdownLink>
+                <SideBarDropdownLink :href="route('admin.messages')" >
                     Messages
                 </SideBarDropdownLink>
-                <SideBarDropdownLink href="#" >
-                    Jobs
+                <SideBarDropdownLink href="#">
+                    System
                 </SideBarDropdownLink>
             </template>
         </SideBarDropdown>
