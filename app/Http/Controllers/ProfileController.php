@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -53,9 +54,11 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->contacts()->delete();
-        $user->groups()->delete();
-        $user->delete();
+        DB::transaction(function () use ($user) {
+            $user->contacts()->delete();
+            $user->groups()->delete();
+            $user->delete();
+        });
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -6,6 +6,7 @@ use App\Models\Group;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
@@ -148,9 +149,12 @@ class GroupController extends Controller
         $group = Group::where('id',$id)
             ->where('user_id',Auth::id())
             ->firstorfail();
-        $group->contacts()->delete();
 
-        $group->delete();
+        DB::transaction(function () use ($group) {
+            $group->contacts()->delete();
+
+            $group->delete();
+        });
 
         toast('group and its contents deleted','success');
         return redirect()->back();

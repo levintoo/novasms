@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -221,9 +222,11 @@ class UsersController extends Controller
                 return redirect()->back();
             }
 
-        $user->contacts()->delete();
-        $user->groups()->delete();
-        $user->delete();
+        DB::transaction(function () use ($user) {
+            $user->contacts()->delete();
+            $user->groups()->delete();
+            $user->delete();
+        });
 
         toast('user trashed successfully','success');
         return redirect()->back();
@@ -232,13 +235,15 @@ class UsersController extends Controller
     {
         $user = User::onlyTrashed()->findorfail($id);
 
-        $user->restore();
+        DB::transaction(function () use ($user) {
+            $user->restore();
 
-        $user->contacts()->onlyTrashed()->restore();
+            $user->contacts()->onlyTrashed()->restore();
 
-        $user->messages()->onlyTrashed()->restore();
+            $user->messages()->onlyTrashed()->restore();
 
-        $user->groups()->onlyTrashed()->restore();
+            $user->groups()->onlyTrashed()->restore();
+        });
 
         toast('user restored successfully','success');
         return redirect()->back();
