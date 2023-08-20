@@ -88,15 +88,22 @@ Route::middleware('auth')->group(function () {
             Route::patch('/user/{id}/restore', 'restore')->name('admin.user.restore');
             Route::patch('/user/{user}/password/reset', 'resetPassword')->name('admin.user.password.reset');
         });
+
         Route::controller(\App\Http\Controllers\Admin\ManageContactsController::class)->group(function () {
             Route::get('/contacts', 'index')->name('admin.contacts');
-        });
+            Route::delete('/contact/{contact}', 'destroy')->name('admin.contact.delete');
+            Route::patch('/contact/{id}', 'restore')->name('admin.contact.restore');
+        })->middleware(['can:manage contacts']);
+
         Route::controller(\App\Http\Controllers\Admin\ManageGroupsController::class)->group(function () {
             Route::get('/groups', 'index')->name('admin.groups');
-        });
+            Route::delete('/group/{group}', 'destroy')->name('admin.group.delete');
+            Route::patch('/group/{id}', 'restore')->name('admin.group.restore');
+        })->middleware(['can:manage groups']);
+
         Route::controller(\App\Http\Controllers\Admin\ManageSmsController::class)->group(function () {
             Route::get('/messages', 'index')->name('admin.messages');
-        });
+        })->middleware(['can:manage messages']);
     });
 
 });

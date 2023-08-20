@@ -100,7 +100,7 @@ const isadmin = computed(() => page.props.auth.roles.includes('admin') || page.p
                     Messages
                 </SideBarDropdownLink>
                 <SideBarDropdownLink href="#">
-                    System
+                    #System
                 </SideBarDropdownLink>
             </template>
         </SideBarDropdown>

@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class ManageGroupsController extends Controller
@@ -22,7 +23,7 @@ class ManageGroupsController extends Controller
             'field' => ['in:name,description,created,contacts'],
             'trashed' => ['in:without,with,only'],
             'search' => ['max:25'],
-            'uid' => ['string','max:9999999'],
+            'uid' => ['string','max:255'],
         ]);
 
         $query = Group::query();
@@ -134,8 +135,25 @@ class ManageGroupsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Group $group)
     {
-        //
+        DB::transaction(function () use ($group) {
+            $group->contacts()->delete();
+            $group->delete();
+        });
+        toast('group removed successfully','success');
+    }
+
+    /**
+     * Restore the specified resource to storage.
+     */
+    public function restore($id)
+    {
+        $group = Group::query()->onlyTrashed()->findOrFail($id);
+        DB::transaction(function () use ($group) {
+            $group->contacts()->restore();
+            $group->restore();
+        });
+        toast('group restored successfully','success');
     }
 }

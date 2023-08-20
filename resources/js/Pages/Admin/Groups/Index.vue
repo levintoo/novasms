@@ -16,6 +16,7 @@ import TableBody from "@/Components/TableBody.vue";
 import TableBodyItem from "@/Components/TableBodyItem.vue";
 import Table from "@/Components/Table.vue";
 import TableData from "@/Components/TableData.vue";
+import toast from "@/Stores/Toast.js";
 
 defineOptions({
     layout: AppLayout,
@@ -55,6 +56,32 @@ const resetFilters = () => {
     params.value.direction = ""
     params.value.trashed = "without"
     params.value.uid = ""
+}
+
+const handleDelete = (id) => {
+    if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
+    router.delete(route('admin.group.delete',id), {
+        preserveScroll: true,
+        onError: (errors) => {
+            toast.add({
+                message: 'something went wrong',
+                duration: 5000
+            })
+        },
+    })
+}
+
+const handleRestore = (id) => {
+    if(!confirm('Are you sure you want to continue, this may be a destructive action')) return;
+    router.patch(route('admin.group.restore',id), {
+        preserveScroll: true,
+        onError: (errors) => {
+            toast.add({
+                message: 'something went wrong',
+                duration: 5000
+            })
+        },
+    })
 }
 </script>
 
@@ -111,7 +138,7 @@ const resetFilters = () => {
                 <TableHeadItem field="User"/>
                 <TableHeadItem :params="params" @click="sort('contacts')" class="cursor-pointer"  field="contacts" />
                 <TableHeadItem :params="params" @click="sort('created')" class="cursor-pointer" field="created"/>
-                <TableHeadItem field="Actions" class="text-center" colspan="3"/>
+                <TableHeadItem field="Actions" class="text-center" />
             </TableHead>
         </template>
         <template #tbody>
@@ -133,21 +160,6 @@ const resetFilters = () => {
                     <TableData>
                         {{ group.created ?? '-' }}
                     </TableData>
-                    <td class="text-center">
-                        <IconLink v-if="!group.trashed" :href="route('group.edit', group.id)"
-                                  class="text-gray-500 focus:ring-gray-300">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"/>
-                                <path
-                                    d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"/>
-                            </svg>
-                        </IconLink>
-                        <span v-else-if="group.trashed && params.trashed !== 'only' ">
-                            -
-                        </span>
-                    </td>
                     <td class="text-center">
                         <IconButton v-if="!group.trashed" @click="handleDelete(group.id)"
                                     class="text-red-500 focus:ring-red-300">
