@@ -1,25 +1,21 @@
 <script setup>
-import {Head, router, usePage} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import TableBodyItem from "@/Components/TableBodyItem.vue";
 import Pagination from "@/Components/Pagination.vue";
-import IconButton from "@/Components/IconButton.vue";
-import toast from "@/Stores/Toast.js";
+import TableBody from "@/Components/TableBody.vue";
+import TableData from "@/Components/TableData.vue";
 import Table from "@/Components/Table.vue";
 import TableHeadItem from "@/Components/TableHeadItem.vue";
 import TableHead from "@/Components/TableHead.vue";
-import TableBody from "@/Components/TableBody.vue";
-import TableBodyItem from "@/Components/TableBodyItem.vue";
-import TableData from "@/Components/TableData.vue";
-import {defineOptions, ref, watch} from "vue";
-import PrimaryLink from "@/Components/PrimaryLink.vue";
-import TextInput from "@/Components/TextInput.vue";
-import SelectInput from "@/Components/SelectInput.vue";
+import IconButton from "@/Components/IconButton.vue";
+import toast from "@/Stores/Toast.js";
+import {ref, watch} from "vue";
 import {debounce, omitBy} from "lodash";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-
-const page = usePage()
+import SelectInput from "@/Components/SelectInput.vue";
+import TextInput from "@/Components/TextInput.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 defineOptions({
     layout: AppLayout,
@@ -27,16 +23,13 @@ defineOptions({
 
 const props = defineProps({
     messages: {
-        type: Object
-    },
-    groups: {
         type: Object,
         default: {},
     },
     filters: {
         type: Object,
         default: {},
-    },
+    }
 })
 
 const params = ref({
@@ -45,8 +38,11 @@ const params = ref({
     direction: props.filters.direction ?? "",
     status: props.filters.status ?? "",
     group: props.filters.group ?? "",
+    trashed: props.filters.trashed ?? "without",
     start_date: props.filters.start_date ?? "",
     end_date: props.filters.end_date ?? "",
+    user_id: props.filters.user_id ?? "",
+    group_id: props.filters.group_id ?? "",
 })
 
 const sort = (field) => {
@@ -55,10 +51,10 @@ const sort = (field) => {
 }
 
 watch(params.value, debounce((params) => {
-    router.get(route('messages'), { ...omitBy(params, v => v === "") }, { preserveScroll: true, replace: true, preserveState: true },)
+    router.get(route('admin.messages'), { ...omitBy(params, v => v === "") }, { preserveScroll: true, replace: true, preserveState: true },)
 },150));
 
-const resetFilters = () => {
+const reset_filters = () => {
     params.value.search = ""
     params.value.field = ""
     params.value.direction = ""
@@ -66,11 +62,27 @@ const resetFilters = () => {
     params.value.start_date = ""
     params.value.end_date = ""
     params.value.group = ""
+    params.value.user_id = ""
+    params.value.group_id = ""
+    params.value.trashed = "without"
 }
 
-const handleDelete = (id) => {
+const handle_delete = (id) => {
     if(!confirm('Are you sure you want to continue, this is a destructive action')) return;
-    router.delete(route('message.delete',id), {
+    router.delete(route('admin.message.delete',id), {
+        preserveScroll: true,
+        onError: () => {
+            toast.add({
+                message: 'something went wrong',
+                duration: 5000
+            })
+        },
+    })
+}
+
+const handle_restore = (id) => {
+    if(!confirm('Are you sure you want to continue, this may be a destructive action')) return;
+    router.patch(route('admin.message.restore',id), {
         preserveScroll: true,
         onError: () => {
             toast.add({
@@ -83,11 +95,11 @@ const handleDelete = (id) => {
 </script>
 
 <template>
-    <Head title="Messages"/>
+    <Head title="Manage Sent Messages" />
 
     <div>
         <h2 class="my-6 text-xl sm:text-xl font-bold text-gray-700 dark:text-gray-200">
-            Sent Messages
+            Manage Sent Messages
         </h2>
     </div>
 
@@ -97,7 +109,7 @@ const handleDelete = (id) => {
                 Filters
             </p>
 
-            <SecondaryButton @click="resetFilters()" class="px-4 py-2 text-sm font-medium rounded-md">
+            <SecondaryButton @click="reset_filters()" class="px-4 py-2 text-sm font-medium rounded-md">
                 Reset Filters
             </SecondaryButton>
         </div>
@@ -110,82 +122,87 @@ const handleDelete = (id) => {
                     <TextInput placeholder="search here..." id="search" v-model="params.search" type="text" class="px-3 py-2 w-full text-sm" />
                 </div>
 
-               <div class="space-y-1">
-                   <InputLabel for="status" value="delivery status" />
-                   <SelectInput id="status" v-model="params.status" class="px-3 py-2 w-full text-sm" :class="params.status === '' ? 'text-gray-500' : '' ">
-                       <option value="">select</option>
-                       <option value="delivered">delivered</option>
-                       <option value="undelivered">undelivered</option>
-                   </SelectInput>
-               </div>
+                <div class="space-y-1">
+                    <InputLabel for="status" value="delivery status" />
+                    <SelectInput id="status" v-model="params.status" class="px-3 py-2 w-full text-sm" :class="params.status === '' ? 'text-gray-500' : '' ">
+                        <option value="">select</option>
+                        <option value="delivered">delivered</option>
+                        <option value="undelivered">undelivered</option>
+                    </SelectInput>
+                </div>
 
                 <div class="space-y-1">
-                    <InputLabel for="start_date" value="start date" />
+                    <InputLabel for="start_date" value="sent from date" />
                     <TextInput id="start_date" v-model="params.start_date" type="datetime-local" class="px-3 py-2 w-full text-sm" :class="params.start_date === '' ? 'text-gray-500' : '' "/>
                 </div>
 
                 <div class="space-y-1">
-                    <InputLabel for="end_date" value="end date" />
+                    <InputLabel for="end_date" value="to date" />
                     <TextInput id="end_date" v-model="params.end_date" type="datetime-local" class="px-3 py-2 w-full text-sm" :class="params.end_date === '' ? 'text-gray-500' : '' "/>
                 </div>
 
-                <div class="space-y-1" v-if="Object.keys(groups).length > 0">
-                    <InputLabel for="status" value="group" />
-                    <SelectInput id="status" v-model="params.group" class="px-3 py-2 w-full text-sm">
-                        <option value="">select</option>
-                        <option v-for="group in groups" :value="group.id">{{ group.name ?? '-' }}</option>
+                <div class="space-y-1">
+                    <InputLabel for="status" value="trashed status" />
+                    <SelectInput id="status" v-model="params.trashed" class="px-3 py-2 w-full text-sm" :class="params.trashed === 'without' ? 'text-gray-500' : '' ">
+                        <option value="without">Without trashed</option>
+                        <option value="with">with trashed</option>
+                        <option value="only">only trashed</option>
                     </SelectInput>
                 </div>
-       </div>
+
+                <div class="space-y-1">
+                    <InputLabel for="search" value="user id" />
+                    <TextInput placeholder="user id here..." id="search" v-model="params.user_id" type="text" class="placeholder-gray-500 px-3 py-2 w-full text-sm" />
+                </div>
+
+                <div class="space-y-1">
+                    <InputLabel for="search" value="group id" />
+                    <TextInput placeholder="group id here..." id="search" v-model="params.group_id" type="text" class="placeholder-gray-500 px-3 py-2 w-full text-sm" />
+                </div>
+            </div>
         </div>
     </div>
 
-    <Table >
+    <Table>
         <template #thead>
             <TableHead>
                 <TableHeadItem @click="sort('recipient')" class="cursor-pointer" :params="params" field="recipient" />
                 <TableHeadItem @click="sort('content')" class="cursor-pointer" :params="params" field="content" />
                 <TableHeadItem @click="sort('sent')" class="cursor-pointer" :params="params" field="sent" />
-                <TableHeadItem field="delivered" />
-                <TableHeadItem field="group" />
+                <TableHeadItem @click="sort('delivered')" class="cursor-pointer" :params="params" field="delivered" />
+                <TableHeadItem @click="sort('group')" class="cursor-pointer" :params="params" field="group" />
                 <TableHeadItem field="Actions"/>
             </TableHead>
         </template>
         <template #tbody>
             <TableBody v-if="messages.data.length > 0">
                 <TableBodyItem v-for="message in messages.data">
-                    <TableData class="whitespace-nowrap">
+                    <TableData>
                         {{ message.recipient ?? '-' }}
                     </TableData>
-                    <TableData class="">
+                    <TableData>
                         {{ message.content ?? '-' }}
                     </TableData>
-                    <TableData class=" whitespace-nowrap">
+                    <TableData>
                         {{ message.sent ?? '-' }}
                     </TableData>
-                    <TableData class="text-xs">
-                        <!--                        {{ message.delivered ?? null }}-->
-                        <span
-                            v-if="message.delivered"
-                            class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full"
-                        >
-                          Delivered
-                        </span>
-                        <span
-                            v-else
-                            class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full"
-                        >
-                          Pending
-                        </span>
+                    <TableData>
+                        {{ message.delivered ?? '-' }}
                     </TableData>
-                    <TableData  class=" whitespace-nowrap">
-                        <span v-if="message.group">
-                            {{ message.group.name ?? '-' }}
-                        </span>
-                        <span v-else>-</span>
+                    <TableData>
+                        {{ message.group ?? '-' }}
                     </TableData>
                     <td class="text-center ">
-                        <IconButton @click="handleDelete(message.id)"
+                        <IconButton v-if="message.trashed" @click.prevent="handle_restore(message.id)"
+                                    class="text-purple-500 focus:ring-purple-300">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                    <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z" clip-rule="evenodd" />
+                                </svg>
+                            </svg>
+                        </IconButton>
+                        <IconButton v-else-if="!message.trashed" @click.prevent="handle_delete(message.id)"
                                     class="text-red-500 focus:ring-red-300">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -197,7 +214,6 @@ const handleDelete = (id) => {
                     </td>
                 </TableBodyItem>
             </TableBody>
-
             <TableBody v-else>
                 <TableBodyItem>
                     <TableData colspan="6" class="text-center text-gray-500">
@@ -205,10 +221,9 @@ const handleDelete = (id) => {
                     </TableData>
                 </TableBodyItem>
             </TableBody>
-
         </template>
-        <template #pagination>
-            <Pagination :to="messages.to" :from="messages.from" :total="messages.total" :links="messages.links" />
-        </template>
+    <template #pagination>
+        <Pagination :to="messages.to" :from="messages.from" :total="messages.total" :links="messages.links" />
+    </template>
     </Table>
 </template>

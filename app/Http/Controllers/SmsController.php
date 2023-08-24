@@ -38,12 +38,6 @@ class SmsController extends Controller
         if(\request('start_date') && \request('end_date')){
             $query->whereBetween('created_at',[carbon::parse(\request('start_date')), carbon::parse(\request('end_date'))]);
         }
-//        else if(\request('end_date')){
-//            dd(\request('end_date'));
-//        }
-//        else if(\request('start_date')){
-//            dd(\request('start_date'));
-//        }
 
         if(request('group')) {
             $query->where('group_id',\request('group'));
@@ -75,8 +69,6 @@ class SmsController extends Controller
 
         $query->with('group:name,id');
 
-        $messages_count = $query->count();
-
         $messages = $query->paginate()->withQueryString()->through(fn($message) => [
             'id' => $message->id,
             'recipient' => $message->recipient,
@@ -105,7 +97,7 @@ class SmsController extends Controller
             'end_date',
         ]);
 
-        return inertia('Sms/Index', compact('messages','filters','messages_count','groups'));
+        return inertia('Sms/Index', compact('messages','filters','groups'));
     }
     /**
      * Show the form for creating a new sms.

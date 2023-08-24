@@ -103,6 +103,8 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(\App\Http\Controllers\Admin\ManageSmsController::class)->group(function () {
             Route::get('/messages', 'index')->name('admin.messages');
+            Route::delete('/message/{message}', 'destroy')->name('admin.message.delete');
+            Route::patch('/message/{id}', 'restore')->name('admin.message.restore');
         })->middleware(['can:manage messages']);
     });
 
