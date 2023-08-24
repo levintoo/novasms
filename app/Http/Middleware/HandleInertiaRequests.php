@@ -32,7 +32,6 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            // Lazily...
             'auth' => [
                 'user' => Auth::check()
                     ? $request->user()->only('name', 'email')
@@ -47,6 +46,11 @@ class HandleInertiaRequests extends Middleware
                 ]);
             },
             'toast' => $request->session()->get('toast') ?? [],
+            'app' => [
+                'config' => [
+                    'sms_rate' => config('app.sms_rate') ?? '1'
+                ]
+            ]
         ]);
     }
 }

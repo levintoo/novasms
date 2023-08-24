@@ -73,10 +73,17 @@ Route::middleware('auth')->group(function () {
         Route::post('/group/sms/send', 'sendToContact')->name('sms.contact.send');
     });
 
+    Route::controller(\App\Http\Controllers\WalletController::class)->group(function () {
+       Route::get('/wallet','index')->name('wallet');
+       Route::post('/recharge/mpesa','top_up_with_mpesa')->name('wallet.top_up_with_mpesa');
+    });
+
     Route::middleware(['can:manage users'])->prefix('admin')->group(function () {
+
         Route::controller(\App\Http\Controllers\Admin\DashboardController::class)->group(function () {
             Route::get('/', 'index')->name('admin.dashboard');
         });
+
         Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
             Route::get('/users', 'index')->name('admin.users');
             Route::get('/user/create', 'create')->name('admin.user.create');

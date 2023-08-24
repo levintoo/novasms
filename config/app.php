@@ -5,6 +5,8 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    'sms_rate' => env('SMS_RATE', '1'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -184,5 +186,4 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
-
 ];
