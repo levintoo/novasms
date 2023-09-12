@@ -54,8 +54,6 @@ class ContactController extends Controller
 
         $query->select('id','phone','first_name','last_name','created_at','group_id');
 
-        $contacts_count = $query->count();
-
         $contacts = $query->paginate()
             ->withQueryString()
             ->through(fn($contact) => [
@@ -84,7 +82,7 @@ class ContactController extends Controller
             'size' => $group->contacts_count,
         ]);
 
-        return inertia('Contacts/Index', compact('groups','contacts','contacts_count','filters'));
+        return inertia('Contacts/Index', compact('groups','contacts','filters'));
     }
 
     /**

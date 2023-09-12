@@ -141,9 +141,46 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::withTrashed()->with('contacts')->with('groups')->findorfail($id);
+        $users = User::query()
+            ->withTrashed()
+            ->select(
+                "id",
+                "name",
+                "email",
+                "phone",
+                "balance",
+                "created_at",
+                "deleted_at",
+            )
+            ->withCount('contacts')
+            ->withCount(['contacts as trashed_contacts_count' => fn($q) => [
+                $q->onlyTrashed()
+            ]])
+            ->withCount('groups')
+            ->withCount(['groups as trashed_groups_count' => fn($q) => [
+                $q->onlyTrashed()
+            ]])
+            ->with(['roles' => fn($q) => [
+                $q->select('id','name')
+            ]])
+            ->where('id',$id)
+            ->get()
+            ->map(fn($user) => [
+                "id" => $user->id,
+                "name" => $user->name,
+                "email" => $user->email,
+                "phone" => $user->phone,
+                "balance" => $user->balance,
+                "created_at" => $user->created_at ? Carbon::parse($user->created_at)->format('d M Y H:i T') : null,
+                "deleted_at" =>$user->deleted_at ? Carbon::parse($user->deleted_at)->format('d M Y H:i T') : null,
+                "contacts_count" => $user->contacts_count,
+                "trashed_contacts_count" => $user->trashed_contacts_count,
+                "groups_count" => $user->groups_count,
+                "trashed_groups_count" => $user->trashed_groups_count,
+                "roles" => $user->getRoleNames()
+            ]);
 
-        return inertia('Admin/Users/Show',compact('user'));
+        return inertia('Admin/Users/Show',compact('users'));
     }
 
     /**

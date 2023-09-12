@@ -29,7 +29,6 @@ const props = defineProps({
     contacts: {
         type: Object
     },
-    contacts_count: Number,
     filters: {
         type: Object,
         default: {},
@@ -232,7 +231,7 @@ const handleDelete = (id) => {
 
             </template>
             <template #pagination>
-                <Pagination :from="contacts.from" :to="contacts.to" :count="contacts_count" :links="contacts.links" />
+                <Pagination :from="contacts.from" :to="contacts.to" :total="contacts.total" :links="contacts.links" />
             </template>
         </Table>
 </template>

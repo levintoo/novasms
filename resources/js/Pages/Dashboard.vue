@@ -10,9 +10,9 @@ defineOptions({
     layout: AppLayout,
 })
 
-defineProps({
-    balance: {
-        type: Number,
+const props = defineProps({
+    user: {
+        type: Object,
     }
 })
 </script>
@@ -49,7 +49,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    6389
+                    {{ user.contacts_count ?? '-' }}
                 </p>
             </div>
         </div>
@@ -77,7 +77,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    $ 46,760.89
+                    {{ user.balance ?? '-' }} sms
                 </p>
             </div>
         </div>
@@ -105,7 +105,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    376
+                    {{ user.sent_messages_count ?? '-' }}
                 </p>
             </div>
         </div>
@@ -133,7 +133,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    35
+                    {{ user.delivered_messages_count ?? '-' }}
                 </p>
             </div>
         </div>

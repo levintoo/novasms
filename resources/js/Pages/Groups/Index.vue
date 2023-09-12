@@ -26,7 +26,6 @@ const props = defineProps({
         type: Object,
         default: {},
     },
-    groups_count: Number,
 })
 
 const page = usePage()
@@ -152,7 +151,7 @@ const handleDelete = (id) => {
 
             </template>
             <template #pagination>
-                <Pagination :to="groups.to" :from="groups.from" :count="groups_count" :links="groups.links" />
+                <Pagination :to="groups.to" :from="groups.from" :total="groups.total" :links="groups.links" />
             </template>
         </Table>
 </template>

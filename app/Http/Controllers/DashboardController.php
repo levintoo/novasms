@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,8 +13,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $balance = Auth::user()->balance;
-        return inertia('Dashboard',compact('balance'));
+        $user = User::query()
+            ->where('id',\request()->user()->id)
+            ->select('balance','id')
+            ->withCount('contacts')
+            ->withCount('groups')
+            ->withCount('messages as sent_messages_count')
+            ->withCount(['messages as delivered_messages_count' => function ($q) {
+                $q->whereNotNull('delivered_at');
+            }])
+            ->firstOrFail();
+        return inertia('Dashboard',compact('user'));
     }
 
     /**

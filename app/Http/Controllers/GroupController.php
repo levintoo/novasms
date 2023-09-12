@@ -49,8 +49,6 @@ class GroupController extends Controller
             $query->orderBy('created_at','DESC');
         }
 
-        $groups_count = $query->count();
-
         $groups = $query->paginate()
             ->withQueryString()
             ->through(fn($group) =>[
@@ -61,7 +59,7 @@ class GroupController extends Controller
                 'size' => $group->contacts_count
         ]);
 
-        return inertia('Groups/Index',compact('groups','groups_count'));
+        return inertia('Groups/Index',compact('groups'));
     }
 
     /**
@@ -85,7 +83,7 @@ class GroupController extends Controller
         $count = Group::where('user_id',Auth::id())->count();
 
         if($count >= 20) {
-            toast('Too many groups','Error');
+            toast('group limit reached','error');
             return redirect()->route('groups');
         }
 
