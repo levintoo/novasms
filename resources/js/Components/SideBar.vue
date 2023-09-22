@@ -108,6 +108,9 @@ const isadmin = computed(() => page.props.auth.roles.includes('admin') || page.p
                 <SideBarDropdownLink :href="route('admin.messages')" >
                     Messages
                 </SideBarDropdownLink>
+                <SideBarDropdownLink :href="route('admin.transactions')" >
+                    Transactions
+                </SideBarDropdownLink>
             </template>
         </SideBarDropdown>
     </ul>

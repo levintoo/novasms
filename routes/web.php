@@ -113,6 +113,10 @@ Route::middleware('auth')->group(function () {
             Route::delete('/message/{message}', 'destroy')->name('admin.message.delete');
             Route::patch('/message/{id}', 'restore')->name('admin.message.restore');
         })->middleware(['can:manage messages']);
+
+        Route::controller(\App\Http\Controllers\Admin\TransactionsController::class)->group(function () {
+            Route::get('/transactions', 'index')->name('admin.transactions');
+        });
     });
 
 });
