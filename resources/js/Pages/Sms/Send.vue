@@ -23,10 +23,10 @@ defineProps({
 })
 
 const form = useForm({
-    recipients: "one",
+    recipients: "group",
     phone: "",
-    group: "",
-    message: "",
+    group: "1",
+    message: "hello {{ first_name }}",
 })
 
 const handleSendSMS = () => {

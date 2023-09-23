@@ -16,6 +16,7 @@ class Message extends Model
         'recipient',
         'content',
         'delivered_at',
+        'message_id'
     ];
 
     public function user() {

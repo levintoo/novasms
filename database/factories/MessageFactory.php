@@ -22,6 +22,7 @@ class MessageFactory extends Factory
             'recipient' => fake()->e164PhoneNumber(),
             'content' => fake()->sentence(),
             'delivered_at' => rand(0,1) === 1 ? fake()->dateTime() : null,
+            'message_id' => fake()->iosMobileToken()
         ];
     }
 }

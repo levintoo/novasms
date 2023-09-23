@@ -78,6 +78,10 @@ Route::middleware('auth')->group(function () {
        Route::post('/recharge/mpesa','top_up_with_mpesa')->name('wallet.top_up_with_mpesa');
     });
 
+    Route::controller(\App\Http\Controllers\JobStatusController::class)->group(function () {
+        Route::get('/jobs','index')->name('jobs.status');
+    });
+
     Route::middleware(['can:manage users'])->prefix('admin')->group(function () {
 
         Route::controller(\App\Http\Controllers\Admin\DashboardController::class)->group(function () {

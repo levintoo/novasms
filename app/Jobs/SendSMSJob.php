@@ -3,13 +3,14 @@
 namespace App\Jobs;
 
 use App\Models\Contact;
-use App\Models\Message;
+use App\Models\JobStatus;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 
 class SendSMSJob implements ShouldQueue
 {
@@ -48,10 +49,15 @@ class SendSMSJob implements ShouldQueue
 
         $chunkedContacts = $contacts->chunk(1000);
 
+        $batch = Bus::batch([])->dispatch();
+
+        JobStatus::create([
+            'user_id' => $this->user_id,
+            'batch_id' => $batch->id,
+            'name' => 'send sms'
+        ]);
 
         foreach ($chunkedContacts as $records) {
-            $messages = collect();
-
             foreach ($records as $contact) {
 
                 $wordlist = [
@@ -62,22 +68,15 @@ class SendSMSJob implements ShouldQueue
 
                 $message_content = str_replace($replaceable, $wordlist, $this->message);
 
-                $messages->push([
-                    'user_id' => $this->user_id,
-                    'group_id' => $this->group_id,
-                    'recipient' => $contact->phone,
-                    'content' => $message_content,
-                    'created_at' => now()
+                $batch->add([
+                    new SendMessageJob($this->user_id,$contact->phone, $message_content, $this->group_id)
                 ]);
             }
-            Message::insert($messages->toArray());
-            info('chunk inserted');
         }
     }
 
     public function failed(\Exception $exception)
     {
-        info('failed...');
-        info($exception->getMessage());
+        error_log($exception->getMessage());
     }
 }
