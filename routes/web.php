@@ -19,10 +19,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return \inertia('Welcome',[
+    return \inertia('Public/Welcome',[
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
+});
+Route::controller(\App\Http\Controllers\public\ContactUsController::class)->prefix('/contact-us')->group(function () {
+    Route::get('/', 'index')->name('contact-us');
 });
 
 Route::middleware('auth')->group(function () {
