@@ -1,7 +1,7 @@
 <script setup>
 import {Head} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {defineOptions} from "vue";
+import {defineOptions, onMounted, onUnmounted} from "vue";
 import Pagination from "@/Components/Pagination.vue";
 import TableBody from "@/Components/TableBody.vue";
 import Table from "@/Components/Table.vue";
@@ -22,6 +22,24 @@ defineProps({
         required: true,
     }
 })
+
+onMounted(() => {
+    const update_interval = setInterval(update,1000)
+    console.log(update_interval)
+})
+
+const update = () => {
+    console.log("ping")
+}
+
+window.onblur = function () {
+
+};
+
+// If users come back to the current tab again, the below function will invoke
+window.onfocus = function () {
+
+};
 </script>
 
 <template>

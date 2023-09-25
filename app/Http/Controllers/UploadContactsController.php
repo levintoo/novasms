@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ImportContactsJob;
 use App\Models\Group;
+use App\Models\JobStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
@@ -31,6 +32,12 @@ class UploadContactsController extends Controller
         $batch = Bus::batch([
             new ImportContactsJob($validated['group'],Auth::id(),$filepath),
         ])->dispatch();
+
+        JobStatus::create([
+            'user_id' => Auth::id(),
+            'batch_id' => $batch->id,
+            'name' => 'uploading contacts'
+        ]);
 
         toast('job dispatched','');
         return redirect()->route('batch', $batch->id);
