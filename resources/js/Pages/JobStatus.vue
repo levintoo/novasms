@@ -22,10 +22,14 @@ defineProps({
         required: true,
     }
 })
-
+let update_interval
 onMounted(() => {
-    const update_interval = setInterval(update,1000)
+    update_interval = setInterval(update,1000)
     console.log(update_interval)
+})
+
+onUnmounted(() => {
+    clearInterval(update_interval)
 })
 
 const update = () => {
