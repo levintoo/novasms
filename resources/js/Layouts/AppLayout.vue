@@ -8,6 +8,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import {Link} from "@inertiajs/vue3";
 
 const isSideMenuOpen = ref(false)
+const isNotificationDropdownOpen = ref(false)
 </script>
 
 <template>
@@ -119,9 +120,11 @@ const isSideMenuOpen = ref(false)
                     </div>
 
                     <ul class="items-center flex-shrink-0 space-x-6 flex">
+
                            <!-- Notifications menu -->
-                           <li>
+                           <li class="relative">
                                <button
+                                   @click="isNotificationDropdownOpen = !isNotificationDropdownOpen"
                                    aria-label="Notifications"
                                    class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple"
                                    >
@@ -141,6 +144,19 @@ const isSideMenuOpen = ref(false)
                                            class="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-1 -translate-y-1 bg-red-600 border-2 border-white rounded-full dark:border-gray-800"
                                        ></span>
                                    </button>
+
+                               <div v-show="isNotificationDropdownOpen" @click="isNotificationDropdownOpen = !isNotificationDropdownOpen" class="fixed inset-0 h-full w-full z-10"></div>
+
+                               <div v-show="isNotificationDropdownOpen" class="absolute right-0 mt-6 bg-white rounded-md shadow-lg overflow-hidden z-20" style="width:20rem;">
+                                   <div class="py-2">
+                                       <a class="flex items-center px-4 py-3 -mx-2">
+                                           <p class="text-gray-600 text-sm mx-2">
+                                               <span class="font-bold">System</span> new login . 5m
+                                           </p>
+                                       </a>
+                                   </div>
+                                   <a @click="isNotificationDropdownOpen = !isNotificationDropdownOpen" class="cursor-pointer block bg-gray-100 text-gray-800 text-center font-bold py-2">Close notifications</a>
+                               </div>
                            </li>
 
                            <!-- Profile menu -->
