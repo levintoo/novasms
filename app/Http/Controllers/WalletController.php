@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -21,12 +22,12 @@ class WalletController extends Controller
         return inertia('Wallet',compact('balance'));
     }
 
-    /**
-     * @param Request $request
-     * @return void
-     */
-    public function top_up_with_mpesa(Request $request): void
+    public function top_up(Request $request)
     {
+        $request->validate([
+            'amount' => ['required', 'numeric'],
+        ]);
+
         $user = User::findorfail(Auth::id());
 
             Transaction::create([
@@ -37,8 +38,9 @@ class WalletController extends Controller
                 'transaction_id' => Str::random(),
             ]);
 
-        $user->balance = $request->amount / config('app.sms_rate');
+        $user->balance = $user->balance + $request->amount / config('app.sms_rate');
         $user->save();
-        toast('transaction finished','success');
+        toast('fake transaction finished','success');
+//        return inertia_location('https://paystack.com/pay/3w3o-ziznp');
     }
 }

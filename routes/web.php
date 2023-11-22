@@ -78,7 +78,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(\App\Http\Controllers\WalletController::class)->group(function () {
        Route::get('/wallet','index')->name('wallet');
-       Route::post('/recharge/mpesa','top_up_with_mpesa')->name('wallet.top_up_with_mpesa');
+       Route::post('/recharge','top_up')->name('wallet.top_up');
     });
 
     Route::controller(\App\Http\Controllers\JobStatusController::class)->group(function () {
