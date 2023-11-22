@@ -5,6 +5,10 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    'sms_api_key' => env('MOBILESASA_SMS_API_KEY'),
+
+    'sender_id' => env('MOBILESASA_SENDER_ID'),
+
     'sms_rate' => env('SMS_RATE', '1'),
 
     /*
