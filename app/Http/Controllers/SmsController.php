@@ -9,6 +9,8 @@ use App\Models\Contact;
 use App\Models\Group;
 use App\Models\Message;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
@@ -121,11 +123,45 @@ class SmsController extends Controller
     {
         $validated = $request->validated();
 
-        $message = Message::create([
-            'user_id' => Auth::id(),
-            'recipient' => $validated['phone'],
-            'content' => $validated['message'],
-        ]);
+        $apiKey = config('app.sms_api_key');
+        $senderId = config('app.sender_id');
+
+        $client = new Client();
+        try {
+            $fullURL = "https://api.mobilesasa.com/v1/send/message";
+
+            $body = [
+                "senderID" => $senderId,
+                "phone" => $validated['phone'],
+                "message" => $validated['message'],
+            ];
+
+            $res = $client->post($fullURL, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type' => 'application/json'
+                ],
+                'json' => $body
+            ]);
+
+            $response = json_decode($res->getBody(), TRUE);
+            // \Illuminate\Support\Facades\Log::info(json_encode($response));
+             $smsCode = $response['messageID'][0];
+
+            $message = Message::create([
+                'user_id' => Auth::id(),
+                'recipient' => $validated['phone'],
+                'content' => $validated['message'],
+                'delivered_at' => now(),
+                'message_id' => $smsCode,
+            ]);
+
+        } catch (GuzzleException $e) {
+        }
+
+        info(json_encode($response ?? []));
+        dd(json_encode($response ?? []));
 
         toast('message sent','success');
         return redirect()->route('messages');
