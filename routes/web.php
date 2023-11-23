@@ -28,7 +28,7 @@ Route::controller(\App\Http\Controllers\public\ContactUsController::class)->pref
     Route::get('/', 'index')->name('contact-us');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
 
     Route::controller(\App\Http\Controllers\DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
