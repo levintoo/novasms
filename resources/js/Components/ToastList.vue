@@ -29,6 +29,6 @@ watch(toastObject,(updated) => {
                      tag="div"
 
     class="fixed top-4 right-0 z-50 space-y-4 text-gray-500 w-full max-w-xs px-3">
-            <ToastListItem v-for="(item, index) in toast.items" :key="item.key"  :duration="3000" :message="item.message" :type="item.type" @remove="remove(index)"/>
+            <ToastListItem v-for="(item, index) in toast.items" :key="item.key"  :duration="duration" :message="item.message" :type="item.type" @remove="remove(index)"/>
         </TransitionGroup>
 </template>

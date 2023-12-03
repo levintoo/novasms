@@ -16,11 +16,11 @@ const is_failed = ref(!!props.batchinfo.finishedAt && props.batchinfo.progress <
 const polling = setInterval(() => {
     if(props.batchinfo.finishedAt) {
         clearInterval(polling)
-        // router.get(route('jobs.status'))
+        router.get(route('jobs.status'))
         return
     }
     router.post(route('batch.progress',props.batchinfo.id))
-},2000)
+},3000)
 
 onUnmounted(() => {
     clearInterval(polling)

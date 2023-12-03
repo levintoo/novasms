@@ -28,7 +28,7 @@ const form = useForm({
 const sms = computed(() => ((form.amount / page.props.app.config.sms_rate ?? 1).toFixed(1)).toLocaleString() + " sms" ) // 0.8 is the sms rate
 
 const handle_submit = () => {
-    form.post(route('wallet.top_up_with_mpesa'),{
+    form.post(route('wallet.top_up'),{
         preserveScroll: true,
         onError: () => {
             toast.add({
@@ -74,7 +74,7 @@ const handle_submit = () => {
                 <p
                     class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
                 >
-                    Account balance
+                    Credit balance
                 </p>
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
@@ -88,17 +88,13 @@ const handle_submit = () => {
     <h2
         class="mb-6 text-xl font-semibold text-gray-700 dark:text-gray-200"
     >
-        Top up with m-pesa
+        Top up
     </h2>
     <div class="grid gap-6 mb-8 md:grid-cols-2">
         <div class="min-w-0 p-6 bg-white rounded-lg shadow-xs">
             <form @submit.prevent="handle_submit()" class="w-full space-y-3">
                 <div>
-                    <InputLabel class="my-2" for="phone" value="Phone" />
-                    <TextInput placeholder="phone number here..." v-model="form.phone" class="w-full h-10" type="text" id="phone" />
-                </div>
-                <div>
-                    <InputLabel class="my-2" for="amount" value="Amount" />
+                    <InputLabel class="my-2" for="amount" value="Amount(ksh)" />
                     <TextInput placeholder="amount here..." v-model="form.amount" class="w-full h-10" id="amount" type="number"/>
                     <InputLabel class="my-2 text-purple-500" for="amount" :value=sms />
                 </div>
