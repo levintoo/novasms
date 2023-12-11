@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Contact;
 use App\Models\JobStatus;
+use App\Models\User;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -71,6 +72,11 @@ class SendSMSJob implements ShouldQueue
                 $batch->add([
                     new SendMessageJob($this->user_id,$contact->phone, $message_content, $this->group_id)
                 ]);
+
+                $user = User::findorfail($this->user_id);
+                if($user->balance <= 0) {
+                    break 2;
+                };
             }
         }
     }
