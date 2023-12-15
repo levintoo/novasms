@@ -5,12 +5,6 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
-    'sms_api_key' => env('MOBILESASA_SMS_API_KEY'),
-
-    'sender_id' => env('MOBILESASA_SENDER_ID'),
-
-    'sms_rate' => env('SMS_RATE', '1'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -22,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Novasms'),
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -76,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'Africa/Nairobi',
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -147,7 +141,7 @@ return [
 
     'maintenance' => [
         'driver' => 'file',
-        // 'store'  => 'redis',
+        // 'store' => 'redis',
     ],
 
     /*
@@ -190,4 +184,5 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+
 ];
