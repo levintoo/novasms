@@ -18,7 +18,7 @@ const search = ref("")
     >
         <!-- Desktop sidebar -->
         <aside
-            class="z-20 hidden lg:w-64 overflow-y-auto bg-white md:block flex-shrink-0"
+            class="z-20 hidden lg:w-64 overflow-y-hidden bg-white md:block flex-shrink-0"
         >
             <div class="py-4 text-gray-500">
                 <SideBar>
@@ -47,7 +47,6 @@ const search = ref("")
         </aside>
         <!-- Mobile sidebar -->
         <!-- Backdrop -->
-
         <div
             v-if="isSideMenuOpen"
             class="fixed inset-0 z-10 flex md:hidden items-end bg-black bg-opacity-50 md:items-center md:justify-center"
