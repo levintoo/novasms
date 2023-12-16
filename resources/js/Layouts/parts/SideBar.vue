@@ -4,6 +4,7 @@ import {Link, usePage} from "@inertiajs/vue3"
 import SideBarItem from "@/Layouts/parts/SideBarItem.vue";
 import SideBarDropdownLink from "@/Layouts/parts/SideBarDropdownLink.vue";
 import SideBarDropdown from "@/Layouts/parts/SideBarDropdown.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 // const page = usePage()
 
@@ -168,8 +169,8 @@ import SideBarDropdown from "@/Layouts/parts/SideBarDropdown.vue";
 
                     <!-- log out user button -->
                     <li class="px-6 my-6 bottom-0">
-                        <Link href="/logout" as="button" method="POST"
-                              class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-gray-600 border border-transparent rounded-lg active:bg-gray-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-gray"
+                        <PrimaryButton href="/logout" as="button" method="POST"
+                              class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +181,7 @@ import SideBarDropdown from "@/Layouts/parts/SideBarDropdown.vue";
                                 <path fill-rule="evenodd" d="M12 2.25a.75.75 0 01.75.75v9a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.166 5.106a.75.75 0 010 1.06 8.25 8.25 0 1011.668 0 .75.75 0 111.06-1.06c3.808 3.807 3.808 9.98 0 13.788-3.807 3.808-9.98 3.808-13.788 0-3.808-3.807-3.808-9.98 0-13.788a.75.75 0 011.06 0z" clip-rule="evenodd" />
                             </svg>
                             Log out
-                        </Link>
+                        </PrimaryButton>
                     </li>
 
                 </ul>

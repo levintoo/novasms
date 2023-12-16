@@ -5,7 +5,7 @@
     >
         <button
             aria-haspopup="true"
-            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800"
+            class="inline-flex items-center justify-between w-full text-sm font-semibold uppercase transition-colors duration-150 hover:text-gray-800"
             @click="isPagesMenuOpen = !isPagesMenuOpen"
         >
                 <span class="inline-flex items-center" >
