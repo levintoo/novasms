@@ -124,7 +124,7 @@ const search = ref("")
                             </span>
                             <input
                                 id="leadingIcon"
-                                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-gray-600 outline-none border border-gray-300 focus:border-cyan-300 transition"
+                                class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-gray-600 outline-none border border-gray-300 focus:border-blue-600 transition"
                                 name="leadingIcon"
                                 placeholder="Search here"
                                 type="search"
