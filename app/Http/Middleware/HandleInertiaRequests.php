@@ -37,6 +37,7 @@ class HandleInertiaRequests extends Middleware
                     ? $request->user()->only('name', 'email')
                     : null,
             ],
+            'toast' => session('toast') ?? ['message' => 'loo'],
         ];
     }
 }

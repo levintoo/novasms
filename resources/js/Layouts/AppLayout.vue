@@ -5,12 +5,15 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import SideBar from "./parts/SideBar.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import {Link, usePage} from "@inertiajs/vue3";
+import ToastList from "@/Components/ToastList.vue";
 
 const isSideMenuOpen = ref(false)
 const search = ref("")
 </script>
 
 <template>
+
+    <ToastList />
 
     <div
         :class="{ 'overflow-hidden': isSideMenuOpen }"
