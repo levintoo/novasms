@@ -114,7 +114,7 @@ class MessageController extends Controller
 
         $groups = Group::query()
 
-            ->where('user_id',Auth::id())
+            ->where('user_id', Auth::id())
 
             ->select('name','id')
 
@@ -137,7 +137,25 @@ class MessageController extends Controller
      */
     public function create()
     {
-        return inertia('Message/Create');
+        $groups = Group::query()
+
+            ->where('user_id', Auth::id())
+
+            ->select('name','id')
+
+            ->orderBy('name','ASC')
+
+            ->withCount('contacts')
+
+            ->get()
+
+            ->map(fn($group) => [
+                'id' => $group->id,
+                'name' => $group->name,
+                'contacts' => $group->contacts_count,
+            ]);
+
+        return inertia('Message/Create', compact('groups'));
     }
 
 

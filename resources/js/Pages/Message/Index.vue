@@ -104,12 +104,12 @@ const handleDelete = (id) => {
             <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
 
                 <div class="space-y-1">
-                    <InputLabel for="search" value="search" />
+                    <InputLabel for="search" value="Search" />
                     <TextInput placeholder="search here..." id="search" v-model="params.search" type="text" class="px-3 py-2 w-full text-sm" />
                 </div>
 
                 <div class="space-y-1">
-                    <InputLabel for="status" value="delivery status" />
+                    <InputLabel for="status" value="Delivery status" />
                     <SelectInput id="status" v-model="params.status" class="px-3 py-2 w-full text-sm" :class="params.status === '' ? 'text-gray-500' : '' ">
                         <option value="">select</option>
                         <option value="delivered">delivered</option>
@@ -118,20 +118,22 @@ const handleDelete = (id) => {
                 </div>
 
                 <div class="space-y-1">
-                    <InputLabel for="start_date" value="start date" />
+                    <InputLabel for="start_date" value="Start date" />
                     <TextInput id="start_date" v-model="params.start_date" type="datetime-local" class="px-3 py-2 w-full text-sm" :class="params.start_date === '' ? 'text-gray-500' : '' "/>
                 </div>
 
                 <div class="space-y-1">
-                    <InputLabel for="end_date" value="end date" />
+                    <InputLabel for="end_date" value="End date" />
                     <TextInput id="end_date" v-model="params.end_date" type="datetime-local" class="px-3 py-2 w-full text-sm" :class="params.end_date === '' ? 'text-gray-500' : '' "/>
                 </div>
 
-                <div class="space-y-1" v-if="Object.keys(groups).length > 0">
-                    <InputLabel for="status" value="group" />
-                    <SelectInput id="status" v-model="params.group" class="px-3 py-2 w-full text-sm">
+                <div class="space-y-1">
+                    <InputLabel for="status" value="Group" />
+                    <SelectInput id="status" v-model="params.group" :class="params.group === '' ? 'text-gray-500' : '' " class="px-3 py-2 w-full text-sm">
                         <option value="">select</option>
-                        <option v-for="group in groups" :value="group.id">{{ group.name ?? '-' }}</option>
+                        <template v-if="Object.keys(groups).length > 0">
+                            <option v-for="group in groups" :value="group.id">{{ group.name ?? '-' }}</option>
+                        </template>
                     </SelectInput>
                 </div>
             </div>
