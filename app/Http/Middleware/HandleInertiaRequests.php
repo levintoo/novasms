@@ -32,12 +32,14 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
+
             'auth' => [
                 'user' => Auth::check()
                     ? $request->user()->only('name', 'email')
                     : null,
             ],
-            'toast' => session('toast') ?? ['message' => 'loo'],
+
+            'toast' => session('toast') ?? [],
         ];
     }
 }

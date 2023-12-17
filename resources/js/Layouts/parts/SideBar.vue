@@ -14,12 +14,12 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 </script>
 
 <template>
-    <div class="h-screen my-4">
+    <div class="h-screen md:my-4">
         <div class="h-full bg-white rounded-2xl">
 
             <slot name="head"/>
 
-            <nav class="mt-6">
+            <nav class="md:mt-6">
                 <ul>
 
                     <SideBarItem href="/dashboard" :active="$page.url.startsWith('/dashboard')">
@@ -39,7 +39,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                             </span>
                     </SideBarItem>
 
-                    <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
+                    <SideBarItem href="/message/compose" :active="$page.url === ('/message/compose')">
                             <span class="text-left">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +55,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                             </span>
                     </SideBarItem>
 
-                    <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
+                    <SideBarItem href="/message" :active="$page.url === ('/message')">
                             <span class="text-left">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                             </span>
                     </SideBarItem>
 
-                    <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
+                    <SideBarItem href="/contact" :active="$page.url.startsWith('/contact')">
                             <span class="text-left">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                             </span>
                     </SideBarItem>
 
-                    <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
+                    <SideBarItem href="/group" :active="$page.url.startsWith('/group')">
                             <span class="text-left">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"

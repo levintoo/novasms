@@ -17,7 +17,7 @@ setTimeout(() => {
 </script>
 
 <template>
-    <div class="shadow-2xl shadow-gray-200 rounded-lg bg-white mx-auto m-8 p-4 w-full flex" role="alert">
+    <div class="shadow-sm border md:border-0 border-gray-100 rounded-lg bg-white mx-auto m-8 p-4 w-full flex" role="alert">
         <div class="pr-2" v-if="type === 'error' || type === 'Error' || type === 'ERROR'">
             <svg
                 class="fill-current text-red-600"

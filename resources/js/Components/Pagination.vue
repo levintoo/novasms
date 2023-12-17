@@ -25,15 +25,15 @@ defineProps({
                       <li class="mb-1">
                         <span
                             v-if="link.url === null"
-                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
+                            class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue"
                         v-html="link.label">
                         </span>
                           <Link
                               preserve-state
                               preserve-scroll
                               v-else
-                              class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple"
-                              :class="{ 'px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple': link.active }"
+                              class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-blue"
+                              :class="{ 'px-3 py-1 text-white transition-colors duration-150 bg-blue-600 border border-r-0 border-blue-600 rounded-md focus:outline-none focus:shadow-outline-blue': link.active }"
                               :href="link.url"
                               v-html="link.label"
                           />

@@ -45,7 +45,8 @@ const handleUpdateGroup = () => {
 }
 </script>
 
-<template><pre>{{ group }}</pre>
+<template>
+
     <Head title="Edit Group" />
 
         <div>

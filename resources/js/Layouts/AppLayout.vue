@@ -26,24 +26,14 @@ const search = ref("")
             <div class="py-4 text-gray-500">
                 <SideBar>
                     <template #head>
-                         <div class="flex justify-between mx-6">
+                         <div class="flex justify-center mx-6">
                                 <Link
                                     class=" text-lg font-bold text-gray-800"
                                     href="/"
                                 >
                                     <ApplicationLogo/>
                                 </Link>
-                                <span
-                                    class="cursor-pointer rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
-                                    @click="isSideMenuOpen = !isSideMenuOpen"
-                                >
-                       <svg class="w-6 h-6" fill="currentColor" stroke="currentColor"
-                            stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
-                       </svg>
-                                </span>
                             </div>
-
                     </template>
                 </SideBar>
             </div>
@@ -60,27 +50,7 @@ const search = ref("")
             class="fixed inset-y-0 z-20 flex-shrink-0 w-64 mt-16 overflow-y-auto bg-white md:hidden"
         >
             <div class="py-4 text-gray-500">
-                <SideBar>
-                    <template #head>
-                        <div class="flex justify-between mx-6">
-                            <Link
-                                class=" text-lg font-bold text-gray-800"
-                                href="/"
-                            >
-                                <ApplicationLogo/>
-                            </Link>
-                            <span
-                                class="cursor-pointer rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
-                                @click="isSideMenuOpen = !isSideMenuOpen"
-                            >
-                       <svg class="w-6 h-6" fill="currentColor" stroke="currentColor"
-                            stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
-                       </svg>
-                   </span>
-                        </div>
-                    </template>
-                </SideBar>
+                <SideBar />
             </div>
         </aside>
 
@@ -94,6 +64,7 @@ const search = ref("")
                     @click="isSideMenuOpen = !isSideMenuOpen"
                     >
                         <svg
+                            v-if="!isSideMenuOpen"
                             aria-hidden="true"
                             class="w-6 h-6 m-auto text-gray-600"
                             fill="currentColor"
@@ -104,6 +75,17 @@ const search = ref("")
                                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                                 fill-rule="evenodd"
                             ></path>
+                        </svg>
+                        <svg
+                            v-else
+                            class="w-6 h-6 m-auto text-gray-600"
+                            fill="currentColor"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
 
@@ -203,7 +185,7 @@ const search = ref("")
             </header>
 
             <main class="min-h-screen">
-                <div class="container px-6 mx-auto grid">
+                <div class="container px-2 sm:px-6 mx-auto grid">
                     <slot/>
                 </div>
             </main>
