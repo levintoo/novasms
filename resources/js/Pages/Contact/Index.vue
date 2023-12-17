@@ -95,7 +95,7 @@ const handleDelete = (id) => {
                            class="block h-10 w-full pl-8 pr-6 py-2 text-sm placeholder-gray-400" />
             </div>
         </div>
-        <div class="md:justify-end flex items-center">
+        <div class="justify-end flex items-center">
             <Dropdown class="my-6">
                 <template #trigger>
                     <span class="inline-flex rounded-md">
