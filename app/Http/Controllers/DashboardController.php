@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -11,7 +12,23 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return inertia('Dashboard');
+        $user = User::query()
+
+            ->select('id')
+
+            ->withCount('contacts')
+
+            ->withCount('groups')
+
+            ->withCount('messages as sent_messages_count')
+
+            ->withCount(['messages as delivered_messages_count' => function ($q) {
+                $q->whereNotNull('delivered_at');
+            }])
+
+            ->findOrFail(\Auth::id());
+
+        return inertia('Dashboard', compact('user'));
     }
 
     /**
