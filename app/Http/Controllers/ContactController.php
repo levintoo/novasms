@@ -102,8 +102,6 @@ class ContactController extends Controller
 
             ->orderBy('name','ASC')
 
-            ->withCount('contacts')
-
             ->get()
 
             ->map(fn($group) => [
@@ -111,8 +109,6 @@ class ContactController extends Controller
                 'id' => $group->id,
 
                 'name' => $group->name,
-
-                'contacts' => $group->contacts_count,
 
             ]);
 

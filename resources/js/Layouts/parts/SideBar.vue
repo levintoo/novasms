@@ -148,7 +148,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                             </span>
                     </SideBarItem>
 
-                    <SideBarDropdown :active="true" >
+                    <SideBarDropdown :active="$page.url.startsWith('/admin')" >
                         <template #toggler>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +161,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                             <span class="ml-4">Admin</span>
                         </template>
                         <template #links>
-                            <SideBarDropdownLink href="/dashboard" >
+                            <SideBarDropdownLink href="/admin/dashboard" >
                                 Dashboard
                             </SideBarDropdownLink>
                         </template>

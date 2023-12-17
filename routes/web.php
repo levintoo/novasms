@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
@@ -102,7 +103,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::delete('{contact}', 'destroy')->name('delete');
 
-        });
+    });
+
+    Route::middleware(['auth'])
+
+        ->prefix('admin')
+
+        ->name('admin.')
+
+        ->group(function () {
+
+            Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    });
 
 });
 
