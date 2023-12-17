@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,21 +20,39 @@ Route::get('/', function () {
     return inertia('Welcome');
 });
 
-Route::controller(DashboardController::class)
+Route::middleware(['auth', 'verified'])->group(function () {
 
-    ->middleware(['auth', 'verified'])
+    Route::controller(DashboardController::class)
 
-    ->prefix('dashboard')
+        ->prefix('dashboard')
 
-    ->name('dashboard.')
+        ->name('dashboard.')
 
-    ->group(function () {
+        ->group(function () {
 
-    Route::get('/', 'index')->name('index');
+        Route::get('/', 'index')->name('index');
 
-    Route::patch('/', 'update')->name('update');
+        Route::patch('/', 'update')->name('update');
 
-    Route::delete('/', 'destroy')->name('destroy');
+        Route::delete('/', 'destroy')->name('destroy');
+
+    });
+
+    Route::controller(MessageController::class)
+
+        ->prefix('message')
+
+        ->name('message.')
+
+        ->group(function () {
+
+        Route::get('/', 'index')->name('index');
+
+        Route::get('compose', 'create')->name('compose');
+
+        Route::post('send', 'send')->name('send');
+
+    });
 
 });
 
