@@ -14,8 +14,8 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 </script>
 
 <template>
-    <div class="h-screen md:my-4">
-        <div class="h-full bg-white rounded-2xl">
+    <div class="min-h-screen md:my-4">
+        <div class="min-h-full bg-white rounded-2xl">
 
             <slot name="head"/>
 
@@ -163,6 +163,9 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
                         <template #links>
                             <SideBarDropdownLink href="/admin/dashboard" >
                                 Dashboard
+                            </SideBarDropdownLink>
+                            <SideBarDropdownLink href="/admin/group" >
+                                Groups
                             </SideBarDropdownLink>
                         </template>
                     </SideBarDropdown>

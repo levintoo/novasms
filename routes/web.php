@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\Admin\GroupController as AdminGroupController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -114,6 +115,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
 
             Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+
+            Route::controller(AdminGroupController::class)
+
+                ->prefix('group')
+
+                ->name('group.')
+
+                ->group(function () {
+
+                    Route::get('/', 'index')->name('index');
+
+                    Route::delete('{group}', 'destroy')->name('delete');
+
+                    Route::patch('restore/{group}', 'restore')->name('delete');
+
+            });
     });
 
 });
