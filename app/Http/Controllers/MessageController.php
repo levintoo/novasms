@@ -73,7 +73,7 @@ class MessageController extends Controller
                     'recipient', 'LIKE', '%' . request('search') . '%'
                 )
                     ->orwhere(
-                        'content', 'LIKE', '%' . request('search') . '%'
+                        'body', 'LIKE', '%' . request('search') . '%'
                     );
             });
         }
@@ -102,7 +102,7 @@ class MessageController extends Controller
 
             'recipient' => $message->recipient,
 
-            'content' => $message->content,
+            'body' => $message->body,
 
             'sent' => $message->created_at ? $message->created_at?->diffForHumans() : null,
 
@@ -183,31 +183,36 @@ class MessageController extends Controller
 
                         "phone" => $validated['phone'],
 
-                        "message" => $validated['message'],
+                        "message" => '[TEST]' . ' ' . $validated['message'],
 
                     ];
 
-                    $res = $client->post($fullURL, [
+//                    $res = $client->post($fullURL, [
+//
+//                        'headers' => [
+//
+//                            'Accept' => 'application/json',
+//
+//                            'Authorization' => 'Bearer ' . $apiKey,
+//
+//                            'Content-Type' => 'application/json'
+//
+//                        ],
+//
+//                        'json' => $body
+//
+//                    ]);
 
-                        'headers' => [
+//                    $response = json_decode($res->getBody(), TRUE);
 
-                            'Accept' => 'application/json',
+                    $response = collect(array(
+                        'status' => true,
+                        'responseCode' => '0200',
+                        'message' => 'Accepted',
+                        'messageId' => fake()->uuid(),
+                    ));
 
-                            'Authorization' => 'Bearer ' . $apiKey,
-
-                            'Content-Type' => 'application/json'
-
-                        ],
-
-                        'json' => $body
-
-                    ]);
-
-                    $response = json_decode($res->getBody(), TRUE);
-
-                    info(json_encode($response));
-
-                    $smsCode = $response['messageID'][0];
+                    $smsCode = $response['messageId'];
 
                     $message = Message::create([
 
@@ -221,6 +226,10 @@ class MessageController extends Controller
 
                     ]);
 
+                    toast('success','message sent success');
+
+                    return redirect()->route('message.index');
+
                 } catch (GuzzleException $e) {
 
                     toast('error','something went wrong');
@@ -228,10 +237,6 @@ class MessageController extends Controller
                     return redirect()->back();
 
                 }
-
-                info(json_encode($response ?? []));
-
-                dd(json_encode($response ?? []));
 
             break;
 

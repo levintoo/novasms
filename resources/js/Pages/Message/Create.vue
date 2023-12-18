@@ -23,9 +23,9 @@ defineProps({
 })
 
 const form = useForm({
-    phone: "",
+    phone: "700814223",
     group: "",
-    message: "",
+    message: "heyy stupid",
     recipient: "contact",
 })
 

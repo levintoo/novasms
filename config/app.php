@@ -185,8 +185,8 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
-    'sms_api_key' => env('SMS_API_KEY'),
+    'sms_api_key' => env('MOBILESASA_SMS_API_KEY'),
 
-    'sms_sender_id' => env('SMS_SENDER_ID'),
+    'sms_sender_id' => env('MOBILESASA_SENDER_ID'),
 
 ];

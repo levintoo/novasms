@@ -144,7 +144,7 @@ const handleDelete = (id) => {
         <template #thead>
             <TableHead>
                 <TableHeadItem @click="sort('recipient')" class="cursor-pointer" :params="params" field="recipient" />
-                <TableHeadItem @click="sort('content')" class="cursor-pointer" :params="params" field="content" />
+                <TableHeadItem @click="sort('body')" class="cursor-pointer" :params="params" field="body" />
                 <TableHeadItem @click="sort('sent')" class="cursor-pointer" :params="params" field="sent" />
                 <TableHeadItem field="delivered" />
                 <TableHeadItem field="group" />
@@ -158,7 +158,7 @@ const handleDelete = (id) => {
                         {{ message.recipient ?? '-' }}
                     </TableData>
                     <TableData class="">
-                        {{ message.content ?? '-' }}
+                        {{ message.body ?? '-' }}
                     </TableData>
                     <TableData class=" whitespace-nowrap">
                         {{ message.sent ?? '-' }}

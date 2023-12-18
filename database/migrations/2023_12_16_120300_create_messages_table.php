@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('recipient');
             $table->longText('body');
             $table->dateTime('delivered_at')->nullable();
+            $table->string('message_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
