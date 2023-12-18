@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import SideBar from "./parts/SideBar.vue";
@@ -8,7 +8,18 @@ import {Link, usePage} from "@inertiajs/vue3";
 import ToastList from "@/Components/ToastList.vue";
 
 const isSideMenuOpen = ref(false)
+
 const search = ref("")
+
+const page = usePage()
+
+const currentUrl = computed(() => page.url )
+
+watch(currentUrl,(value, oldValue) => {
+    if(value !== oldValue) {
+        isSideMenuOpen.value = false
+    }
+} )
 </script>
 
 <template>
