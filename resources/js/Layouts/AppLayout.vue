@@ -16,12 +16,11 @@ const search = ref("")
     <ToastList />
 
     <div
-        :class="{ 'overflow-hidden': isSideMenuOpen }"
-        class="flex min-h-screen bg-gray-100"
+        class="flex"
     >
         <!-- Desktop sidebar -->
         <aside
-            class="z-20 hidden lg:w-64 overflow-y-hidden bg-white md:block flex-shrink-0"
+            class="z-20 hidden lg:w-64 bg-white md:block flex-shrink-0"
         >
             <div class="py-4 text-gray-500">
                 <SideBar>
