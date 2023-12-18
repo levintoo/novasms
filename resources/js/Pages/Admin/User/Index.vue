@@ -153,17 +153,15 @@ const handleReset = (id) => {
            <TableHead>
                <TableHeadItem field="id" />
                <TableHeadItem class="cursor-pointer" field="name" :params=params @click="sort('name')" />
-               <TableHeadItem class="cursor-pointer" field="phone" :params=params @click="sort('phone')" />
                <TableHeadItem class="cursor-pointer" field="email" :params=params @click="sort('email')" />
-               <TableHeadItem class="cursor-pointer" field="groups" :params="params" @click="sort('groups')"/>
-               <TableHeadItem class="cursor-pointer" field="contacts" :params="params" @click="sort('contacts')" />
                <TableHeadItem class="cursor-pointer" field="balance" :params="params" @click="sort('balance')" />
                <TableHeadItem class="cursor-pointer" field="joined" :params="params" @click="sort('joined')" />
+               <TableHeadItem class="cursor-pointer" field="verified" :params="params" @click="sort('verified')" />
                <TableHeadItem field="action" colspan="3" class="text-center">action</TableHeadItem>
            </TableHead>
        </template>
         <template #tbody>
-            <TableBody v-if="users.data.length > 0">
+            <TableBody class="whitespace-nowrap" v-if="users.data.length > 0">
                 <TableBodyItem v-for="user in users.data">
                     <TableData class="whitespace-nowrap">{{ user.id }}</TableData>
                     <TableData>
@@ -175,16 +173,14 @@ const handleReset = (id) => {
                             <p v-else class="text-xs text-gray-600">-</p>
                         </div>
                     </TableData>
-                    <TableData class="whitespace-nowrap">{{ user.phone }}</TableData>
                     <TableData>
                         <div class="max-w-md overflow-hidden">
-                            <p>{{ user.email }}</p>
+                            <p>{{ user.email ?? '-' }}</p>
                         </div>
                     </TableData>
-                    <TableData>{{ user.groups }}</TableData>
-                    <TableData>{{ user.contacts }}</TableData>
-                    <TableData>{{ user.balance }}</TableData>
-                    <TableData>{{ user.joined }}</TableData>
+                    <TableData>{{ user.balance ?? '-' }}</TableData>
+                    <TableData>{{ user.joined ?? '-' }}</TableData>
+                    <TableData>{{ user.verified ?? '-' }}</TableData>
                     <td class="text-center">
                         <IconButton v-if="!user.trashed" @click="handleReset(user.id)"
                                     class="text-purple-500 focus:ring-purple-300">

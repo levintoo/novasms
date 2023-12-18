@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         request()->validate([
             'direction' => 'in:desc,asc',
-            'field' => 'in:name,email,phone,joined,groups,balance,contacts',
+            'field' => 'in:name,email,phone,joined,balance,verified',
             'trashed' => 'in:without,with,only',
             'search' => 'max:25'
         ]);
@@ -31,18 +31,21 @@ class UserController extends Controller
         }
 
         if(request('field') == 'contacts') {
-            $query->orderBy('contacts_count',request('direction'));
-        }
-        else if(request('field') == 'groups') {
-            $query->orderBy('groups_count',request('direction'));
-        }
-        else if(request('field') == 'joined') {
-            $query->orderBy('created_at',request('direction'));
-        }
-        else if(request('field')) {
-            $query->orderBy(request('field'),request('direction'));
+            $query->orderBy(
+                'contacts_count',request('direction'
+                ));
+        } else if(request('field') == 'groups') {
+            $query->orderBy(
+                'groups_count',request('direction')
+            );
+        } else if(request('field')) {
+            $query->orderBy(
+                request('field'),request('direction')
+            );
         } else {
-            $query->orderBy('created_at','DESC');
+            $query->orderBy(
+                'created_at','DESC'
+            );
         }
 
         if(request('trashed') == "with") {
@@ -55,10 +58,6 @@ class UserController extends Controller
             $query->withoutTrashed();
         }
 
-        $query->withCount('groups');
-
-        $query->withCount('contacts');
-
         $query->with('roles');
 
         $users = $query->paginate()->through(fn($user) => [
@@ -67,10 +66,6 @@ class UserController extends Controller
 
             'name' => $user->name,
 
-            'contacts' => $user->contacts_count,
-
-            'groups' => $user->groups_count,
-
             'balance' => $user->balance,
 
             'phone' => $user->phone,
@@ -78,6 +73,8 @@ class UserController extends Controller
             'email' => $user->email,
 
             'joined' => $user->created_at ? $user->created_at->diffForHumans() : null ,
+
+            'verified' => $user->email_verified_at ? $user->email_verified_at->diffForHumans() : null ,
 
             'roles' => $user->roles->map(fn($role) => [
                     'name' => $role->name,
