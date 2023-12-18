@@ -34,9 +34,15 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
 
             'auth' => [
+
                 'user' => Auth::check()
                     ? $request->user()->only('name', 'email')
                     : null,
+
+                'roles' => Auth::check()
+                    ? $request->user()->getRoleNames()
+                    : null,
+
             ],
 
             'toast' => session('toast') ?? [],

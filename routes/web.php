@@ -106,7 +106,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     });
 
-    Route::middleware(['auth'])
+    Route::middleware(['can:manage users'])
 
         ->prefix('admin')
 
