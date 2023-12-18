@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\DashboardController;
@@ -146,6 +147,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::delete('{contact}', 'destroy')->name('delete');
 
                     Route::patch('restore/{contact}', 'restore')->name('restore');
+
+            });
+
+            Route::controller(AdminUserController::class)
+
+                ->prefix('user')
+
+                ->name('user.')
+
+                ->group(function () {
+
+                    Route::get('/', 'index')->name('index');
 
                 });
     });

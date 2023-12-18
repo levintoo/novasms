@@ -168,8 +168,14 @@ const isAdmin = computed(() => {
                                 Groups
                             </SideBarDropdownLink>
                             <SideBarDropdownLink href="/admin/contact" >
-                                Groups
+                                Contacts
                             </SideBarDropdownLink>
+                            <SideBarDropdownLink href="/admin/user" >
+                                Users
+                            </SideBarDropdownLink>
+<!--                            <SideBarDropdownLink href="/admin/contact" >-->
+<!--                                Admins-->
+<!--                            </SideBarDropdownLink>-->
                         </template>
                     </SideBarDropdown>
 
