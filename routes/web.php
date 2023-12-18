@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Admin\GroupController as AdminGroupController;
@@ -128,9 +129,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                     Route::delete('{group}', 'destroy')->name('delete');
 
-                    Route::patch('restore/{group}', 'restore')->name('delete');
+                    Route::patch('restore/{group}', 'restore')->name('restore');
 
             });
+
+            Route::controller(AdminContactController::class)
+
+                ->prefix('contact')
+
+                ->name('contact.')
+
+                ->group(function () {
+
+                    Route::get('/', 'index')->name('index');
+
+                    Route::delete('{contact}', 'destroy')->name('delete');
+
+                    Route::patch('restore/{contact}', 'restore')->name('restore');
+
+                });
     });
 
 });
