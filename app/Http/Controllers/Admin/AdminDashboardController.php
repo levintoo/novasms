@@ -18,13 +18,67 @@ class AdminDashboardController extends Controller
     {
         $stats = collect([
 
-            'users' => User::count(),
+            'users' => User::query()
 
-            'groups' => Group::count(),
+                ->withTrashed()
 
-            'contacts' => Contact::count(),
+                ->count(),
 
-            'messages' => Message::count(),
+            'active_users' => User::query()
+
+                ->count(),
+
+            'trashed_users' => User::query()
+
+                ->onlyTrashed()
+
+                ->count(),
+
+            'groups' => Group::query()
+
+                ->withTrashed()
+
+                ->count(),
+
+            'trashed_groups' => Group::query()
+
+                ->onlyTrashed()
+
+                ->count(),
+
+            'contacts' => Contact::query()
+
+                ->withTrashed()
+
+                ->count(),
+
+            'trashed_contacts' => Contact::query()
+
+                ->onlyTrashed()
+
+                ->count(),
+
+            'messages' => Message::query()
+
+                ->withTrashed()
+
+                ->count(),
+
+            'delivered_messages' => Message::query()
+
+                ->whereNotNull('delivered_at')
+
+                ->withTrashed()
+
+                ->count(),
+
+            'undelivered_messages' => Message::query()
+
+                ->whereNull('delivered_at')
+
+                ->withTrashed()
+
+                ->count(),
 
         ]);
 

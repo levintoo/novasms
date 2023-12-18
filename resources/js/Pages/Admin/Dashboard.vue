@@ -107,7 +107,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    {{ stats?.messages }}
+                    {{ stats?.undelivered_messages }}
                 </p>
             </div>
         </div>
@@ -187,7 +187,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    {{ stats?.contacts }}
+                    {{ stats?.trashed_contacts }}
                 </p>
             </div>
         </div>
@@ -238,7 +238,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    {{ stats?.users }}
+                    {{ stats?.active_users }}
                 </p>
             </div>
         </div>
@@ -258,12 +258,12 @@ defineProps({
                 <p
                     class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
                 >
-                    Deactivated users
+                    Trashed users
                 </p>
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    {{ stats?.users }}
+                    {{ stats?.trashed_users }}
                 </p>
             </div>
         </div>
@@ -320,7 +320,7 @@ defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700"
                 >
-                    {{ stats?.groups }}
+                    {{ stats?.trashed_groups }}
                 </p>
             </div>
         </div>
