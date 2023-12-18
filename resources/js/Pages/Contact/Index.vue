@@ -227,7 +227,7 @@ const handleDelete = (id) => {
 
             </template>
             <template #pagination>
-                <Pagination :from="contacts.from" :to="contacts.to" :total="contacts.total" :links="contacts.links" />
+                <Pagination v-if="contacts.links" :from="contacts.from" :to="contacts.to" :total="contacts.total" :links="contacts.links" />
             </template>
         </Table>
 </template>
