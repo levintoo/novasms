@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Admin\GroupController as AdminGroupController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PendingJobController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -108,6 +109,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     });
 
+    Route::controller(PendingJobController::class)
+
+        ->prefix('pending-jobs')
+
+        ->name('job.')
+
+        ->group(function () {
+
+            Route::get('/', 'index')->name('index');
+
+    });
+
+    // admin routes
     Route::middleware(['can:manage users'])
 
         ->prefix('admin')

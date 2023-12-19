@@ -104,7 +104,7 @@ const isAdmin = computed(() => {
                             </span>
                     </SideBarItem>
 
-                    <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
+                    <SideBarItem href="/pending-jobs" :active="$page.url.startsWith('/pending-jobs')">
                             <span class="text-left">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
