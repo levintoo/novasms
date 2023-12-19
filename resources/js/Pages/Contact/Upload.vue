@@ -78,8 +78,9 @@ const handleUploadContacts = () => {
                                     following
                                     errors.</p>
                             </div>
-                            <div class="px-16 mb-4" v-for="error in form.errors">
-                                <li class="text-md font-bold text-red-500 text-sm">{{ error ?? '-' }}</li></div>
+                            <ul class="px-16 mb-4" v-for="error in form.errors">
+                                <li class="text-md font-bold text-red-500 text-sm">{{ error ?? '-' }}</li>
+                            </ul>
                         </div>
                     </div>
                 </div>

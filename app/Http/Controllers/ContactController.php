@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Http\Requests\UploadContactRequest;
+use App\Jobs\ContactImportjob;
 use App\Models\Contact;
 use App\Models\Group;
+use App\Models\PendingJob;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Validation\Rule;
 
 class ContactController extends Controller
@@ -166,7 +169,25 @@ class ContactController extends Controller
     {
         $validated = $request->validated();
 
-        dd($validated);
+        $filepath = $validated['file']->store('excel');
+
+        $userId = Auth::id();
+
+        $batch = Bus::batch([
+            new ContactImportjob($validated['group'], $userId, $filepath),
+        ])->dispatch();
+
+        PendingJob::create([
+            'user_id' => $userId,
+
+            'batch_id' => $batch->id,
+
+            'name' => 'uploading contacts'
+        ]);
+
+        toast('success','job dispatched');
+
+        return redirect()->route('contact.index');
     }
 
     /**
@@ -194,7 +215,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from storage.use Maatwebsite\Excel\Facades\Excel;
      */
     public function destroy(Contact $contact)
     {
