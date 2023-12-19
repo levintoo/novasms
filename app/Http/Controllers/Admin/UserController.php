@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
 use Str;
 
@@ -155,11 +157,79 @@ class UserController extends Controller
         //
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(User $user)
     {
-        //
+        if($user->id == Auth::id()) {
+
+            toast('info', 'To delete your account head to the profile menu by clicking your name on the top right',null);
+
+            return redirect()->back();
+        }
+
+        if($user->hasRole('admin') || $user->hasRole('super admin')) {
+            if (!Auth::user()->can('manage admins')) {
+
+                toast('error', 'cannot delete admins');
+
+                return redirect()->back();
+            }
+        }
+
+        DB::transaction(function () use ($user) {
+
+            $user->contacts()->delete();
+
+            $user->groups()->delete();
+
+            $user->delete();
+
+        });
+
+        toast('success', 'user trashed successfully');
+
+        return redirect()->back();
+    }
+
+    public function restore($id)
+    {
+        $user = User::onlyTrashed()->findorfail($id);
+
+        DB::transaction(function () use ($user) {
+
+            $user->restore();
+
+            $user->contacts()->onlyTrashed()->restore();
+
+            $user->messages()->onlyTrashed()->restore();
+
+            $user->groups()->onlyTrashed()->restore();
+        });
+
+        toast('success','user restored successfully');
+
+        return redirect()->back();
+    }
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function resetPassword(User $user)
+    {
+        $status = Password::sendResetLink(
+            ['email' => $user->email],
+        );
+
+        if ($status == Password::RESET_LINK_SENT) {
+            toast('success', __($status));
+        }
+
+        toast('error', __($status));
+
+        return redirect()->back();
     }
 }

@@ -73,7 +73,7 @@ const handleDelete = (id) => {
 }
 const handleRestore = (id) => {
     if(!confirm('Are you sure you want to restore user')) return;
-    router.patch('/admin/user/restore/' + id, {
+    router.patch('/admin/user/' + id + '/restore' , {
         preserveScroll: true,
         onError: (errors) => {
             toast.add({
