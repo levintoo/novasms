@@ -189,4 +189,5 @@ return [
 
     'sms_sender_id' => env('MOBILESASA_SENDER_ID'),
 
+    'date_time_format' => 'd-m-Y H:i:s T',
 ];

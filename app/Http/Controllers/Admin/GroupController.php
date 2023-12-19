@@ -104,7 +104,7 @@ class GroupController extends Controller
 
             'trashed' => !!$group->deleted_at,
 
-            'created' => $group->created_at ? $group->created_at->diffForHumans() : null,
+            'created' => $group->created_at ? $group->created_at->format(config('app.date_time_format')) : null,
 
             'user' => [
 

@@ -90,7 +90,7 @@ class ContactController extends Controller
 
             'trashed' => !!$contact->deleted_at,
 
-            'created' => $contact->created_at ? $contact->created_at->diffForHumans() : null,
+            'created' => $contact->created_at ? $contact->created_at->format(config('app.date_time_format')) : null,
 
             'user' => [
                 'name' => $contact->user->name ?? null,

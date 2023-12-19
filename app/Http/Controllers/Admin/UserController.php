@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         request()->validate([
             'direction' => 'in:desc,asc',
-            'field' => 'in:name,email,phone,joined,balance,verified',
+            'field' => 'in:name,email,joined,balance,verified',
             'trashed' => 'in:without,with,only',
             'search' => 'max:25'
         ]);
@@ -25,8 +25,7 @@ class UserController extends Controller
         if(request('search')) {
             $query->where(function ($query) {
                 $query->where('name','LIKE','%'.request('search').'%')
-                    ->orwhere('email','LIKE','%'.request('search').'%')
-                    ->orwhere('phone','LIKE','%'.request('search').'%');
+                    ->orwhere('email','LIKE','%'.request('search').'%');
             });
         }
 
@@ -37,6 +36,10 @@ class UserController extends Controller
         } else if(request('field') == 'groups') {
             $query->orderBy(
                 'groups_count',request('direction')
+            );
+        } else if(request('field') == 'joined') {
+            $query->orderBy(
+                'created_at',request('direction')
             );
         } else if(request('field')) {
             $query->orderBy(
@@ -68,13 +71,11 @@ class UserController extends Controller
 
             'balance' => $user->balance,
 
-            'phone' => $user->phone,
-
             'email' => $user->email,
 
-            'joined' => $user->created_at ? $user->created_at->diffForHumans() : null ,
+            'joined' => $user->created_at ? $user->created_at->format(config('app.date_time_format')) : null ,
 
-            'verified' => $user->email_verified_at ? $user->email_verified_at->diffForHumans() : null ,
+            'verified' => $user->email_verified_at ? $user->email_verified_at->format(config('app.date_time_format')) : null ,
 
             'roles' => $user->roles->map(fn($role) => [
                     'name' => $role->name,
