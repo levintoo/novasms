@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Str;
 
 class UserController extends Controller
 {
@@ -15,8 +19,11 @@ class UserController extends Controller
     {
         request()->validate([
             'direction' => 'in:desc,asc',
+
             'field' => 'in:name,email,joined,balance,verified',
+
             'trashed' => 'in:without,with,only',
+
             'search' => 'max:25'
         ]);
 
@@ -95,15 +102,33 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::query()->select('name')->get();
+
+        return inertia('Admin/User/Create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $user = DB::transaction(function () use($validated) {
+
+            $user = User::create([
+                ...$validated,
+                'password' => Str::password(),
+            ]);
+
+            $user->assignRole($validated['role']);
+
+            return $user;
+        });
+
+        toast('success','user created success');
+
+        return redirect()->route('admin.user.index');
     }
 
     /**

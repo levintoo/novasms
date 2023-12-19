@@ -138,7 +138,7 @@ const handleReset = (id) => {
 
                 <div class="space-y-1">
                     <InputLabel for="status" value="trashed" />
-                    <SelectInput id="status" v-model="params.trashed" class="px-3 py-2 w-full text-sm" :class="params.status === '' ? 'text-gray-500' : '' ">
+                    <SelectInput id="status" v-model="params.trashed" :class="params.trashed === 'without' ? 'text-gray-500' : '' " class="px-3 py-2 w-full text-sm">
                         <option value="without">Without trashed</option>
                         <option value="with">With trashed</option>
                         <option value="only">Only trashed</option>
