@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('pending_jobs', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class);
-//            $table->foreignIdFor()
+            $table->string('name');
+            $table->string('batch_id');
             $table->timestamps();
         });
     }

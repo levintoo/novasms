@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\PendingJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 
 class PendingJobController extends Controller
 {
@@ -12,9 +14,41 @@ class PendingJobController extends Controller
      */
     public function index()
     {
-        $jobs = PendingJob::query()->where('user_id',\Auth::id())->paginate();
+        $userId = Auth::id();
 
-        return inertia('PendingJobs');
+        $jobs = PendingJob::query()
+
+            ->where('user_id', $userId)
+
+            ->select('name','batch_id')
+
+            ->latest()
+
+            ->paginate()
+
+            ->through(fn($job) => [
+
+            'name' => $job->name,
+
+            'batch' => collect([
+
+                Bus::findBatch($job->batch_id)->toArray(),
+
+            ])->map(fn($batch) => [
+
+                'id' => $batch['id'],
+
+                'progress' => $batch['progress'],
+
+                'finishedAt' => $batch['finishedAt'] ? $batch['finishedAt']->diffForHumans() : null,
+
+                'cancelled' => !!$batch['cancelledAt'],
+
+            ]),
+
+        ]);
+
+        return inertia('PendingJobs', compact('jobs'));
     }
 
     /**
