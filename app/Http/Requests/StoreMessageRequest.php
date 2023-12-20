@@ -22,7 +22,7 @@ class StoreMessageRequest extends FormRequest
 
             'phone' => ['required_if:recipient,contact', 'nullable', 'string', 'max_digits:9',],
 
-            'group' => ['required_if:recipient,group', 'nullable', 'string', Rule::exists('groups', 'id')->where('user_id', Auth::id()),],
+            'group' => ['required_if:recipient,group', 'nullable', Rule::exists('groups', 'id')->where('user_id', Auth::id()),],
 
             'message' => ['required'],
 
