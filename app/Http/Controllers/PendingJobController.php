@@ -42,7 +42,9 @@ class PendingJobController extends Controller
 
                 'finishedAt' => $batch['finishedAt'] ? $batch['finishedAt']->diffForHumans() : null,
 
-                'cancelled' => !!$batch['cancelledAt'],
+                'failed' => (bool)$batch['cancelledAt'],
+
+                'jobs' => (bool)$batch['totalJobs'],
 
             ]),
 
