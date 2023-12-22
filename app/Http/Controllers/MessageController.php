@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMessageRequest;
 use App\Http\Requests\UpdateMessageRequest;
+use App\Jobs\PrepareMessageJob;
 use App\Models\Group;
 use App\Models\Message;
+use App\Models\PendingJob;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Validation\Rule;
 use function request;
 
@@ -257,7 +260,23 @@ class MessageController extends Controller
                 return redirect()->back();
             }
 
-            // dispatch job
+            $userId = Auth::id();
+
+            $batch = Bus::batch([
+                new PrepareMessageJob($userId, $validated['group'], $validated['message']),
+            ])->dispatch();
+
+            PendingJob::create([
+                'user_id' => $userId,
+
+                'batch_id' => $batch->id,
+
+                'name' => 'preparing messages'
+            ]);
+
+            toast('info', 'job dispatched');
+
+            return redirect()->route('message.index');
 
             break;
         }
