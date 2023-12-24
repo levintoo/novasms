@@ -163,10 +163,10 @@ const handleReset = (id) => {
         <template #tbody>
             <TableBody class="whitespace-nowrap" v-if="users.data.length > 0">
                 <TableBodyItem v-for="user in users.data">
-                    <TableData class="whitespace-nowrap">{{ user.id }}</TableData>
+                    <TableData>{{ user.id }}</TableData>
                     <TableData>
                         <div class="text-sm">
-                            <Link :href="`/admin/user/show/${user.id}`" class="underline hover:text-purple-800">{{ user.name }}</Link>
+                            <Link :href="`/admin/user/${user.id}`" class="underline hover:text-blue-800">{{ user.name }}</Link>
                             <div v-if="user.roles.length > 0" class="">
                                 <p v-for="role in user.roles" class="text-xs text-gray-600">{{ role.name ?? '-' }}</p>
                             </div>
@@ -174,7 +174,7 @@ const handleReset = (id) => {
                         </div>
                     </TableData>
                     <TableData>
-                        <div class="max-w-md overflow-hidden">
+                        <div class="max-w-md whitespace-nowrap">
                             <p>{{ user.email ?? '-' }}</p>
                         </div>
                     </TableData>
@@ -183,7 +183,7 @@ const handleReset = (id) => {
                     <TableData>{{ user.verified ?? '-' }}</TableData>
                     <td class="text-center">
                         <IconButton v-if="!user.trashed" @click="handleReset(user.id)"
-                                    class="text-purple-500 focus:ring-purple-300">
+                                    class="text-blue-500 focus:ring-blue-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                             </svg>
@@ -191,7 +191,7 @@ const handleReset = (id) => {
                         <span v-else-if="user.trashed && params.trashed !== 'only' "> - </span>
                     </td>
                     <td class="text-center">
-                        <IconLink v-if="!user.trashed" :href="`/admin/user/edit/${user.id}`"
+                        <IconLink v-if="!user.trashed" :href="`/admin/user/${user.id}/edit`"
                                   class="text-gray-500 focus:ring-gray-300">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -216,7 +216,7 @@ const handleReset = (id) => {
                     </td>
                     <td v-if="user.trashed" class="text-center">
                         <IconButton @click="handleRestore(user.id)"
-                                    class="text-purple-500 focus:ring-purple-300">
+                                    class="text-blue-500 focus:ring-blue-300">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
                                 <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z" clip-rule="evenodd" />
                             </svg>

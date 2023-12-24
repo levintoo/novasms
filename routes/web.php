@@ -174,9 +174,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                     Route::get('/', 'index')->name('index');
 
+                    Route::get('{userId}', 'show')->name('show');
+
                     Route::get('create', 'create')->name('create');
 
                     Route::post('create', 'store')->name('store');
+
+                    Route::get('{userId}/edit', 'edit')->name('edit');
+
+                    Route::patch('{user}/edit', 'update')->name('update');
 
                     Route::delete('{user}', 'destroy')->name('delete');
 

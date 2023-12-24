@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class UserController extends Controller
         request()->validate([
             'direction' => 'in:desc,asc',
 
-            'field' => 'in:name,email,joined,balance,verified',
+            'field' => 'in:name,email,joined,verified',
 
             'trashed' => 'in:without,with,only',
 
@@ -41,7 +42,7 @@ class UserController extends Controller
         if(request('field') == 'contacts') {
             $query->orderBy(
                 'contacts_count',request('direction'
-                ));
+            ));
         } else if(request('field') == 'groups') {
             $query->orderBy(
                 'groups_count',request('direction')
@@ -136,27 +137,58 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $userId)
     {
-        //
+        dd($userId);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(String $userId)
     {
-        //
+        $roles = Role::select('name')->get();
+
+        $user = User::select(['id','name','email'])
+
+            ->where('id', $userId)
+
+            ->with('roles')
+
+            ->get()->map(fn($user) => [
+
+            'id' => $user->id,
+
+            'name' => $user->name,
+
+            'email' => $user->email,
+
+            'roles' => $user->roles->map(fn($role) => [
+                'name' => $role->name,
+            ]),
+
+        ]);
+
+        $user = $user[0];
+
+        return inertia('Admin/User/Edit', compact('user','roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
-    }
+        $validated = $request->validated();
 
+        $user->update($validated);
+
+        $user->syncRoles($validated['role']);
+
+        toast('success', 'user updated success');
+
+        return redirect()->route('admin.user.index');
+    }
 
     /**
      * Remove the specified resource from storage.

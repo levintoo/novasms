@@ -83,8 +83,8 @@ const isAdmin = computed(() => {
                                 </svg>
                             </span>
                         <span class="mx-4 text-sm font-normal">
-                                Contacts
-                            </span>
+                            Contacts
+                        </span>
                     </SideBarItem>
 
                     <SideBarItem href="/group" :active="$page.url.startsWith('/group')">
@@ -100,8 +100,8 @@ const isAdmin = computed(() => {
                                 </svg>
                             </span>
                         <span class="mx-4 text-sm font-normal">
-                                Groups
-                            </span>
+                            Groups
+                        </span>
                     </SideBarItem>
 
                     <SideBarItem href="/pending-jobs" :active="$page.url.startsWith('/pending-jobs')">
@@ -117,35 +117,36 @@ const isAdmin = computed(() => {
                                 </svg>
                             </span>
                         <span class="mx-4 text-sm font-normal">
-                                Jobs
-                            </span>
+                            Jobs
+                        </span>
                     </SideBarItem>
 
                     <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
-                            <span class="text-left">
+                        <span class="text-left">
                                 <svg height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                     <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
                                 </svg>
                             </span>
-                            <span class="mx-4 text-sm font-normal">
-                                Profile
-                            </span>
+                        <span class="mx-4 text-sm font-normal">
+                            Profile
+                        </span>
                     </SideBarItem>
 
                     <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
-                            <span class="text-left">
+                        <span class="text-left">
                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
                                     class="w-5 h-5"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
                                 >
-                                    <path d="M2.273 5.625A4.483 4.483 0 015.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0018.75 3H5.25a3 3 0 00-2.977 2.625zM2.273 8.625A4.483 4.483 0 015.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0018.75 6H5.25a3 3 0 00-2.977 2.625zM5.25 9a3 3 0 00-3 3v6a3 3 0 003 3h13.5a3 3 0 003-3v-6a3 3 0 00-3-3H15a.75.75 0 00-.75.75 2.25 2.25 0 01-4.5 0A.75.75 0 009 9H5.25z" />
+                                    <path
+                                        d="M2.273 5.625A4.483 4.483 0 015.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0018.75 3H5.25a3 3 0 00-2.977 2.625zM2.273 8.625A4.483 4.483 0 015.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0018.75 6H5.25a3 3 0 00-2.977 2.625zM5.25 9a3 3 0 00-3 3v6a3 3 0 003 3h13.5a3 3 0 003-3v-6a3 3 0 00-3-3H15a.75.75 0 00-.75.75 2.25 2.25 0 01-4.5 0A.75.75 0 009 9H5.25z"/>
                                 </svg>
                             </span>
                         <span class="mx-4 text-sm font-normal">
-                                Account
-                            </span>
+                            Account
+                        </span>
                     </SideBarItem>
 
                     <SideBarDropdown v-if="isAdmin" :active="$page.url.startsWith('/admin')" >
@@ -158,7 +159,9 @@ const isAdmin = computed(() => {
                             >
                                 <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h2.25a3 3 0 013 3v2.25a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm9.75 0a3 3 0 013-3H18a3 3 0 013 3v2.25a3 3 0 01-3 3h-2.25a3 3 0 01-3-3V6zM3 15.75a3 3 0 013-3h2.25a3 3 0 013 3V18a3 3 0 01-3 3H6a3 3 0 01-3-3v-2.25zm9.75 0a3 3 0 013-3H18a3 3 0 013 3V18a3 3 0 01-3 3h-2.25a3 3 0 01-3-3v-2.25z" clip-rule="evenodd" />
                             </svg>
-                            <span class="ml-4">Admin</span>
+                            <span class="ml-4">
+                                Admin
+                            </span>
                         </template>
                         <template #links>
                             <SideBarDropdownLink href="/admin/dashboard" >
