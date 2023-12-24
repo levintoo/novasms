@@ -17,7 +17,9 @@ class GroupFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => 1,
+            'name' => fake()->company,
+            'description' => fake()->shuffleArray([fake()->sentence, ""])[fake()->numberBetween(0,1)],
         ];
     }
 }
