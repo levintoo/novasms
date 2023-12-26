@@ -49,7 +49,7 @@ const retryJob = (id) => {
         <template #tbody>
             <TableBody v-if="jobs.data.length > 0">
                 <TableBodyItem v-for="job in jobs.data">
-                   <template v-if="job.batch[0].jobs">
+
                        <TableData >
                            {{ job.name ?? '-' }}
                        </TableData>
@@ -70,7 +70,6 @@ const retryJob = (id) => {
                        <TableData>
                            {{ job.batch[0].finishedAt ?? '-' }}
                        </TableData>
-
                        <td>
                            <IconButton v-if="job.batch[0].failed" @click="retryJob(job.batch[0].id)"
                                        class="text-blue-500 focus:ring-blue-300">
@@ -84,7 +83,6 @@ const retryJob = (id) => {
                            </span>
                        </td>
 
-                   </template>
                 </TableBodyItem>
             </TableBody>
 
