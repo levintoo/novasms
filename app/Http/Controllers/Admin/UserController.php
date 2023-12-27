@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
-use App\Http\Requests\StoreUserRequest;
+use App\Models\Group;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
@@ -137,9 +137,86 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $userId)
+    public function show(String $userId)
     {
-        dd($userId);
+
+        $user = User::query()
+
+            ->where('id', $userId)
+
+            ->with('roles')
+
+            ->withCount(['messages as undelivered_messages' => function ($q) {
+                $q->whereNull('delivered_at')->withTrashed();
+            }])
+
+            ->withCount(['messages as delivered_messages' => function ($q) {
+                $q->whereNotNull('delivered_at')->withTrashed();
+            }])
+
+            ->withCount(['contacts as active_contacts' => function ($q) {
+                $q->withoutTrashed();
+            }])
+
+            ->withCount(['contacts as trashed_contacts' => function ($q) {
+                $q->onlyTrashed();
+            }])
+
+            ->withCount(['groups as active_groups' => function ($q) {
+                $q->withoutTrashed();
+            }])
+
+            ->withCount(['groups as trashed_groups' => function ($q) {
+                $q->onlyTrashed();
+            }])
+
+            ->where('id',$userId)
+
+            ->get()
+
+            ->map(fn($user) => [
+
+                'id' => $user->id,
+
+                'name' => $user->name,
+
+                'email' => $user->email,
+
+                'messages' => $user->delivered_messages + $user->undelivered_messages,
+
+                'delivered messages' => $user->delivered_messages,
+
+                'undelivered messages' => $user->undelivered_messages,
+
+                'groups' => $user->active_groups + $user->trashed_groups,
+
+                'active groups' => $user->active_groups,
+
+                'trashed groups' => $user->trashed_groups,
+
+                'contacts' => $user->active_contacts + $user->trashed_contacts,
+
+                'active contacts' => $user->active_contacts,
+
+                'trashed contacts' => $user->trashed_contacts,
+
+                'joined' => $user->created_at ? $user->created_at->format(config('app.date_time_format')) : null ,
+
+                'email_verified_at' => $user->email_verified_at ? $user->email_verified_at->format(config('app.date_time_format')) : null ,
+
+                'updated' => $user->updated_at ? $user->updated_at->format(config('app.date_time_format')) : null ,
+
+                'trashed' => $user->deleted_at ? $user->deleted_at->format(config('app.date_time_format')) : null ,
+
+                'main role' => $user->roles->map(fn($role) => [
+                    $role->name,
+                ])[0],
+
+            ]);
+
+        $user = $user[0];
+
+        return inertia('Admin/User/Show', compact('user'));
     }
 
     /**

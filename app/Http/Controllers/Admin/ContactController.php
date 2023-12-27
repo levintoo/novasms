@@ -72,9 +72,13 @@ class ContactController extends Controller
             );
         }
 
-        $query->with('user:id,name,email');
+        $query->with(['user' => function ($q) {
+            $q->select('name','id','email')->withTrashed();
+        }]);
 
-        $query->with('group:name,id');
+        $query->with(['group' => function ($q) {
+            $q->select('name','id')->withTrashed();
+        }]);
 
         $contacts = $query->paginate()
 
