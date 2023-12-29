@@ -37,11 +37,23 @@ class ContactImportjob implements ShouldQueue
      */
     public function handle(): void
     {
-        Excel::import(new ContactImport($this->groupId, $this->userId), $this->filePath);
+        try {
+            Excel::import(new ContactImport($this->groupId, $this->userId), $this->filePath);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+                info($failures);
 
-        if(Storage::exists($this->filePath)){
+            foreach ($failures as $failure) {
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }
+        } finally {
+            if(Storage::exists($this->filePath)){
 
-            Storage::delete([$this->filePath]);
+                Storage::delete([$this->filePath]);
+            }
         }
 
         info('success message');
