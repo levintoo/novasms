@@ -245,38 +245,44 @@ class MessageController extends Controller
 
             case 'group';
 
-            $groupsCount = Group::query()
+                $groupsCount = Group::query()
 
-                ->where('id',$validated['group'])
+                    ->where('id',$validated['group'])
 
-                ->select('id')
+                    ->select('id')
 
-                ->count();
+                    ->count();
 
-            if($groupsCount === 0) {
+                if($groupsCount === 0) {
 
-                toast('error','something went wrong');
+                    toast('error','something went wrong');
 
-                return redirect()->back();
-            }
+                    return redirect()->back();
+                }
 
-            $userId = Auth::id();
+                $userId = Auth::id();
 
-            $batch = Bus::batch([
-                new PrepareMessageJob($userId, $validated['group'], $validated['message']),
-            ])->dispatch();
+                $batch = Bus::batch([
 
-            PendingJob::create([
-                'user_id' => $userId,
+                    new PrepareMessageJob(
+                        $userId,
+                        $validated['group'],
+                        $validated['message'],
+                    ),
 
-                'batch_id' => $batch->id,
+                ])->dispatch();
 
-                'name' => 'preparing messages'
-            ]);
+                PendingJob::create([
+                    'user_id' => $userId,
 
-            toast('info', 'job dispatched');
+                    'batch_id' => $batch->id,
 
-            return redirect()->route('message.index');
+                    'name' => 'preparing messages'
+                ]);
+
+                toast('info', 'job dispatched');
+
+                return redirect()->route('message.index');
 
             break;
         }
