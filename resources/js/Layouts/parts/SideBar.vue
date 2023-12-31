@@ -176,9 +176,9 @@ const isAdmin = computed(() => {
                             <SideBarDropdownLink href="/admin/user" >
                                 Users
                             </SideBarDropdownLink>
-<!--                            <SideBarDropdownLink href="/admin/contact" >-->
-<!--                                Admins-->
-<!--                            </SideBarDropdownLink>-->
+                            <SideBarDropdownLink href="/admin/pending-jobs" >
+                                Jobs
+                            </SideBarDropdownLink>
                         </template>
                     </SideBarDropdown>
 

@@ -152,9 +152,9 @@ const handleRestore = (id) => {
                         {{ group.name ?? '-' }}
                     </TableData>
                     <TableData>
-                        {{ group.description ?? '-' }}
+                        {{ group.description ? group.description : '-' }}
                     </TableData>
-                    <TableData class="grid grid-cols-1 w-full">
+                    <TableData class="flex flex-col w-full">
                         <span>{{ group.user.name ?? '-' }}</span>
                         <span class="text-xs">{{ group.user.email }}</span>
                     </TableData>

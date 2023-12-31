@@ -9,7 +9,7 @@ import ToastList from "@/Components/ToastList.vue";
 
 const isSideMenuOpen = ref(false)
 
-const search = ref("")
+const universalSearch = ref("")
 
 const page = usePage()
 
@@ -67,7 +67,7 @@ watch(currentUrl,(value, oldValue) => {
         <div class="flex flex-col flex-1 w-full">
             <header class="z-10 py-4 bg-white">
                 <div
-                    class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600">
+                    class="container flex items-center justify-between h-full px-6 mx-auto text-blue-600">
                     <!-- Mobile hamburger -->
                     <button
                             class="p-1 mr-3 -ml-1 md:hidden w-10 h-10 rounded-xl md:border md:bg-gray-100 focus:bg-gray-100 active:bg-gray-200"
@@ -118,6 +118,7 @@ watch(currentUrl,(value, oldValue) => {
                                 </svg>
                             </span>
                             <input
+                                v-model="universalSearch"
                                 id="leadingIcon"
                                 class="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-gray-600 outline-none border border-gray-300 focus:border-blue-600 transition"
                                 name="leadingIcon"
@@ -148,7 +149,6 @@ watch(currentUrl,(value, oldValue) => {
                                     class="absolute top-2 md:top-0 right-3 md:right-0 inline-block w-3 h-3 transform translate-x-1 -translate-y-1 bg-red-600 border-2 border-white rounded-full"
                                 ></span>
                             </button>
-
                         </li>
 
                         <!-- profile menu -->
