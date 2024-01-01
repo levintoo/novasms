@@ -9,6 +9,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Admin\GroupController as AdminGroupController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PendingJobController;
+use App\Http\Controllers\Admin\PendingJobController as AdminPendingJobController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -170,9 +171,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                     Route::get('/', 'index')->name('index');
 
-                    Route::get('{userId}', 'show')->name('show');
-
                     Route::get('create', 'create')->name('create');
+
+                    Route::get('{userId}', 'show')->name('show');
 
                     Route::post('create', 'store')->name('store');
 
@@ -185,8 +186,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::patch('{id}/restore', 'restore')->name('restore');
 
                     Route::patch('{user}/password/reset', 'resetPassword')->name('password.reset');
+            });
 
-                });
+            Route::controller(AdminPendingJobController::class)
+
+                ->prefix('pending-jobs')
+
+                ->name('jobs.')
+
+                ->group(function () {
+
+                    Route::get('/', 'index')->name('index');
+            });
     });
 
 });
