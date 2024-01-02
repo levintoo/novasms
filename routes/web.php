@@ -98,9 +98,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::post('upload', 'UploadStore')->name('upload.store');
 
-            Route::get('edit/{contact}', 'edit')->name('edit');
+            Route::get('edit/{id}', 'edit')->name('edit');
 
-            Route::patch('edit/{contact}', 'update')->name('update');
+            Route::patch('edit/{id}', 'update')->name('update');
 
             Route::delete('{contact}', 'destroy')->name('delete');
 

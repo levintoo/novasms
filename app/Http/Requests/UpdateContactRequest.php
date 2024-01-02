@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateContactRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class UpdateContactRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,10 @@ class UpdateContactRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'group' => ['required',Rule::exists('groups','id')->where('user_id',Auth::id())],
+            'first_name' => 'required|max:100',
+            'last_name' => 'required|max:100',
+            'phone' => 'required|max:255',
         ];
     }
 }

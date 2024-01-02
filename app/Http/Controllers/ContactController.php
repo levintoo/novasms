@@ -201,17 +201,45 @@ class ContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Contact $contact)
+    public function edit(String $id)
     {
-        //
+        $userId =  Auth::id();
+
+        $groups = Group::query()
+
+            ->where('user_id', $userId)
+
+            ->select('name','id')
+
+            ->get();
+
+        $contact = Contact::query()
+
+            ->where('user_id', $userId)
+
+            ->select('first_name','last_name','group_id','phone')
+
+            ->findOrFail($id);
+
+        return inertia('Contact/Edit', compact('contact','groups','id'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateContactRequest $request, Contact $contact)
+    public function update(UpdateContactRequest $request, String $id)
     {
-        //
+        $validated = $request->validated();
+
+        $userId =  Auth::id();
+
+        $contact = Contact::query()->where('user_id', $userId)->findOrFail($id);
+
+        $contact->update([...$validated,'group_id' => $validated['group']]);
+
+        toast('success','contact updated success');
+
+        return redirect()->route('contact.index');
     }
 
     /**

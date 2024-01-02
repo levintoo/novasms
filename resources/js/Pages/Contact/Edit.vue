@@ -1,11 +1,10 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import {Head, useForm, Link} from "@inertiajs/vue3";
 import toast from "@/Stores/Toast.js";
 import TextInput from "@/Components/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
-import PrimaryLink from "@/Components/PrimaryLink.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import {defineOptions} from "vue";
@@ -33,11 +32,11 @@ const form = useForm({
     first_name: props.contact.first_name ?? '',
     last_name: props.contact.last_name ?? '',
     phone: props.contact.phone ?? '',
-    group: props.contact.group ?? '',
+    group: props.contact.group_id ?? '',
 })
 
 const handleUpdateContact = () => {
-    form.patch(route('contact.update', props.id), {
+    form.patch('/contact/edit/' + props.id, {
         preserveScroll: true,
         onError: () => {
             toast.add({
@@ -59,14 +58,15 @@ const handleUpdateContact = () => {
                 </h2>
 
                 <span class="flex align-center justify-end">
-                        <PrimaryLink class="flex justify-between my-6"
-                                     :href="route('contacts')">
+                    <Link href="/contact">
+                        <PrimaryButton class="flex justify-between my-6">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path clip-rule="evenodd" d="M15 10a.75.75 0 01-.75.75H7.612l2.158 1.96a.75.75 0 11-1.04 1.08l-3.5-3.25a.75.75 0 010-1.08l3.5-3.25a.75.75 0 111.04 1.08L7.612 9.25h6.638A.75.75 0 0115 10z" fill-rule="evenodd"/>
                             </svg>
                             <span class="mx-1">Back</span>
-                        </PrimaryLink>
-                    </span>
+                        </PrimaryButton>
+                    </Link>
+                </span>
             </div>
         </div>
 
