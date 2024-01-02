@@ -49,7 +49,7 @@ const props = defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    {{ user?.sent_messages_count ?? '-' }}
+                    {{ user?.sent_messages_count?.toLocaleString() ?? '-' }}
                 </p>
             </div>
         </div>
@@ -77,7 +77,7 @@ const props = defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    {{ user?.delivered_messages_count ?? '-' }}
+                    {{ user?.delivered_messages_count?.toLocaleString() ?? '-' }}
                 </p>
             </div>
         </div>
@@ -103,7 +103,7 @@ const props = defineProps({
                 <p
                     class="text-lg font-semibold text-gray-700 dark:text-gray-200"
                 >
-                    {{ user?.contacts_count ?? '-' }}
+                    {{ user?.contacts_count?.toLocaleString() ?? '-' }}
                 </p>
             </div>
         </div>
@@ -129,9 +129,9 @@ const props = defineProps({
                     Balance
                 </p>
                 <p
-                    class="text-lg font-semibold text-gray-700 dark:text-gray-200"
+                    class="text-lg font-semibold text-gray-700 dark: text-gray-200"
                 >
-                    {{ user?.balance ?? '-' }} sms
+                    {{ user?.balance?.toLocaleString() ?? '-' }} sms
                 </p>
             </div>
         </div>
