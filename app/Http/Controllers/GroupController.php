@@ -149,7 +149,7 @@ class GroupController extends Controller
 
         $group->update($validated);
 
-        toast('success','group uodated sucess');
+        toast('success','group updated success');
 
         return redirect()->route('group.index');
     }
