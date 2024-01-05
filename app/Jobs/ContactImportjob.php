@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Imports\ContactImport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,6 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Str;
 
 class ContactImportjob implements ShouldQueue
 {
@@ -38,18 +40,31 @@ class ContactImportjob implements ShouldQueue
     public function handle(): void
     {
         try {
+
             Excel::import(new ContactImport($this->groupId, $this->userId), $this->filePath);
+
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+
             $failures = $e->failures();
-                info($failures);
+
+            $errors = array();
 
             foreach ($failures as $failure) {
-                $failure->row(); // row that went wrong
-                $failure->attribute(); // either heading key (if using heading row concern) or column index
-                $failure->errors(); // Actual error messages from Laravel validator
-                $failure->values(); // The values of the row that has failed.
+                $errors[] = [
+                    'row' => $failure->row(),
+                    'attribute' => $failure->attribute(),
+                    'errors' => $failure->errors(),
+                ];
             }
+
+            $pdf = PDF::loadView('errors.report',compact('errors'));
+
+            $fileName = 'errors/import-errors-' . Str::uuid() . '.pdf';
+
+            $pdf->save($fileName ,'local');
+
         } finally {
+
             if(Storage::exists($this->filePath)){
 
                 Storage::delete([$this->filePath]);
