@@ -49,12 +49,19 @@ class ContactImportjob implements ShouldQueue
 
             $errors = array();
 
+            $max = 1000;
+
             foreach ($failures as $failure) {
+
+                if ($max === 0) break;
+
                 $errors[] = [
                     'row' => $failure->row(),
                     'attribute' => $failure->attribute(),
                     'errors' => $failure->errors(),
                 ];
+
+                $max--;
             }
 
             $pdf = PDF::loadView('errors.report',compact('errors'));
