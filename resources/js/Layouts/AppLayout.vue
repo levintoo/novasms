@@ -37,12 +37,12 @@ watch(currentUrl,(value, oldValue) => {
                 <SideBar>
                     <template #head>
                          <div class="flex justify-center mx-6">
-                                <Link
+                                <a
                                     class=" text-lg font-bold text-gray-800"
                                     href="/"
                                 >
                                     <ApplicationLogo/>
-                                </Link>
+                                </a>
                             </div>
                     </template>
                 </SideBar>
