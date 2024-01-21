@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Imports\ContactImport;
+use App\Mail\SendValidationErrors;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -10,9 +12,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
-use Str;
 
 class ContactImportjob implements ShouldQueue
 {
@@ -66,27 +69,28 @@ class ContactImportjob implements ShouldQueue
 
             $pdf = PDF::loadView('errors.report',compact('errors'));
 
-            $fileName = 'errors/import-errors-' . Str::uuid() . '.pdf';
+            $file = 'import-errors-' . Str::uuid() . '.pdf';
 
-            $pdf->save($fileName ,'local');
+            $filePath = 'errors/' . $file;
+
+            $pdf->save($filePath ,'local');
+
+            Mail::to(User::findOrFail($this->userId))->send(new SendValidationErrors($file));
+
+            if(Storage::exists($filePath)){
+                Storage::delete([$filePath]);
+            }
 
         } finally {
-
             if(Storage::exists($this->filePath)){
-
                 Storage::delete([$this->filePath]);
             }
         }
-
-        info('success message');
     }
 
-    public function failed(\Exception $exception): void
+    public function failed(): void
     {
-        info($exception->getMessage());
-
         if(Storage::exists($this->filePath)){
-
             Storage::delete([$this->filePath]);
         }
     }
