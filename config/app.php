@@ -189,6 +189,8 @@ return [
 
     'sms_sender_id' => env('MOBILESASA_SENDER_ID'),
 
+    'sms_rate' => env('SMS_RATE', 1),
+
     'date_time_format' => 'd-m-Y H:i:s T',
 
     'paystack_secret_key' => env('PAYSTACK_SECRET_KEY'),
