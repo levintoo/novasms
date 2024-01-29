@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PaystackWebhookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::post('paystack-webhook', function (Request $request) {
-    info($request);
-});
+Route::post('paystack-webhook', PaystackWebhookController::class);
