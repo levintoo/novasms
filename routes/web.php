@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ContactController;
@@ -118,6 +119,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     });
 
+    Route::controller(AccountController::class)
+
+        ->prefix('account')
+
+        ->name('account.')
+
+        ->group(function () {
+
+            Route::get('/', 'index')->name('index');
+
+            Route::post('pay', 'pay')->name('pay');
+
+        });
+
     // admin routes
     Route::middleware(['can:manage users'])
 
@@ -221,3 +236,8 @@ Route::controller(ProfileController::class)
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/test',function () {
+    $url = "https://checkout.paystack.com/eidcmqhmgflwv60";
+    return inertia_location($url);
+});

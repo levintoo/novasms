@@ -132,7 +132,7 @@ const isAdmin = computed(() => {
                         </span>
                     </SideBarItem>
 
-                    <SideBarItem href="/profile" :active="$page.url.startsWith('/profile')">
+                    <SideBarItem href="/account" :active="$page.url.startsWith('/account')">
                         <span class="text-left">
                                 <svg
                                     class="w-5 h-5"
