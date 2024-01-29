@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\User::class);
+            $table->unsignedBigInteger('amount');
+            $table->string('transaction_id')->unique();
+            $table->unsignedTinyInteger('status')->default(\App\Enums\TransactionStatus::PENDING);
             $table->timestamps();
         });
     }
