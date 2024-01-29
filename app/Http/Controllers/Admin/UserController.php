@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Models\Account;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -125,6 +126,8 @@ class UserController extends Controller
             ]);
 
             $user->assignRole($validated['role']);
+
+            Account::create(['user_id' => $user->id]);
 
             return $user;
         });
@@ -294,6 +297,8 @@ class UserController extends Controller
 
             $user->groups()->delete();
 
+            $user->account()->delete();
+
             $user->delete();
 
         });
@@ -316,6 +321,8 @@ class UserController extends Controller
             $user->messages()->onlyTrashed()->restore();
 
             $user->groups()->onlyTrashed()->restore();
+
+            $user->account()->onlyTrashed()->restore();
         });
 
         toast('success','user restored successfully');
