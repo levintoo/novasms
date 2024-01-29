@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TransactionStatus;
 use App\Http\Requests\PayAccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
 use App\Models\Account;
+use App\Models\Transaction;
 use Exception;
 use Illuminate\Support\Facades\Http;
 
@@ -15,7 +17,55 @@ class AccountController extends Controller
      */
     public function index()
     {
-        return inertia('Account/Index');
+        request()->validate([
+
+            'direction' => 'in:desc,asc',
+
+            'field' => 'in:status,transacted_at,amount',
+
+            'search' => 'max:255',
+        ]);
+
+        $userId = \Auth::id();
+
+        $account = Account::query()
+
+            ->select('balance')
+
+            ->where('user_id', $userId)
+
+            ->firstorfail();
+
+        $query = Transaction::query();
+
+        $query->where('user_id',$userId);
+
+        if(request('field') == 'transacted_at') {
+            $query->orderBy(
+                'created_at',request('direction')
+            );
+        } else if(request('field') && request('direction')) {
+            $query->orderBy(
+                \request('field'),\request('direction')
+            );
+        } else{
+            $query->latest();
+        }
+
+        $transactions = $query->paginate(10)->through(fn($transaction) => [
+            'amount' => $transaction->amount,
+            'status' => TransactionStatus::getValueName($transaction->status),
+            'id' => $transaction->transaction_id,
+            'transacted_at' => $transaction->created_at ? $transaction->created_at->format(config('app.date_time_format')) : null ,
+        ]);
+
+        $filters = request()->all([
+            'field',
+            'search',
+            'direction',
+        ]);
+
+        return inertia('Account/Index', compact('account','transactions','filters'));
     }
 
     public function pay(PayAccountRequest $request)
@@ -24,11 +74,13 @@ class AccountController extends Controller
 
         $validated = $request->validated();
 
+        $amount = $validated['amount'] * 100;
+
         $url = "https://api.paystack.co/transaction/initialize";
 
         $fields = [
             'email' => $email,
-            'amount' => $validated['amount'] * 100,
+            'amount' => $amount,
             'callback_url' => route('account.index')
         ];
 
@@ -43,7 +95,12 @@ class AccountController extends Controller
 
                 $data = $response->json();
 
-                info($data);
+                Transaction::create([
+                    'user_id' => \Auth::id(),
+                    'amount' => $amount / 100,
+                    'transaction_id' => $data['data']['reference'],
+                    'status' => TransactionStatus::PENDING ,
+                ]);
 
                 $authorization_url = $data['data']['authorization_url'];
 

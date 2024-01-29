@@ -1,37 +1,58 @@
 <script setup>
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, router, useForm} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {defineOptions} from "vue";
+import {defineOptions, ref, watch} from "vue";
 import TableData from "@/Components/TableData.vue";
 import TableBodyItem from "@/Components/TableBodyItem.vue";
-import IconButton from "@/Components/IconButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TableHead from "@/Components/TableHead.vue";
 import TableBody from "@/Components/TableBody.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import Table from "@/Components/Table.vue";
 import Pagination from "@/Components/Pagination.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import IconLink from "@/Components/IconLink.vue";
 import TableHeadItem from "@/Components/TableHeadItem.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import SelectInput from "@/Components/SelectInput.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import {debounce, omitBy} from "lodash";
 
 defineOptions({
     layout: AppLayout,
 })
 
 const props = defineProps({
-    user: {
+    account: {
         type: Object,
-    }
+        required: true,
+    },
+    transactions: {
+        type: Object,
+        required: true,
+        default: {},
+    },
+    filters: {
+        type: Object,
+        default: {},
+    },
 })
 
 const form = useForm({
     amount: null,
 })
+
+const params = ref({
+    search: props.filters.search ?? "",
+    field: props.filters.field ?? "",
+    direction: props.filters.direction ?? "",
+})
+
+const sort = (field) => {
+    params.value.field = field
+    params.value.direction = params.value.direction === 'asc' ? 'desc' : 'asc'
+}
+
+watch(params.value, debounce((params) => {
+    router.get('/account', { ...omitBy(params, v => v === "") }, { preserveScroll: true, replace: true, preserveState: true },)
+},150));
 </script>
 
 <template>
@@ -69,7 +90,7 @@ const form = useForm({
                 <p
                     class="text-lg font-semibold text-gray-700 dark: text-gray-200"
                 >
-                    69 sms
+                    {{ account.balance.toLocaleString() ?? '-' }} sms
                 </p>
             </div>
         </div>
@@ -87,7 +108,7 @@ const form = useForm({
 
             <form @submit.prevent="form.post('/account/pay')" class="mt-6 space-y-6">
                 <div>
-                    <InputLabel for="amount" value="Amount" />
+                    <InputLabel for="amount" value="Amount (Ksh)" />
 
                     <TextInput
                         id="amount"
@@ -117,19 +138,64 @@ const form = useForm({
             <Table>
                 <template #thead>
                     <TableHead>
-                        <TableHeadItem field="group" />
+                        <TableHeadItem
+                            sort="amount"
+                            field="Amount (Ksh)"
+                            class="cursor-pointer"
+                            :params=params
+                            @click="sort('amount')"  />
+                        <TableHeadItem
+                            sort="status"
+                            field="Status"
+                            class="cursor-pointer"
+                            :params=params
+                            @click="sort('status')"  />
+                        <TableHeadItem
+                            sort="transacted_at"
+                            field="transacted_at"
+                            class="cursor-pointer"
+                            :params=params
+                            @click="sort('transacted_at')"  />
                     </TableHead>
                 </template>
                 <template #tbody>
-                    <TableBody>
-                        <TableBodyItem v-for="contact in [1,2,3,4,5,5]">
+                    <TableBody v-if="transactions.data.length > 0">
+                        <TableBodyItem v-for="transaction in transactions.data">
                             <TableData>
-                                {{ contact ?? '-' }}
+                                {{ transaction.amount ?? '-' }}
+                            </TableData>
+                            <TableData>
+                                <span v-if="transaction.status === 'finished' "
+                                      class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
+                                    {{ transaction.status ?? '-' }}
+                                </span>
+                                <span v-else-if="transaction.status === 'cancelled'"
+                                      class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
+                                    {{ transaction.status ?? '-' }}
+                                </span>
+                                <span v-else
+                                      class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
+                                    {{ transaction.status ?? '-' }}
+                                </span>
+                            </TableData>
+                            <TableData>
+                                {{ transaction.transacted_at ?? '-' }}
                             </TableData>
                         </TableBodyItem>
                     </TableBody>
-                </template>
 
+                    <TableBody v-else>
+                        <TableBodyItem>
+                            <TableData colspan="6" class="text-center text-gray-500">
+                                There is nothing to show here
+                            </TableData>
+                        </TableBodyItem>
+                    </TableBody>
+
+                </template>
+                <template #pagination>
+                    <Pagination v-if="transactions.links" :from="transactions.from" :to="transactions.to" :total="transactions.total" :links="transactions.links" />
+                </template>
             </Table>
         </section>
     </div>
