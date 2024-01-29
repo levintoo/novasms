@@ -6,6 +6,7 @@ use App\Enums\TransactionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -43,6 +44,8 @@ class PaystackWebhookController extends Controller
         if ($request->event === 'charge.success') {
             $this->handleChargeSuccess($request);
         }
+
+        info($request);
     }
 
     public function handleChargeSuccess($request) {
@@ -59,6 +62,8 @@ class PaystackWebhookController extends Controller
         $account->balance = $account->balance + $sms;
 
         $transaction->status = TransactionStatus::COMPLETED;
+
+        $transaction->transacted_at = Carbon::parse($request['data']['paid_at'])->timezone(config('app.timezone'));
 
         DB::transaction(function () use ($request, $account, $transaction) {
             $account->save();
