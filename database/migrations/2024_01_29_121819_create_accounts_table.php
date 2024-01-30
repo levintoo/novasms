@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\User::class);
-            $table->unsignedBigInteger('balance')->default(0);
+            $table->bigInteger('balance')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

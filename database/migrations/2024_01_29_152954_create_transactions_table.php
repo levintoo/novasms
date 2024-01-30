@@ -17,7 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('amount');
             $table->string('transaction_id')->unique();
             $table->unsignedTinyInteger('status')->default(\App\Enums\TransactionStatus::PENDING);
+            $table->dateTime('transacted_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
