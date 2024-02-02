@@ -12,6 +12,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PendingJobController;
 use App\Http\Controllers\Admin\PendingJobController as AdminPendingJobController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UniversalSearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -133,6 +134,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         });
 
+    Route::post('/universal-search', UniversalSearchController::class);
+
     // admin routes
     Route::middleware(['can:manage users'])
 
@@ -238,6 +241,5 @@ Route::controller(ProfileController::class)
 require __DIR__.'/auth.php';
 
 Route::get('/test',function () {
-    $url = "https://checkout.paystack.com/eidcmqhmgflwv60";
-    return inertia_location($url);
+    return ':(';
 });
