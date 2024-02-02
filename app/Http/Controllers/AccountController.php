@@ -40,11 +40,7 @@ class AccountController extends Controller
 
         $query->where('user_id',$userId);
 
-        if(request('field') == 'transacted_at') {
-            $query->orderBy(
-                'created_at',request('direction')
-            );
-        } else if(request('field') && request('direction')) {
+        if (request('field') && request('direction')) {
             $query->orderBy(
                 \request('field'),\request('direction')
             );
@@ -56,7 +52,7 @@ class AccountController extends Controller
             'amount' => $transaction->amount,
             'status' => TransactionStatus::getValueName($transaction->status),
             'id' => $transaction->transaction_id,
-            'transacted_at' => $transaction->created_at ? $transaction->created_at->format(config('app.date_time_format')) : null ,
+            'transacted_at' => $transaction->transacted_at ? $transaction->transacted_at->format(config('app.date_time_format')) : null ,
         ]);
 
         $filters = request()->all([
