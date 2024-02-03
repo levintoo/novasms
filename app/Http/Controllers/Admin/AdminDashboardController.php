@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use App\Models\Contact;
 use App\Models\Group;
 use App\Models\Message;
@@ -79,6 +80,12 @@ class AdminDashboardController extends Controller
                 ->withTrashed()
 
                 ->count(),
+
+            'balance' => Account::query()
+
+                ->withTrashed()
+
+                ->sum('balance'),
 
         ]);
 

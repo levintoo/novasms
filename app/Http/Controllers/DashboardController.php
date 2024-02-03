@@ -20,6 +20,8 @@ class DashboardController extends Controller
 
             ->withCount('groups')
 
+            ->withSum('account as balance','balance')
+
             ->withCount('messages as sent_messages_count')
 
             ->withCount(['messages as delivered_messages_count' => function ($q) {
