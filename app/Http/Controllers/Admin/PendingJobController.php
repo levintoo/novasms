@@ -16,11 +16,15 @@ class PendingJobController extends Controller
     {
         $jobs = PendingJob::query()
 
+            ->with('user:id,name,email')
+
             ->paginate()
 
             ->through(fn($job) => [
 
                 'name' => $job->name,
+
+                'owner' => $job->user,
 
                 'batch' => collect([
 
@@ -32,13 +36,13 @@ class PendingJobController extends Controller
 
                     'progress' => $batch['progress'],
 
-                    'finishedAt' => $batch['finishedAt'] ? $batch['finishedAt']->diffForHumans() : null,
+                    'finishedAt' => $batch['finishedAt'] ? $batch['finishedAt']->format(config('app.date_time_format')) : null,
 
                     'failed' => (bool)$batch['cancelledAt'],
 
                     'timeTaken' => $batch['finishedAt'] ? $batch['finishedAt']->diffInMinutes($batch['createdAt']) . ' minutes' : null,
 
-                    'jobs' => (bool)$batch['totalJobs'],
+                    'jobs' => $batch['totalJobs'],
 
                 ])]);
 

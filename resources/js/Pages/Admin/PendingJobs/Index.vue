@@ -1,5 +1,5 @@
 <script setup>
-import {Head} from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {defineOptions} from "vue";
 import Table from "@/Components/Table.vue";
@@ -23,7 +23,6 @@ const props = defineProps({
 </script>
 
 <template>
-<pre>{{ jobs }}</pre>
     <Head title="Manage Pending Jobs" />
 
     <div class="w-full md:flex md:justify-between mb-4">
@@ -37,12 +36,38 @@ const props = defineProps({
             <TableHead>
                 <TableHeadItem field="name" />
                 <TableHeadItem field="owner" />
+                <TableHeadItem field="batch id" />
+                <TableHeadItem field="progress" />
+                <TableHeadItem field="finished" />
+                <TableHeadItem field="time taken" />
+                <TableHeadItem field="jobs" />
             </TableHead>
         </template>
         <template #tbody>
             <TableBody class="whitespace-nowrap" v-if="jobs.data.length > 0">
                 <TableBodyItem v-for="job in jobs.data">
-                    <TableData>{{ job.id }}</TableData>
+                    <TableData>{{ job.name }}</TableData>
+                    <TableData>
+                        <div class="text-sm">
+                            <Link :href='`/admin/user/${job.owner.id}`' class="underline hover:text-blue-800">{{ job.owner.name }}</Link>
+                            <p class="text-xs text-gray-600">{{ job.owner.email ?? '-' }}</p>
+                        </div>
+                    </TableData>
+                    <TableData>{{ job.batch[0].id }}</TableData>
+                    <TableData>{{ `${job.batch[0].progress}%` }}</TableData>
+                    <TableData>
+                        <span v-if="!job.batch[0].failed && job.batch[0].finishedAt" class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
+                           {{ job.batch[0].finishedAt }}
+                        </span>
+                        <span v-else-if="job.batch[0].failed && job.batch[0].finishedAt" class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
+                             {{ job.batch[0].finishedAt }}
+                        </span>
+                        <span v-else class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
+                           {{ job.batch[0].finishedAt }}
+                        </span>
+                    </TableData>
+                    <TableData>{{ job.batch[0].timeTaken }}</TableData>
+                    <TableData>{{ job.batch[0].jobs }}</TableData>
                 </TableBodyItem>
             </TableBody>
             <TableBodyItem v-else class="bg-white">
