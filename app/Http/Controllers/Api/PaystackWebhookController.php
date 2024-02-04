@@ -9,7 +9,6 @@ use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class PaystackWebhookController extends Controller
 {
@@ -20,35 +19,25 @@ class PaystackWebhookController extends Controller
             '52.214.14.220',
         ]);
 
-//        $ip = $request->getClientIp();
+//        $ip = $request->ip();
 //
 //        if (!$whiteListedIps->contains($ip)) {
 //            info('ip('.$ip.') is not whitelisted for paystack webhooks');
 //            return;
 //        }
 
-        if (!$request->hasHeader('X-Paystack-Signature')) {
+        if (!$request->hasHeader('X-Paystack-Signature') || !$this->isSignatureValid($request)) {
             abort(400);
-        }
-
-        info($request->header('X-Paystack-Signature'));
-
-        $signature = $request->header('X-Paystack-Signature');
-
-        $secretKey = config('app.paystack_secret_key');
-
-        if($signature !== hash_hmac('sha512', $request->getContent(), $secretKey)) {
-            info('failed hash test');
         }
 
         if ($request->event === 'charge.success') {
             $this->handleChargeSuccess($request);
+        } else{
+            info($request);
         }
-
-        info($request);
     }
 
-    public function handleChargeSuccess($request) {
+    private function handleChargeSuccess(Request $request) {
         $transaction = Transaction::where('transaction_id', $request['data']['reference'])->firstOrFail();
 
         $account = Account::where('user_id', $transaction->user_id)->firstorfail();
@@ -69,5 +58,18 @@ class PaystackWebhookController extends Controller
             $account->save();
             $transaction->save();
         });
+    }
+
+    private function isSignatureValid(Request $request): bool
+    {
+        $signature = $request->header('x-paystack-signature');
+
+        $secretKey = config('app.paystack_secret_key');
+
+        $payload = $request->getContent();
+
+        $calculatedSignature = hash_hmac('sha512', $payload, $secretKey);
+
+        return hash_equals($calculatedSignature, $signature);
     }
 }
