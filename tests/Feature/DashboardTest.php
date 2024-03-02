@@ -1,30 +1,17 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class DashboardTest extends TestCase
-{
-    use RefreshDatabase;
+test('dashboard is displayed for logged-in users', function () {
+    $user = User::factory()->create();
 
-    public function test_dashboard_is_displayed()
-    {
-        $user = User::factory()->create();
+    $response = $this->actingAs($user)->get('/dashboard');
 
-        $response = $this
-            ->actingAs($user)
-            ->get('/dashboard');
+    $response->assertOk();
+});
 
-        $response->assertOk();
-    }
+test('dashboard access requires login', function () {
+    $response = $this->get('/dashboard');
 
-    public function test_dashboard_is_not_accessed_without_login()
-    {
-        $response = $this->get('/dashboard');
-
-        $response->assertStatus(302);
-    }
-}
+    $response->assertRedirect('/login');
+});

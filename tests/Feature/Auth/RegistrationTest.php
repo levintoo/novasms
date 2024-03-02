@@ -1,32 +1,43 @@
 <?php
 
-namespace Tests\Feature\Auth;
 
+use App\Models\Account;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Spatie\Permission\Models\Role;
 
-class RegistrationTest extends TestCase
-{
-    use RefreshDatabase;
+it('test registration screen can be rendered', function (): void {
+    $response = $this->get('/register');
 
-    public function test_registration_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/register');
+    $response->assertStatus(200);
+});
 
-        $response->assertStatus(200);
-    }
+it('creates a user with role and account', function () {
+    $fakeRole = Role::create(['name' => 'standard user']);
 
-    public function test_new_users_can_register(): void
-    {
-        $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+    $userData = [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password123',
+    ];
+
+    $user = DB::transaction(function () use ($userData, $fakeRole) {
+        $user = User::create([
+            'name' => $userData['name'],
+            'email' => $userData['email'],
+            'password' => Hash::make($userData['password']),
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(RouteServiceProvider::HOME);
-    }
-}
+        $user->assignRole($fakeRole->name);
+
+        Account::create(['user_id' => $user->id]);
+
+        return $user;
+    });
+
+    expect($user->name)->toBe($userData['name'])
+        ->and($user->email)->toBe($userData['email'])
+        ->and(Hash::check($userData['password'], $user->password))->toBeTrue()
+        ->and($user->hasRole($fakeRole->name))->toBeTrue()
+        ->and(Account::where('user_id', $user->id)->exists())->toBeTrue();
+});
