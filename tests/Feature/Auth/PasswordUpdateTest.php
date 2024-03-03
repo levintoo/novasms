@@ -3,7 +3,7 @@
 
 use App\Models\User;
 
-it('test password can be updated', function (): void {
+test('test password can be updated', function (): void {
     $user = User::factory()->create();
 
     $response = $this
@@ -22,7 +22,7 @@ it('test password can be updated', function (): void {
     $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
 });
 
-it('test correct password must be provided to update password', function (): void {
+test('test correct password must be provided to update password', function (): void {
     $user = User::factory()->create();
 
     $response = $this

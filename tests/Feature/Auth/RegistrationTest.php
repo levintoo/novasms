@@ -3,16 +3,15 @@
 
 use App\Models\Account;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Spatie\Permission\Models\Role;
 
-it('test registration screen can be rendered', function (): void {
+test('test registration screen can be rendered', function (): void {
     $response = $this->get('/register');
 
     $response->assertStatus(200);
 });
 
-it('creates a user with role and account', function () {
+test('creates a user with role and account', function () {
     $fakeRole = Role::create(['name' => 'standard user']);
 
     $userData = [

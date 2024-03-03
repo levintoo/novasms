@@ -2,7 +2,7 @@
 
 use App\Models\User;
 
-it('test profile page is displayed', function () {
+test('test profile page is displayed', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -12,7 +12,7 @@ it('test profile page is displayed', function () {
     $response->assertOk();
 });
 
-it('test profile information can be updated', function () {
+test('test profile information can be updated', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -33,7 +33,7 @@ it('test profile information can be updated', function () {
     $this->assertNull($user->email_verified_at);
 });
 
-it('test email verification status is unchanged when the email address is unchanged', function () {
+test('test email verification status is unchanged when the email address is unchanged', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -50,7 +50,7 @@ it('test email verification status is unchanged when the email address is unchan
     $this->assertNotNull($user->refresh()->email_verified_at);
 });
 
-it('test user can delete their account', function () {
+test('test user can delete their account', function () {
     $user = User::factory()->create();
 
     $response = $this
@@ -67,7 +67,7 @@ it('test user can delete their account', function () {
     $this->assertGuest();
 });
 
-it('test correct password must be provided to delete account', function () {
+test('test correct password must be provided to delete account', function () {
     $user = User::factory()->create();
 
     $response = $this

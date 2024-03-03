@@ -5,7 +5,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 
-it('test email verification screen can be rendered', function (): void {
+test('test email verification screen can be rendered', function (): void {
     $user = User::factory()->create([
         'email_verified_at' => null,
     ]);
@@ -15,7 +15,7 @@ it('test email verification screen can be rendered', function (): void {
     $response->assertStatus(200);
 });
 
-it('test email can be verified', function (): void {
+test('test email can be verified', function (): void {
     $user = User::factory()->create([
         'email_verified_at' => null,
     ]);
@@ -35,7 +35,7 @@ it('test email can be verified', function (): void {
     $response->assertRedirect(RouteServiceProvider::HOME . '?verified=1');
 });
 
-it('test email is not verified with invalid hash', function (): void {
+test('test email is not verified with invalid hash', function (): void {
     $user = User::factory()->create([
         'email_verified_at' => null,
     ]);

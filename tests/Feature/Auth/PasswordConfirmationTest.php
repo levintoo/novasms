@@ -5,7 +5,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 
-it('test confirm password screen can be rendered', function (): void {
+test('test confirm password screen can be rendered', function (): void {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->get('/confirm-password');
@@ -13,7 +13,7 @@ it('test confirm password screen can be rendered', function (): void {
     $response->assertStatus(200);
 });
 
-it('test password can be confirmed', function (): void {
+test('test password can be confirmed', function (): void {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post('/confirm-password', [
@@ -24,7 +24,7 @@ it('test password can be confirmed', function (): void {
     $response->assertSessionHasNoErrors();
 });
 
-it('test password is not confirmed with invalid password', function (): void {
+test('test password is not confirmed with invalid password', function (): void {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->post('/confirm-password', [
