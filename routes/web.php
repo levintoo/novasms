@@ -27,8 +27,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('Home');
+    return view('home');
 })->name('home');
+
+Route::get('/test', function () {
+    return view('test');
+})->name('test');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -239,7 +243,7 @@ Route::controller(ProfileController::class)
 });
 
 require __DIR__.'/auth.php';
-
-Route::get('/test',function () {
-    return ':(';
-});
+//
+//Route::get('/test',function () {
+//    return ':(';
+//});

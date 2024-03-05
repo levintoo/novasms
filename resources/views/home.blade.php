@@ -9,7 +9,7 @@
         <link rel="icon" href="{{ asset('icon.png') }}" />
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css'])
+        @vite(['resources/css/app.css','resources/css/app.js'])
     </head>
     <body>
         <div class="bg-white">
@@ -162,47 +162,6 @@
                             <div class="space-y-6">
                                 <h3 class="text-2xl font-semibold text-gray-800 transition">Personalised bulk sms</h3>
                                 <p class="text-gray-600 text-sm">Reach your audience on a personal level with our personalised bulk SMS service. Craft individualized messages that resonate, fostering stronger connections. Personalisation enhances engagement and response rates, ensuring your messages are not just read, but acted upon.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-32">
-            <div class="mx-auto px-4 sm:px-12 xl:max-w-6xl xl:px-0">
-                <div class="text-center">
-                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white md:text-4xl xl:text-5xl">Trusted by clients</h2>
-                    <p class="mx-auto mt-6 text-gray-700 md:w-3/4 lg:w-3/5 text-sm">Your insights, opinions, and experiences steer our improvements, enabling us to craft a service that resonates with and fulfills your needs. Your feedback isn't just valued; it's transformative.</p>
-                </div>
-                <div class="mt-12 grid gap-8 md:grid-cols-2">
-                    <div class="rounded-3xl border border-gray-100 bg-white p-8 shadow-2xl shadow-gray-600/10 dark:border-gray-700 dark:bg-gray-800 dark:shadow-none sm:col-span-2 sm:px-12 lg:col-span-1 lg:row-span-2">
-                        <div class="flex h-full flex-col justify-center space-y-6 md:space-y-8">
-                            <p>microfost</p>
-                            <p class="text-gray-600 text-sm md:text-md lg:text-lg">
-                                <span class="font-serif">"</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat repellat perspiciatis excepturi est. Non ipsum iusto aliquam consequatur repellat provident, omnis ut, sapiente voluptates veritatis cum deleniti repudiandae ad doloribus. <br />
-                                <br />
-                                Esse, sint sit aut ducimus ea ipsam velit saepe earum dolorem, dignissimos minima voluptate quo accusamus corporis, quaerat beatae aliquid. Impedit, accusamus. <span class="font-serif">"</span>
-                            </p>
-                            <div class="flex items-center gap-3">
-                                <div>
-                                    <h3 class="text-md font-semibold leading-none text-gray-600 dark:text-gray-200">Andy Doe</h3>
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">Product Designer</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-y-6 rounded-3xl border border-gray-100 bg-white p-8 shadow-2xl shadow-gray-600/10 dark:border-gray-700 dark:bg-gray-800 dark:shadow-none">
-                        <p class="text-sm">ge</p>
-                        <p class="text-gray-600 dark:text-gray-300 text-sm">
-                            <span class="font-serif">"</span>
-                            Sit amet consectetur adipisicing elit. Quaerat repellat perspiciatis excepturi est. Provident, omnis ut, sapiente veritatis cum deleniti repudiandae ad doloribus.
-                            <span class="font-serif">"</span>
-                        </p>
-                        <div class="flex items-center gap-3 text-left">
-                            <div>
-                                <h3 class="text-md font-semibold leading-none text-gray-600 dark:text-gray-200">John Doe</h3>
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Product Designer</span>
                             </div>
                         </div>
                     </div>

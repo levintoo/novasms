@@ -7,7 +7,30 @@ const is_sidebar_open = ref(false);
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head>
+<!--            <meta charset"UTF-8">-->
+<!--            <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">-->
+<!--            <meta name="description" content="The web ecosystem is rich and changes fast. My blog will help you keep up and teach you a thing or two, no matter how experienced you are. Ready to level up?">-->
+<!--            <meta property="og:title" content="The go-to place for 91,537 web developers every month">-->
+<!--            <meta property="og:image" content="https://i.useflipp.com/gw6mxpkgy4v8.png?title=The+go-to+place+for+91%2C537+web+developers+every+month&amp;body=The+web+ecosystem+is+rich+and+changes+fast.+My+blog+will+help+you+keep+up+and+teach+you+a+thing+or+two%2C+no+matter+how+experienced+you+are.+Ready+to+level+up%3F&amp;watermark=useflipp.com">-->
+<!--            <meta property="og:type" content="website">-->
+<!--            <meta property="og:url" content="https://benjamincrozat.com">-->
+<!--            <meta name="twitter:card" content="summary_large_image">-->
+<!--            <meta name="twitter:creator" content="@benjamincrozat">-->
+<!--            <meta name="twitter:description" content="The web ecosystem is rich and changes fast. My blog will help you keep up and teach you a thing or two, no matter how experienced you are. Ready to level up?">-->
+<!--            <meta name="twitter:image" content="https://i.useflipp.com/gw6mxpkgy4v8.png?title=The+go-to+place+for+91%2C537+web+developers+every+month&amp;body=The+web+ecosystem+is+rich+and+changes+fast.+My+blog+will+help+you+keep+up+and+teach+you+a+thing+or+two%2C+no+matter+how+experienced+you+are.+Ready+to+level+up%3F&amp;watermark=useflipp.com">-->
+<!--            <meta name="twitter:title" content="The go-to place for 91,537 web developers every month">-->
+<!--            <meta name="theme-color" content="#f9fafb">-->
+            <title>Instant delivery</title>
+<!--            <link rel="canonical" href="https://benjamincrozat.com">-->
+<!--            <link rel="apple-touch-icon" sizes="180x180" href="https://benjamincrozat.com/build/assets/apple-touch-icon-670525e4.jpg">-->
+<!--            <link rel="icon" type="image/jpeg" sizes="16x16" href="https://benjamincrozat.com/build/assets/16x16-5d514928.jpg">-->
+<!--            <link rel="icon" type="image/jpeg" sizes="32x32" href="https://benjamincrozat.com/build/assets/32x32-f2214e19.jpg">-->
+<!--            <link rel="icon" type="image/jpeg" sizes="48x48" href="https://benjamincrozat.com/build/assets/48x48-405ec2a0.jpg">-->
+<!--            <link rel="icon" type="image/jpeg" sizes="96x96" href="https://benjamincrozat.com/build/assets/96x96-9825d6d3.jpg">-->
+
+<!--            <link rel="alternate" type="application/atom+xml" href="https://benjamincrozat.com/feed" title="Benjamin Crozat's blog">-->
+    </Head>
 
     <div class="bg-white">
         <header class="absolute inset-x-0 top-0 z-50">
