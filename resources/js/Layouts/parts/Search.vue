@@ -5,7 +5,7 @@ import toast from "@/Stores/Toast.js";
 import {usePage} from "@inertiajs/vue3";
 
 const search = ref("")
-const open = ref(true)
+const open = ref(false)
 let results = ref({});
 const page = usePage()
 const currentUrl = computed(() => page.url )
